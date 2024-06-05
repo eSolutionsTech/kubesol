@@ -3,7 +3,7 @@
 
 # Kubesol
 
-__Kubesol__ is an [open-source](License.md) Kubernetes distribution available on [github.com/eSolutionsGrup/kubesol](https://github.com/eSolutionsGrup/kubesol).
+_Kubesol_ is an [open-source](LICENSE.md) Kubernetes distribution available on [github.com/eSolutionsGrup/kubesol](https://github.com/eSolutionsGrup/kubesol).
 
 For commercial support, contact [esolutions.tech](https://esolutions.tech).
 
