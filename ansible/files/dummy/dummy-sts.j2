@@ -17,6 +17,9 @@ spec:
       containers:
       - name: dummy
         image: vvang/dummy:amd64
+        securityContext:
+          privileged: true
+          runAsUser: 0
         ports:
         - containerPort: 80
           name: web
