@@ -2,7 +2,7 @@
 
 ## What is Kubesol
 
-**Kubesol** is a Kubernetes distribution, free and open-source but with optional commercial support by **eSolutions.tech**. After creating the required Virtual Machines (VMs) and running the installer, the end product is a Kubernetes cluster with many useful and popular components installed (full list below).
+**Kubesol** is a Kubernetes distribution, free and open-source but with optional commercial support by [eSolutions.tech](https://www.esolutions.tech/kubesol). After creating the required Virtual Machines (VMs) and running the installer, the end product is a Kubernetes cluster with many useful and popular components installed (full list below).
 
 Some of the advantages are:
 - It is free and open-source but with optional commercial support
