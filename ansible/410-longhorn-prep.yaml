@@ -1,6 +1,6 @@
 ---
 - 
-  hosts: worker
+  hosts: all
   gather_facts: no
   name: Longhorn prep
 
@@ -9,6 +9,7 @@
     filesystem:
       fstype: ext4
       dev: "/dev/{{ longhorn_device }}"
+    when: longhorn_device is defined
 
   - name: mount longhorn device
     mount:
@@ -16,7 +17,8 @@
       src: "/dev/{{ longhorn_device }}"
       fstype: ext4
       state: mounted
-  
+    when: longhorn_device is defined
+
   - name: install longhorn requirements nfs for RWM
     apt:
       pkg:

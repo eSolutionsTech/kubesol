@@ -16,14 +16,14 @@
 
   - name: unpack helm tar.gz
     unarchive:
-      src: "{{ HELM_ARCHIVE }}"
+      src: "/root/{{ HELM_ARCHIVE }}"
       dest: /root
       remote_src: yes
 
   - name: copy helm binary to /usr/local/bin
     copy: 
       remote_src: True 
-      src: linux-amd64/helm
+      src: /root/linux-amd64/helm
       dest: /usr/local/bin
       mode: '0755'
 

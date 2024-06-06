@@ -2,22 +2,53 @@
 
 A full production Kubesol setup will require at least 7 VMs (one gateway, 3 controller nodes, 3 worker nodes). But you may experiment on a single VM even with some limitations.
 
-For this, create a Virtual Machine with Ubuntu Linux and at least 8GB RAM, 2-8 CPU cores, 50 GB disk.
+## Step by step on DigitalOcean
 
-A full step by step tutorial will be available soon, for now some quick notes:
 
-Your Ansible Inventory file will look something like this:
+1. Create a Virtual Machine with Ubuntu Linux 24.04 and 8GB RAM, 4 CPU cores (it will have 150 GB disk but 50GB is enough). 
+I have used the name `kubesol-dev4-c1` for the VM.
+
+2. Check you can ssh on it as root with ssh key. DigitalOcean VMs will have both a public and a private IP. Note them down 
+(run `ip a`)
+
+3. We need DNS for SSL certificates so, use the public IP from above and add 2 records to a domain. Something like this:
+
+```
+  dev4.YOUR_DOMAIN_COM    PUBLIC_IP
+  *.dev4.YOUR_DOMAIN_COM  PUBLIC_IP
+```
+
+4. ssh into VM and install some tools (as root): 
+
+```
+apt update -y
+apt install ansible python3-kubernetes pwgen -y
+```
+
+5. `git clone https://github.com/eSolutionsGrup/kubesol.git`
+
+6. cd into this directory kubesol/ansible and create a file `ansible.cfg`:
+
+```
+[defaults]
+inventory = Inventory
+host_key_checking = False
+remote_user = root
+remote_port = 22
+deprecation_warnings=False 
+log_path = .ansible.log
+executable = /bin/bash
+```
+
+and a file `Inventory` like this (use your hostname, email etc):
+
 
 ```
 [all:vars]
 rke2_version="v1.29.4+rke2r1"
 
-longhorn_device="sda"
-directpv_device=""
-
-project_name="kubesol_test" # used in nginx config
-ext_dns_name="kubesol-test.example.com"
-letsencrypt_email="some.email@example.com"
+ext_dns_name="dev4.YOUR_DOMAIN_COM"
+letsencrypt_email="EMAIL_FOR_letsencrypt"
 
 longhorn_version="1.6.1"
 certmanager_version="v1.14.4"
@@ -28,17 +59,105 @@ external_secrets_chart_version="0.9.19"
 keycloak_version="24.0.5"
 trivy_chart_version="0.23.2"
 
-# you may choose to have an empty section [gateway]
-# in which case the ansible playbooks won't try to configure that host
-# but you still need to define the variable hosts_gw which is
-# the internal name of the gw/nginx used in rke2 config 
-hosts_gw="kubesol-test-c1"
-[gateway]
+hosts_gw="kubesol-dev4-c1"
 
 [controller_one]
-kubesol-test-c1.example.com  int_ip=10.135.187.236  controller_worker=true
+kubesol-dev4-c1.YOUR_DOMAIN_COM int_ip=10.135.187.238 controller_worker=true ansible_connection=local 
 ```
 
-Longhorn volumes will work even if they will remain in _Degraded_ state because there are not enough nodes for 3 replicas.
+7. run `ansible-playbook 200-inventory-check.yaml`. if all ok, continue, else debug and re-run the playbook
+
+8. run `ansible-playbook 300-new-rke2.yaml`. if all ok, continue, else debug and re-run the playbook
+
+9. you now have a Kubernetes cluster with one node. you could use it with:
+
+```
+export KUBECONFIG=$(pwd)/.kubeconfig
+kubectl get nodes
+```
+
+10. For the playbooks >400 we recommend running them one by one and checking status after each one. For example:
+
+## Kubernetes dashboard
+
+```
+# cert-manager
+ansible-playbook 430-cert-manager.yaml  # you will need this for ssl certificates
+kubectl -n cert-manager get pods        # wait for all pods to be Ready
+
+# kubernetes-dashboard
+ansible-playbook 460-kubernetes-dashboard.yaml
+ansible-playbook 462-kubernetes-dashboard-ingress.yaml 
+kubectl -n kubernetes-dashboard get pods         # wait for all pods to be Ready
+kubectl -n kubernetes-dashboard get ingress      # note the URL
+kubectl -n kubernetes-dashboard get certificate  # SSL certificate is ready?
+
+# get the access token and open the dashboard in browser
+kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={.data.token} | base64 -d ; echo
+```
+
+## Longhorn storage class
+
+Before installing Longhorn storage class, edit `410-longhorn-prep.yaml` and change `hosts: worker` to `hosts: all`. Then:
+
+```
+# edit 410-longhorn-prep.yaml and change hosts: worker to hosts: all
+ansible-playbook 410-longhorn-prep.yaml
+ansible-playbook 411-longhorn-helm.yaml
+ansible-playbook 412-longhorn-web.yaml 
+
+kubectl -n longhorn-system get pods    # check all pods to be Ready
+kubectl -n longhorn-system get ingress # get hostname
+ansible-playbook 412-longhorn-web.yaml # run the playbook again to see the password
+# open in browser
+```
+
+## Dummy custom web application
+ 
+In _dummy_ we have an example of a custom web application together with Ingress, SSL certificaties, pods with volumes:
+
+```
+ansible-playbook 454-dummy.yaml
+
+kubectl -n dummy get pods
+kubectl -n dummy get ingress
+kubectl -n dummy get issuer
+kubectl -n dummy get certificate
+kubectl -n dummy get pvc
+# access it in browser
+```
+
+If you look again at the longhorn web interface, you will see the volume in the state _Degraded_. This is normal because there are not enough nodes for 3 replicas. But the volume works even without redundancy.
+
+## The monitoring system
+
+Before installing it you will need to run (otherwise `promtail` pod will crash):
+
+```
+echo 256 > /proc/sys/fs/inotify/max_user_instances  # default is 128
+echo 120000 > /proc/sys/fs/inotify/max_user_watches  # default is 65000
+```
+
+The monitoring system will install kube-prometheus-stack and Loki:
+
+```
+ansible-playbook 490-kube-prometheus-stack.yaml
+ansible-playbook 491-loki.yaml 
+ansible-playbook 492-grafana-ingress.yaml 
+
+kubectl -n monitoring get pods
+kubectl -n monitoring get ingress
+
+# get the admin password
+kubectl -n monitoring get secret grafana-credentials  -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+```
+
+Access the web interface and browse, for example, to Dashboards -> Kubernetes / Compute Resources / Cluster.
+
+## That's all for now
+
+Check out our full documentation for more components.
+
 
 

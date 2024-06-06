@@ -69,7 +69,7 @@
       mode: '0700'
 
   - name: Installing rke2 server
-    command: ./rke2.sh
+    command: /root/rke2.sh
     environment: 
       INSTALL_RKE2_VERSION: "{{ rke2_version }}"
 
