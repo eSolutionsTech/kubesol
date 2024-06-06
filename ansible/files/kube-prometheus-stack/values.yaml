@@ -1,0 +1,37 @@
+prometheus:
+  prometheusSpec:
+    podMonitorSelectorNilUsesHelmValues: false
+    replicas: 1
+    retention: 120h
+    retentionSize: "1GB"
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 2Gi
+    serviceMonitorSelectorNilUsesHelmValues: false
+grafana:
+  persistence:
+    enabled: true
+    type: pvc
+    storageClassName: "longhorn"
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      isDefault: false
+      basicAuth: false
+      access: proxy
+      url: http://loki:3100
+      version: 1
+  admin:
+    existingSecret: "grafana-credentials"
+    passwordKey: admin-password
+    userKey: admin-user

@@ -1,0 +1,8 @@
+
+# on your computer, run in this directory
+# mkdocs serve
+
+site_name: 'KubeSol docs'
+theme:
+  name: readthedocs
+  

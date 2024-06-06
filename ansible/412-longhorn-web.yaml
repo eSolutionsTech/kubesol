@@ -1,0 +1,127 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Longhorn web interface
+
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+    NS: "longhorn-system"
+    SECRET: "longhorn-ui"
+
+  tasks:
+    - kubernetes.core.k8s_info:
+        kind: secret
+        namespace: "{{ NS }}"
+        name: "{{ SECRET }}"
+        kubeconfig: "{{ K }}"
+      register: ks8_secret
+
+    - debug:
+        msg: "Found Longhorn ui password: {{ ks8_secret.resources[0].data.password |b64decode }} If you want to reset it, delete secret {{ SECRET }} from namespace {{ NS }}." 
+      when: ks8_secret.resources[0] is defined  
+
+# just exit now if the password is already defined
+    - meta: end_play
+      when: ks8_secret.resources[0] is defined
+
+    - name: Generate a new password
+      shell: pwgen 16 1
+      register: new_password
+
+    - debug:
+        msg: "New password for Longhorn web interface (user admin) is {{ new_password.stdout }}"
+
+    - name: Create kubernetes secret
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: "{{ SECRET }}"
+            namespace: "{{ NS }}"
+          type: kubernetes.io/basic-auth
+          stringData:
+            username: admin
+            password: "{{ new_password.stdout }}"
+
+    - name: Create auth file
+      shell:
+        cmd: echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" > auth
+      environment:
+        - USER: admin
+        - PASSWORD: "{{ new_password.stdout }}"   
+
+    - name: Delete basic-auth secret if exists
+      kubernetes.core.k8s:
+        state: absent
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: basic-auth
+            namespace: "{{ NS }}"
+
+    - name: Create basic-auth secret
+      shell: 
+        cmd: kubectl -n "{{ NS }}" create secret generic basic-auth --from-file=auth
+      environment:
+        KUBECONFIG: "{{ K }}"
+
+    - name: Create issuer
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: Issuer
+          metadata:
+            name: letsencrypt-longhorn
+            namespace: "{{ NS }}"
+          spec:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              email: "{{ letsencrypt_email }}"
+              privateKeySecretRef:
+                name: letsencrypt-longhorn
+              solvers:
+              - http01:
+                  ingress:
+                    ingressClassName: nginx
+
+    - name: Create longhorn ingress
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: longhorn-ingress
+            namespace: "{{ NS }}"
+            annotations:
+              nginx.ingress.kubernetes.io/auth-type: basic
+              nginx.ingress.kubernetes.io/auth-secret: basic-auth
+              nginx.ingress.kubernetes.io/auth-realm: 'Longhorn web interface '
+              nginx.ingress.kubernetes.io/proxy-body-size: 10000m
+              cert-manager.io/issuer: "letsencrypt-longhorn"
+          spec:
+            tls:
+            - hosts:
+              - "longhorn.{{ ext_dns_name }}"
+              secretName: longhorn-tls
+            rules:
+            - host: "longhorn.{{ ext_dns_name }}"
+              http:
+                paths:
+                - pathType: Prefix
+                  path: "/"
+                  backend:
+                    service:
+                      name: longhorn-frontend
+                      port:
+                        number: 80
+

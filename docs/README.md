@@ -17,6 +17,7 @@ See also the [FAQ](FAQ.md).
 
 ## Usage
 
+- [quickstart with a single VM](cluster/Quickstart.md)
 - [create a new cluster](cluster/create-new-cluster.md)
 - [use an existing cluster](cluster/use-existing-cluster.md). Short version: to run kubectl commands just `export KUBECONFIG=.kubeconfig` then run kubectl/helm commands targetting the cluster.
 - [upgrade an existing cluster](cluster/upgrade-cluster.md)

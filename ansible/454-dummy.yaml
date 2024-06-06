@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install dummy
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: dummy template j2 -> yaml
+      template:
+        src: "files/dummy/{{ item }}.j2"
+        dest: "./.{{ item }}.yaml"
+      with_items:
+        - dummy-ns
+        - dummy-ing
+        - dummy-issuer
+        - dummy-svc
+        - dummy-sts
+        
+    - name: dummy apply yamls
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        src: "./.{{ item }}.yaml"
+      with_items:
+        - dummy-ns
+        - dummy-ing
+        - dummy-issuer
+        - dummy-svc
+        - dummy-sts
+

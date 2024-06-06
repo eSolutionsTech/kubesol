@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install cert-manager
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+    v: "{{ certmanager_version }}"
+    url: "https://github.com/cert-manager/cert-manager/releases/download/{{ v }}/cert-manager.yaml"
+
+  tasks:
+    - name:
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ url }}"
+        kubeconfig: "{{ K }}"
+

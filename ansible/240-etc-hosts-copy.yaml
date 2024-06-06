@@ -1,0 +1,12 @@
+---
+-
+  hosts: all
+  gather_facts: no
+
+  tasks:
+
+  - name: Create nice /etc/hosts on all
+    template:
+      src: files/etc-hosts/etc-hosts.j2
+      dest: /etc/hosts
+      mode: 0644

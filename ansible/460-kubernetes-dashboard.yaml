@@ -1,0 +1,67 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install Kubernetes dashboard
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - kubernetes.core.helm_repository:
+        name: kubernetes-dashboard
+        repo_url: https://kubernetes.github.io/dashboard/
+
+    - kubernetes.core.helm:
+        name: kubernetes-dashboard
+        namespace: kubernetes-dashboard
+        chart_ref: kubernetes-dashboard/kubernetes-dashboard
+        create_namespace: yes
+        kubeconfig: "{{ K }}"
+
+# https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+    - name: service account admin-user
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: ServiceAccount
+          metadata:
+            name: admin-user
+            namespace: kubernetes-dashboard
+
+    - name: clusterRoleBinding admin-user
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRoleBinding
+          metadata:
+            name: admin-user
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: cluster-admin
+          subjects:
+          - kind: ServiceAccount
+            name: admin-user
+            namespace: kubernetes-dashboard
+
+    - name: secret admin-user
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}" 
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: admin-user
+            namespace: kubernetes-dashboard
+            annotations:
+              kubernetes.io/service-account.name: "admin-user"   
+          type: kubernetes.io/service-account-token  
+
+    - debug:
+        msg: "To get the token for kubernetes dashboard run: kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={.data.token} | base64 -d"
+    

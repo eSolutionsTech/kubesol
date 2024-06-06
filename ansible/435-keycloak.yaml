@@ -1,0 +1,102 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install keycloak
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+    NS: "keycloak"
+
+
+  tasks:
+      - name: Ensure namespace for keycloak exists.
+        kubernetes.core.k8s:
+          api_version: v1
+          kind: Namespace
+          name: "{{ NS }}"
+          state: present
+          kubeconfig: "{{ K }}"
+
+      - name: Create db cluster for keycloak
+        kubernetes.core.k8s:
+          api_version: v1
+          namespace: "{{ NS }}"
+          state: present
+          src: files/keycloak/keycloak-cnpg.yaml
+          kubeconfig: "{{ K }}"
+
+      - name: Generate a new password
+        shell: pwgen 16 1
+        register: admin_password
+      
+      - name: keycloak template j2 -> yaml
+        template:
+          src: "files/keycloak/values-keycloak.j2"
+          dest: ".values-keycloak.yaml"
+
+      - kubernetes.core.helm_repository:
+          name: keycloak
+          repo_url: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+
+      - kubernetes.core.helm:
+          name: keycloak
+          chart_ref: keycloak/keycloak
+          namespace: "{{ NS }}"
+          kubeconfig: "{{ K }}"
+          disable_hook: true
+          values_files:
+            - .values-keycloak.yaml
+
+      - name: Create issuer
+        kubernetes.core.k8s:
+          state: present
+          kubeconfig: "{{ K }}"
+          definition:
+            apiVersion: cert-manager.io/v1
+            kind: Issuer
+            metadata:
+              name: letsencrypt-keycloak
+              namespace: "{{ NS }}"
+            spec:
+              acme:
+                server: https://acme-v02.api.letsencrypt.org/directory
+                email: "{{ letsencrypt_email }}"
+                privateKeySecretRef:
+                  name: letsencrypt-keycloak
+                solvers:
+                - http01:
+                    ingress:
+                      ingressClassName: nginx
+
+      - name: Create keycloak ingress
+        kubernetes.core.k8s:
+          state: present
+          kubeconfig: "{{ K }}"
+          definition:
+            apiVersion: networking.k8s.io/v1
+            kind: Ingress
+            metadata:
+              name: keycloak-ingress
+              namespace: "{{ NS }}"
+              annotations:
+                kubernetes.io/ingress.class: nginx
+                nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+                cert-manager.io/issuer: "letsencrypt-keycloak"
+            spec:
+              tls:
+              - hosts:
+                - "keycloak.{{ ext_dns_name }}"
+                secretName: keycloak-tls
+              rules:
+              - host: "keycloak.{{ ext_dns_name }}"
+                http:
+                  paths:
+                  - pathType: Prefix
+                    path: "/"
+                    backend:
+                      service:
+                        name: keycloak
+                        port:
+                          number: 80
+

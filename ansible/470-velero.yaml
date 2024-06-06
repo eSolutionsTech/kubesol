@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install velero
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - kubernetes.core.helm_repository:
+        name: velero
+        repo_url: https://vmware-tanzu.github.io/helm-charts
+
+    - kubernetes.core.helm:
+        name: velero
+        namespace: velero
+        chart_ref: vmware-tanzu/velero
+        create_namespace: yes
+        kubeconfig: "{{ K }}"
+        values_files:
+          - files/velero/values-velero.yaml  
+    
+    - debug:
+        msg: "NOT IMPLEMENTED YET"
+

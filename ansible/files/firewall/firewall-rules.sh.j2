@@ -1,0 +1,81 @@
+#!/bin/bash
+# firewall-rules.sh
+ALLOWED_IPS=({% for ansible_host in groups ['all'] %} "{{hostvars[ansible_host]['int_ip']}}"{% endfor %}  )
+
+function start_firewall() {
+    # Flush all existing rules
+    iptables -F
+
+    # Default policy to accept all incoming and forwarded packets
+    iptables -P INPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+    iptables -P OUTPUT ACCEPT
+
+    # Allow loopback interface
+    iptables -A INPUT -i lo -j ACCEPT
+    iptables -A OUTPUT -o lo -j ACCEPT
+    
+    # Allow ICMP
+    iptables -A INPUT -p icmp -j ACCEPT
+
+    # Allow established and related incoming connections
+    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+    # Allow incoming SSH, HTTP, and HTTPS and rke2 ports
+    iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+    iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+    iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+    
+    # Control Plane Node(s):
+    iptables -A INPUT -p tcp --dport 6443 -j ACCEPT # Kubernetes API server
+
+
+    
+    # Allow incoming traffic on port all from the specified IP addresses
+    for ip in "${ALLOWED_IPS[@]}"; do
+        iptables -A INPUT -p tcp -s $ip -j ACCEPT
+    done
+
+    for ip in "${ALLOWED_IPS[@]}"; do
+        iptables -A INPUT -p udp -s $ip -j ACCEPT
+    done
+
+    
+    # Reject all inputs
+    iptables -A INPUT   -p tcp -m state --state NEW -j REJECT --reject-with tcp-reset
+    iptables -A INPUT   -p udp -m state --state NEW -j REJECT --reject-with icmp-port-unreachable
+    iptables -A INPUT   -m state --state NEW -j LOG
+    iptables -A INPUT   -m state --state NEW -j DROP
+
+}
+
+function stop_firewall() {
+    # Flush all rules, delete all chains, and accept all by default
+    iptables -F
+    iptables -X
+    iptables -P INPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+    iptables -P OUTPUT ACCEPT
+}
+
+function restart_firewall() {
+    stop_firewall
+    start_firewall
+}
+
+case "$1" in
+    start)
+        start_firewall
+        ;;
+    stop)
+        stop_firewall
+        ;;
+    restart)
+        restart_firewall
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac

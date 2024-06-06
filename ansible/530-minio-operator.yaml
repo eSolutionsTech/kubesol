@@ -1,0 +1,70 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install Minio operator
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: minio helm repo
+      kubernetes.core.helm_repository:
+        name: minio-operator
+        repo_url: https://operator.min.io
+
+    - name: create namespace minio-operator
+      kubernetes.core.k8s:
+        name: minio-operator
+        api_version: v1
+        kind: Namespace
+        state: present
+        kubeconfig: "{{ K }}"
+
+    - name: minio issuer
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: Issuer
+          metadata:
+            name: letsencrypt-minio
+            namespace: minio-operator
+          spec:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              email: "{{ letsencrypt_email }}"
+              privateKeySecretRef:
+                name: letsencrypt-minio
+              solvers:
+                - http01:
+                    ingress:
+                      ingressClassName: nginx
+
+    - name: minio helm install
+      kubernetes.core.helm:
+        name: minio-operator
+        chart_ref: minio-operator/operator
+        chart_version: "{{ minio_operator_chart_version }}"
+        release_namespace: minio-operator
+        kubeconfig: "{{ K }}"
+        values:
+          console:
+            ingress:
+              enabled: true
+              ingressClassName: nginx
+              host: "minio-operator.{{ ext_dns_name }}"
+              path: /
+              pathType: Prefix
+              number: 9090
+              annotations: 
+                cert-manager.io/issuer: letsencrypt-minio
+                nginx.ingress.kubernetes.io/backend-protocol: HTTP
+                nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+              tls:
+              - hosts:
+                - "minio-operator.{{ ext_dns_name }}"
+                secretName: minio-tls
+
+ 
+#eof

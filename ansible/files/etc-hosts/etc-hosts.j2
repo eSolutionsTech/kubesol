@@ -1,0 +1,9 @@
+127.0.0.1 localhost
+::1 localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+{% for ansible_host in groups ['all'] %}
+{%     set hostname = ansible_host.split('.').0 %}
+{{  hostvars[ansible_host]['int_ip']  }}    {{ ansible_host }}    {{  hostname  }}
+{% endfor %}

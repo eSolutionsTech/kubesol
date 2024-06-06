@@ -1,0 +1,12 @@
+---
+- name: Setup unattended upgrades
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Edit /etc/apt/apt.conf.d/20auto-upgrades
+      copy:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        content: |
+          APT::Periodic::Update-Package-Lists "1";
+          APT::Periodic::Unattended-Upgrade "1";

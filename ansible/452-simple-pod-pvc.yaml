@@ -1,0 +1,56 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install dummy
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: Create PVC directPV
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: PersistentVolumeClaim
+          metadata:
+            name: simple-pod-pvc
+            namespace: default
+          spec:
+            storageClassName: directpv-min-io
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Mi
+
+    - name: Create simple-pod-pvc directPV
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: simple-pod-pvc
+            namespace: default
+          spec:
+            containers:
+            - image: vvang/dummy:amd64
+              name: c1
+              resources: 
+                requests:
+                  cpu: 0.1
+                  memory: 10Mi
+                limits:
+                  cpu: 1
+                  memory: 250Mi
+              volumeMounts:
+                - mountPath: "/data"
+                  name: vol1
+            volumes:
+            - name: vol1
+              persistentVolumeClaim:
+                claimName: simple-pod-pvc
+      

@@ -1,0 +1,26 @@
+---
+- 
+  hosts: controller
+  serial: 1
+  gather_facts: no
+  vars:
+    - CONFIG_FILE: /etc/rancher/rke2/config.yaml
+
+  tasks:
+#  - name: check if already ran
+#    shell: test -s /etc/rancher/node/password
+#    register: already_ran
+#    ignore_errors: yes
+#    changed_when: already_ran is failed
+
+  - include_tasks: 332-more-controllers.yaml
+#    when: already_ran is failed
+
+  handlers:
+    - name: Make sure a service unit is restarted
+      systemd:
+        name: rke2-server
+        state: restarted
+        enabled: true
+      listen: "rke2-server service restart"
+

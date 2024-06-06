@@ -1,0 +1,47 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: keycloak-pg-cluster
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
+  instances: 2
+  storage:
+    size: 1Gi
+  bootstrap:
+    initdb:
+      database: keycloak
+      owner: keycloak
+  # backup:
+  #   retentionPolicy: "30d"
+  #   barmanObjectStore:
+  #     destinationPath: s3://cnpg-backup/kdev2/who-keycloak
+  #     endpointURL: https://fra1.digitaloceanspaces.com
+  #     wal:
+  #       compression: gzip
+  #     s3Credentials:
+  #       accessKeyId:
+  #         name: do-s3-creds
+  #         key: ACCESS_KEY
+  #       secretAccessKey:
+  #         name: do-s3-creds
+  #         key: SECRET_KEY
+  postgresql:
+    parameters:
+      max_connections: "20"
+      shared_buffers: 128MB
+      effective_cache_size: 384MB
+      maintenance_work_mem: 32MB
+      checkpoint_completion_target: "0.9"
+      wal_buffers: 3932kB
+      default_statistics_target: "100"
+      random_page_cost: "1.1"
+      effective_io_concurrency: "200"
+      work_mem: 3276kB
+      min_wal_size: 512MB
+      max_wal_size: 1GB
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 500m
+    limits:
+      memory: 512Mi

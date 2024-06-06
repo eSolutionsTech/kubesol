@@ -1,0 +1,25 @@
+---
+- hosts: controller_one
+  gather_facts: no
+  name: Install Vertical Pod Autoscaler VPA
+
+  tasks:
+  - shell:
+      cmd: kubectl -n kube-system get deploy -o name | grep vpa-
+    register: deploy_vpa
+    changed_when: deploy_vpa.stdout != ""
+
+  - pause:
+      prompt: "It seems like it's already installed. Press ENTER to continue install/upgrade or CTRL+C,A to abort"
+    when: deploy_vpa.stdout != ""
+
+  - name: autoscaler git checkout
+    ansible.builtin.git:
+      repo: "https://github.com/kubernetes/autoscaler.git"
+      dest: /root/vpa
+
+  - name: run vpa-up.sh
+    shell:
+      chdir: /root/vpa/vertical-pod-autoscaler
+      cmd: hack/vpa-up.sh
+      

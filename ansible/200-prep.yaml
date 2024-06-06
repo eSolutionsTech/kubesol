@@ -1,0 +1,11 @@
+---
+- import_playbook: 210-inventory-check.yaml 
+#- import_playbook: 220-add-ssh-keys-root.yaml
+#- import_playbook: 222-users-sudo.yaml
+- import_playbook: 230-apt.yaml 
+- import_playbook: 240-etc-hosts-copy.yaml 
+- import_playbook: 260-firewall.yaml	
+- import_playbook: 270-unattended-upgrades.yaml	
+- import_playbook: 280-gw.yaml 
+- import_playbook: 280-c1.yaml
+

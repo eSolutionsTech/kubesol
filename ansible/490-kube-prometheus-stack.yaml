@@ -1,0 +1,72 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: kube-prometheus-stack helm install
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+    NS: "monitoring"
+    SECRET: "grafana-credentials"
+
+  tasks:
+    - name: Add prometheus-community helm repository
+      kubernetes.core.helm_repository:
+        name: prometheus-community
+        repo_url: https://prometheus-community.github.io/helm-charts
+
+    - name: create namespace
+      kubernetes.core.k8s:
+        name: "{{ NS }}"
+        api_version: v1
+        kind: Namespace
+        state: present
+        kubeconfig: "{{ K }}"
+
+    - name: Check if grafana-credentials secret exists
+      kubernetes.core.k8s_info:
+        kind: secret
+        namespace: "{{ NS }}"
+        name: "{{ SECRET }}"
+        kubeconfig: "{{ K }}"
+      register: k8s_secret
+
+    - name: Generate grafana password
+      shell: pwgen 16 1
+      register: new_password
+      when: k8s_secret.resources[0] is undefined
+
+    - name: Create kubernetes secret
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: "{{ SECRET }}"
+            namespace: "{{ NS }}"
+          data:
+            admin-user: "{{ 'admin' | b64encode }}"
+            admin-password: "{{ new_password.stdout | b64encode }}"
+      when: k8s_secret.resources[0] is undefined
+
+    - name: Install kube-prometheus-stack
+      kubernetes.core.helm:
+        name: kube-prometheus-stack
+        namespace: monitoring
+        chart_ref: prometheus-community/kube-prometheus-stack
+        create_namespace: yes
+        kubeconfig: "{{ K }}"
+        values_files:
+          - files/kube-prometheus-stack/values.yaml
+
+
+# Access Grafana:
+# KUBECONFIG=.kubeconfig kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
+# Get admin password: KUBECONFIG=.kubeconfig kubectl -n monitoring get secret kube-prometheus-stack-grafana  -o jsonpath="{.data.admin-password}" | base64 --decode
+
+# Access Alertmanager:
+# KUBECONFIG=.kubeconfig kubectl port-forward -n monitoring svc/kube-prometheus-stack-alertmanager 9093:9093
+
+# Access Prometheus:
+# KUBECONFIG=.kubeconfig kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 9090:9090

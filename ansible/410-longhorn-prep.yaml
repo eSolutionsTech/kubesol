@@ -1,0 +1,44 @@
+---
+- 
+  hosts: worker
+  gather_facts: no
+  name: Longhorn prep
+
+  tasks:
+  - name: format longhorn device
+    filesystem:
+      fstype: ext4
+      dev: "/dev/{{ longhorn_device }}"
+
+  - name: mount longhorn device
+    mount:
+      path: "/var/lib/longhorn"
+      src: "/dev/{{ longhorn_device }}"
+      fstype: ext4
+      state: mounted
+  
+  - name: install longhorn requirements nfs for RWM
+    apt:
+      pkg:
+      - open-iscsi
+      - nfs-kernel-server
+
+# https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+  - name: longhorn multipath.conf fix
+    copy: 
+      dest: /etc/multipath.conf
+      content: |
+        defaults {
+          user_friendly_names yes
+        }
+        blacklist {
+          devnode "^sd[a-z0-9]+"
+        } 
+    notify: restart multipathd 
+
+  handlers:
+  - name: restart multipathd
+    service:
+      name: multipathd
+      state: restarted
+

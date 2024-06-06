@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dummy
+  namespace: dummy
+  annotations:
+    cert-manager.io/issuer: "letsencrypt-dummy"
+spec:
+  tls:
+  - hosts:
+    - dummy.{{ ext_dns_name }}
+    secretName: dummy-tls
+  rules:
+  - host: dummy.{{ ext_dns_name }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: dummy
+            port:
+              number: 80
+

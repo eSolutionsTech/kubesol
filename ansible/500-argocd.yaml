@@ -1,0 +1,92 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install ArgoCD
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: argocd helm repo
+      kubernetes.core.helm_repository:
+        name: argo
+        repo_url: https://argoproj.github.io/argo-helm
+
+    - name: create namespace argocd
+      kubernetes.core.k8s:
+        name: argocd
+        api_version: v1
+        kind: Namespace
+        state: present
+        kubeconfig: "{{ K }}"
+
+    - name: argocd issuer
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: Issuer
+          metadata:
+            name: letsencrypt-argocd
+            namespace: argocd
+          spec:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              email: "{{ letsencrypt_email }}"
+              privateKeySecretRef:
+                name: letsencrypt-argocd
+              solvers:
+                - http01:
+                    ingress:
+                      ingressClassName: nginx
+          
+    - name: argocd helm install
+      kubernetes.core.helm:
+        name: argocd
+        chart_ref: argo/argo-cd
+        chart_version: "{{ argocd_chart_version }}"
+        release_namespace: argocd
+        kubeconfig: "{{ K }}"
+        values:
+          global:
+            domain: "argocd.{{ ext_dns_name }}"
+          
+          configs:
+            params:
+              server.insecure: true
+          
+          server:
+            autoscaling:
+              enabled: true
+              minReplicas: 1
+              maxReplicas: 2
+            ingress:
+              enabled: true
+              ingressClassName: nginx
+              annotations:
+                nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+                nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+                cert-manager.io/issuer: "letsencrypt-argocd"
+              extraTls:
+                - hosts:
+                  - "argocd.{{ ext_dns_name }}"
+                  # Based on the ingress controller used secret might be optional
+                  secretName: argocd-tls
+          
+          redis-ha:
+            enabled: true
+          
+          controller:
+            replicas: 1
+          
+          repoServer:
+            autoscaling:
+              enabled: true
+              minReplicas: 1
+              maxReplicas: 2
+          
+          applicationSet:
+            replicas: 1
+          
+#eof

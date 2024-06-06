@@ -1,0 +1,28 @@
+---
+- import_playbook: 430-cert-manager.yaml
+- import_playbook: 460-kubernetes-dashboard.yaml
+- import_playbook: 462-kubernetes-dashboard-ingress.yaml
+
+## storage classes
+#- import_playbook: 410-longhorn-prep.yaml
+#- import_playbook: 411-longhorn-helm.yaml
+#- import_playbook: 412-longhorn-web.yaml
+
+#- import_playbook: 420-directpv.yaml
+
+##
+#- import_playbook: 440-cnpg.yaml
+#- import_playbook: 435-keycloak.yaml 
+#- import_playbook: 450-simple-pod.yaml
+#- import_playbook: 452-simple-pod-pvc.yaml
+#- import_playbook: 454-dummy.yaml
+##- import_playbook: 470-velero.yaml
+#- import_playbook: 490-kube-prometheus-stack.yaml 
+#- import_playbook: 491-loki.yaml
+#- import_playbook: 500-argocd.yaml
+#- import_playbook: 520-strimzi.yaml
+#- import_playbook: 530-minio-operator.yaml
+#- import_playbook: 540-vpa.yaml 
+#- import_playbook: 550-vault.yaml
+#- import_playbook: 560-external-secrets.yaml
+

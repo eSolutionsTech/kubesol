@@ -1,0 +1,14 @@
+[Unit]
+Description=Custom Firewall Service
+Before=network-pre.target
+Wants=network-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/firewall-rules.sh start
+ExecStop=/usr/local/bin/firewall-rules.sh stop
+ExecReload=/usr/local/bin/firewall-rules.sh restart
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

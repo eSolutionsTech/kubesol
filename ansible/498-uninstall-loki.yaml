@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: loki helm uninstall
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: Remove loki
+      kubernetes.core.helm:
+        name: loki
+        namespace: monitoring
+        state: absent
+        wait: true
+        kubeconfig: "{{ K }}"
+
+    - name: Remove Promtail
+      kubernetes.core.helm:
+        name: promtail
+        namespace: monitoring
+        state: absent
+        wait: true
+        kubeconfig: "{{ K }}"
+
+

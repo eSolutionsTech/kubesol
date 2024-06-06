@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: loki helm install
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+    NS: "monitoring"
+  tasks:
+    - name: Add grafana helm repository
+      kubernetes.core.helm_repository:
+        name: grafana
+        repo_url: https://grafana.github.io/helm-charts
+
+    - name: Install loki
+      kubernetes.core.helm:
+        name: loki
+        namespace: "{{ NS }}"
+        chart_ref: grafana/loki
+        create_namespace: yes
+        kubeconfig: "{{ K }}"
+        values_files:
+          - files/loki/values.yaml
+
+    - name: Install Promtail
+      kubernetes.core.helm:
+        name: promtail
+        namespace: "{{ NS }}"
+        chart_ref: grafana/promtail
+        create_namespace: yes
+        kubeconfig: "{{ K }}"
+        values_files:
+          - files/loki/promtail.yaml

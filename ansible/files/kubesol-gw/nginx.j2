@@ -1,0 +1,147 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+	worker_connections 768;
+	# multi_accept on;
+}
+
+http {
+
+	##
+	# Basic Settings
+	##
+
+	sendfile on;
+	tcp_nopush on;
+	types_hash_max_size 2048;
+	# server_tokens off;
+
+	# server_names_hash_bucket_size 64;
+	# server_name_in_redirect off;
+
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	##
+	# SSL Settings
+	##
+
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; # Dropping SSLv3, ref: POODLE
+	ssl_prefer_server_ciphers on;
+
+	##
+	# Logging Settings
+	##
+
+	access_log /var/log/nginx/access.log;
+	error_log /var/log/nginx/error.log;
+
+	##
+	# Gzip Settings
+	##
+
+	gzip on;
+
+	# gzip_vary on;
+	# gzip_proxied any;
+	# gzip_comp_level 6;
+	# gzip_buffers 16 8k;
+	# gzip_http_version 1.1;
+	# gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+	##
+	# Virtual Host Configs
+	##
+
+	include /etc/nginx/conf.d/*.conf;
+	include /etc/nginx/sites-enabled/*;
+}
+
+
+#mail {
+#	# See sample authentication script at:
+#	# http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
+#
+#	# auth_http localhost/auth.php;
+#	# pop3_capabilities "TOP" "USER";
+#	# imap_capabilities "IMAP4rev1" "UIDPLUS";
+#
+#	server {
+#		listen     localhost:110;
+#		protocol   pop3;
+#		proxy      on;
+#	}
+#
+#	server {
+#		listen     localhost:143;
+#		protocol   imap;
+#		proxy      on;
+#	}
+#}
+
+##### vang
+## kubernetes
+stream {
+
+  log_format stream '$remote_addr [$time_local] '
+                 '$protocol $status $bytes_sent $bytes_received '
+                 '$session_time $upstream_addr '
+                 '$upstream_bytes_sent $upstream_bytes_received $upstream_connect_time';
+  access_log /var/log/nginx/stream.log stream;
+
+#kubesol-dev2
+  server {
+    listen {{ ext_dns_name }}:6443;
+    proxy_pass {{ project_name }}_6443;
+  }
+  upstream {{ project_name }}_6443 {
+    {% for ansible_host in groups['controller_one'] %}
+    server {{ ansible_host }}:6443;
+    {% endfor %}
+    {% for ansible_host in groups['controller'] %}
+    server {{ ansible_host }}:6443;
+    {% endfor %}
+  }
+
+    server {
+    listen {{ hosts_gw }}:9345;
+    proxy_pass {{ project_name }}_9345;
+  }
+  upstream {{ project_name }}_9345 {
+    {% for ansible_host in groups['controller_one'] %}
+    server {{ ansible_host }}:9345;
+    {% endfor %}
+    {% for ansible_host in groups['controller'] %}
+    server {{ ansible_host }}:9345;
+    {% endfor %}
+  }
+
+# kubesol-dev2 port 80
+  server {
+    listen {{ ext_dns_name }}:80;
+    proxy_pass {{ project_name }}_80;
+  }
+  upstream {{ project_name }}_80 {
+    {% for ansible_host in groups['worker'] %}
+    server {{ ansible_host }}:80;
+    {% endfor %}
+  }
+
+
+# kubesol-dev2 port 443
+  server {
+    listen {{ ext_dns_name }}:443;
+    proxy_pass {{ project_name }}_443;
+  }
+  upstream {{ project_name }}_443 {
+    {% for ansible_host in groups['worker'] %}
+    server {{ ansible_host }}:443;
+    {% endfor %}
+  }
+
+
+}
+

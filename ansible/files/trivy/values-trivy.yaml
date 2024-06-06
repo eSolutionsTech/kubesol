@@ -1,0 +1,41 @@
+
+targetNamespaces: ""
+excludeNamespaces: ""
+
+operator:
+  replicas: 1
+  namespace: trivy-system
+  scanJobsConcurrentLimit: 5
+  scannerReportTTL: "96h"
+  metricsVulnIdEnabled: true
+
+service:
+  # -- if true, the Service doesn't allocate any IP
+  headless: false
+
+serviceMonitor:
+  # -- enabled determines whether a serviceMonitor should be deployed
+  enabled: true
+
+trivy:
+  storageClassName: longhorn
+  storageSize: "1Gi"
+  ignoreUnfixed: true
+  #severity: HIGH,CRITICAL
+
+  # -- slow this flag is to use less CPU/memory for scanning though it takes more time than normal scanning
+  slow: true
+
+# permit running on controller nodes
+nodeCollector:
+  tolerations:
+    - key: "CriticalAddonsOnly"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
+
+compliance:
+  # default is every 6 hours
+  #cron: "0 */6 * * *"
+  cron: "0 1 * * *"
+

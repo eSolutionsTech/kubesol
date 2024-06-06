@@ -1,0 +1,40 @@
+
+# run first something like
+# export ANSIBLE_CONFIG=${CONF_DIR}/ansible.cfg
+
+---
+- 
+  hosts: controller_one,controller,worker
+  gather_facts: no
+  name: Uninstall RKE2
+
+  tasks:
+  - name: Please, first uninstall DirectPV!
+    pause:
+      prompt: See 429-Uninstall-directpv.yaml. Press return to continue. Press Ctrl+c and then "a" to abort
+
+  - name: List cluster components
+    command: hostname
+    changed_when: none
+
+  - name: Uninstall RKE2
+    pause:
+      prompt: Are you sure? Press return to continue. Press Ctrl+c and then "a" to abort
+
+  - name: run rke2-uninstall.sh 
+    shell: /usr/local/bin/rke2-uninstall.sh 
+
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: Remove local files
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - ./.kubeconfig
+        - ./auth
+        - ./.kube
+

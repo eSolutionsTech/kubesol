@@ -1,0 +1,21 @@
+# Nginx ingress controller
+
+Ingress-nginx is an Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
+This is installed by default in our project. Docs at 
+https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md 
+
+## Usage
+
+With `ansible-playbook 454-dummy.yaml` you can install our demos you see how we create 
+Issuer (for SSL certificates), Ingress with TLS, services and pods for a full web application in Kubernetes.
+
+A list of useful commands in our setup:
+
+```
+  kubectl get ingressclasses
+  kubectl -n kube-system get pods | grep nginx
+
+  kubectl -n dummy get ingress
+  kubectl -n dummy get issuer
+```
+

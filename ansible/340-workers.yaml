@@ -1,0 +1,27 @@
+# loosely based on https://blog.devgenius.io/automating-installation-of-ha-rke2-kubernetes-cluster-with-ansible-2456cc95d970
+
+---
+- 
+  hosts: worker
+  gather_facts: no
+  vars:
+    - CONFIG_FILE: /etc/rancher/rke2/config.yaml
+
+  tasks:
+#  - name: check if already ran
+#    shell: test -s /etc/rancher/node/password
+#    register: already_ran
+#    ignore_errors: yes
+#    changed_when: already_ran is failed
+
+  - include_tasks: 342-workers.yaml 
+#    when: already_ran is failed
+
+  handlers:
+    - name: Make sure a service unit is restarted
+      systemd:
+        name: rke2-agent
+        state: restarted
+        enabled: true
+      listen: "rke2-agent service restart"
+

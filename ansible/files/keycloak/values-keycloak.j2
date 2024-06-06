@@ -1,0 +1,71 @@
+production: true
+proxy: edge
+proxyAddressForwarding: true
+auth:
+  createAdminUser: false
+  adminUser: admin
+  adminPassword: {{ admin_password.stdout }}
+image:
+  tag: {{ keycloak_version }}
+ingress:
+  enabled: false
+
+# initContainers: 
+#   - name: theme-provider
+#     image: registry-gitlab.esolutions.ro/public-repo/who-reporting-kthemes:6388438d
+#     imagePullPolicy: IfNotPresent
+#     command:
+#       - sh
+#     args:
+#       - -c
+#       - |
+#         echo "Copying theme..."
+#         cp -R /mytheme/* /who-theme
+#     volumeMounts:
+#       - name: who-theme
+#         mountPath: /who-theme
+# extraVolumeMounts: 
+#   - name: who-theme
+#     mountPath: /opt/bitnami/keycloak/themes/who-theme
+
+# extraVolumes: 
+#   - name: who-theme
+#     emptyDir: {}
+
+postgresql:
+  enabled: false
+proxyAddressForwarding: true
+service:
+  type: ClusterIP
+externalDatabase:
+  host: "keycloak-pg-cluster-rw"
+  port: 5432
+  user: keycloak
+  database: keycloak
+  existingSecret: "keycloak-pg-cluster-app"
+  existingSecretPasswordKey: "password"
+customReadinessProbe:
+  httpGet:
+    path: /realms/master
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+  successThreshold: 1
+customLivenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+  successThreshold: 1
+resources:
+  requests:
+    cpu: 200m
+    memory: 800Mi
+  limits:
+    memory: 800Mi
+extraStartupArgs: "-Dkeycloak.profile.feature.scripts=enabled -Dkeycloak.profile.feature.upload_scripts=enabled --hostname=keycloak.{{ ext_dns_name }} --hostname-admin-url=https://keycloak.{{ ext_dns_name }}"

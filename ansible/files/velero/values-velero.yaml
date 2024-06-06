@@ -1,0 +1,43 @@
+---
+initContainers:
+- name: velero-plugin-for-aws
+  image: velero/velero-plugin-for-aws:v1.8.0
+    #  imagePullPolicy: IfNotPresent
+  volumeMounts:
+    - mountPath: /target
+      name: plugins
+
+configuration:
+  backupStorageLocation:
+  - name:
+    provider: velero.io/aws
+    bucket: <bucket name>
+    default: true
+    config:
+      region: <aws region>
+  volumeSnapshotLocation:
+  - name:
+    provider: velero.io/aws
+    config:
+      region: <aws region>
+credentials:
+  secretContents: ## enter access and secret key to s3 bucket. This configuration will create kubernetes secret.
+    cloud: |
+      [default]
+      aws_access_key_id=<AWS_ACCESS_KEY_ID>
+      aws_secret_access_key=<AWS_SECRET_ACCESS_KEY>
+
+upgradeJobResources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 256Mi
+
+kubectl:
+  image:
+    repository: docker.io/bitnami/kubectl
+    digest: sha256:0f5215ad2bed05938a8fe4f4ace9267c60da3eace65d32c033ced6dd16e5ee26
+---
+

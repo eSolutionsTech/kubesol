@@ -1,0 +1,6 @@
+---
+- import_playbook: 310-controller-one.yaml
+- import_playbook: 320-get-kubeconfig.yaml
+- import_playbook: 330-more-controllers.yaml
+- import_playbook: 340-workers.yaml
+

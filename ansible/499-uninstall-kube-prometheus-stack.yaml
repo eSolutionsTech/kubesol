@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: kube-prometheus-stack helm uninstall
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+
+  # https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#uninstall-helm-chart
+
+  tasks:
+    - name: Remove kube-prometheus-stack release and waiting suppression ending
+      kubernetes.core.helm:
+        name: kube-prometheus-stack
+        namespace: monitoring
+        state: absent
+        wait: true
+        kubeconfig: "{{ K }}"
+
+    - name: Remove CRDs
+      shell: "KUBECONFIG={{ K }} kubectl delete crd {{ item }}"
+      loop:
+        - alertmanagerconfigs.monitoring.coreos.com
+        - alertmanagers.monitoring.coreos.com
+        - podmonitors.monitoring.coreos.com
+        - probes.monitoring.coreos.com
+        - prometheusagents.monitoring.coreos.com
+        - prometheuses.monitoring.coreos.com
+        - prometheusrules.monitoring.coreos.com
+        - scrapeconfigs.monitoring.coreos.com
+        - servicemonitors.monitoring.coreos.com
+        - thanosrulers.monitoring.coreos.com

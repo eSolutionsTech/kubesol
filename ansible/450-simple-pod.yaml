@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install dummy
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: Create simple-pod
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: simple-pod
+            namespace: default
+          spec:
+            containers:
+            - image: vvang/dummy:amd64
+              name: c1
+              resources: 
+                requests:
+                  cpu: 0.1
+                  memory: 10Mi
+                limits:
+                  cpu: 1
+                  memory: 250Mi
+

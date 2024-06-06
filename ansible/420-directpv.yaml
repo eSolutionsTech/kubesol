@@ -1,0 +1,43 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install DirectPV
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: You need to have kubectl-directpv binary
+      shell:
+        cmd: which kubectl-directpv
+      changed_when: False
+
+    - name: Creating file .directpv.yaml
+      shell: 
+        cmd: kubectl-directpv install -o yaml --kubeconfig=.kubeconfig >.directpv.yaml
+        creates: .directpv.yaml
+
+    - name: Applying .directpv.yaml to k8s
+      kubernetes.core.k8s:
+        state: present
+        src: .directpv.yaml
+        kubeconfig: "{{ K }}"
+
+    - name: Pause for 2 minutes to start directpv pods
+      ansible.builtin.pause:
+        minutes: 2
+
+    - name: Creating file .drives.yaml
+      shell:
+        cmd: kubectl-directpv discover --kubeconfig=.kubeconfig --output-file .drives.yaml
+        creates: .drives.yaml
+
+    - name: Check .drives.yaml
+      pause:
+        prompt: Check .drives.yaml now! Press return to continue. Press Ctrl+c and then "a" to abort
+
+    - name: Init using .drives.yaml
+      shell:
+        cmd: kubectl-directpv init .drives.yaml --kubeconfig=.kubeconfig --dangerous && touch .drives.init
+        creates: .drives.init
+      

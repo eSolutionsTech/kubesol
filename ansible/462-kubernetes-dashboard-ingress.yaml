@@ -1,0 +1,63 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install Kubernetes dashboard ingress
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: kubernetes dashboard cluster issuer
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: Issuer
+          metadata:
+            name: letsencrypt-kubernetes-dashboard
+            namespace: kubernetes-dashboard
+          spec:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              email: "{{ letsencrypt_email }}"
+              privateKeySecretRef:
+                name: letsencrypt-kubernetes-dashboard
+              solvers:
+                - http01:
+                    ingress:
+                      ingressClassName: nginx
+
+    - name: kubernetes dashboard ingress
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}" 
+        definition:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: kubernetes-dashboard
+            namespace: kubernetes-dashboard
+            annotations:
+              nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+              nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+              nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+              cert-manager.io/issuer: "letsencrypt-kubernetes-dashboard"
+          spec:
+            tls:
+              - hosts:
+                - "kubernetes-dashboard.{{ ext_dns_name }}"
+                secretName: kubernetes-dashboard-tls
+            rules:
+              - host: "kubernetes-dashboard.{{ ext_dns_name }}"
+                http:
+                  paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                      service:
+                        name: kubernetes-dashboard-kong-proxy
+                        port:
+                          number: 443
+          
+          

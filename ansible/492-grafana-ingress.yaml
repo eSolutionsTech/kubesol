@@ -1,0 +1,59 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install Grafana ingress
+  vars:
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: Grafana cluster issuer
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: cert-manager.io/v1
+          kind: Issuer
+          metadata:
+            name: letsencrypt-grafana
+            namespace: monitoring
+          spec:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              email: "{{ letsencrypt_email }}"
+              privateKeySecretRef:
+                name: letsencrypt-grafana
+              solvers:
+                - http01:
+                    ingress:
+                      ingressClassName: nginx
+
+    - name: Grafana ingress
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: grafana
+            namespace: monitoring
+            annotations:
+              nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+              cert-manager.io/issuer: "letsencrypt-grafana"
+          spec:
+            tls:
+              - hosts:
+                  - "grafana.{{ ext_dns_name }}"
+                secretName: grafana-tls
+            rules:
+              - host: "grafana.{{ ext_dns_name }}"
+                http:
+                  paths:
+                    - path: /
+                      pathType: Prefix
+                      backend:
+                        service:
+                          name: kube-prometheus-stack-grafana
+                          port:
+                            number: 80

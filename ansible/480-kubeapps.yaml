@@ -1,0 +1,67 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  name: Install kubeapps
+  vars:
+    NS: "kubeapps"
+    K: "{{ playbook_dir }}/.kubeconfig"
+
+  tasks:
+    - name: Add bitnami helm repository
+      kubernetes.core.helm_repository:
+        name: bitnami
+        repo_url: https://charts.bitnami.com/bitnami
+
+    - name: Install kubeapps helm chart
+      kubernetes.core.helm:
+        name: kubeapps
+        namespace: "{{ NS }}"
+        chart_ref: bitnami/kubeapps
+        create_namespace: yes
+        kubeconfig: "{{ K }}"
+        values_files:
+          - files/kubeapps/values-kubeapps.yaml
+
+    - name: Create service account
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: ServiceAccount
+          metadata:
+            name: kubeapps-operator
+            namespace: "{{ NS }}"
+
+    - name: Create ClusterRoleBinding
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRoleBinding
+          metadata:
+            name: kubeapps-operator
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: cluster-admin
+          subjects:
+            - kind: ServiceAccount
+              name: kubeapps-operator
+              namespace: "{{ NS }}"
+
+    - name: Create service account token
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: "{{ K }}"
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: kubeapps-operator-token
+            namespace: "{{ NS }}"
+            annotations:
+              kubernetes.io/service-account.name: "kubeapps-operator"
+          type: kubernetes.io/service-account-token

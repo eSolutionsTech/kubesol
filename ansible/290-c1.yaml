@@ -1,0 +1,29 @@
+---
+- 
+  hosts: controller_one
+  gather_facts: no
+  name: Add some handy tools on controller one c1
+  vars:
+    HELM_ARCHIVE: "helm-v3.15.1-linux-amd64.tar.gz"
+
+  tasks:
+# install helm
+  - name: get helm binary tar.gz
+    get_url:
+      url: "https://get.helm.sh/{{ HELM_ARCHIVE }}"
+      dest: /root
+      mode: '0644'
+
+  - name: unpack helm tar.gz
+    unarchive:
+      src: "{{ HELM_ARCHIVE }}"
+      dest: /root
+      remote_src: yes
+
+  - name: copy helm binary to /usr/local/bin
+    copy: 
+      remote_src: True 
+      src: linux-amd64/helm
+      dest: /usr/local/bin
+      mode: '0755'
+

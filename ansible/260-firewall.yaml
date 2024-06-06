@@ -1,0 +1,31 @@
+---
+- name: Add a local firewall file
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Configure Firewall Service
+      template:
+          src: files/firewall/firewall-rules.sh.j2
+          dest: /usr/local/bin/firewall-rules.sh
+          mode: 0755
+      notify: restart firewall service
+
+    - name: Create systemd service unit for firewall
+      copy:
+        src: files/firewall/firewall.service
+        dest: /etc/systemd/system/firewall.service
+      notify: reload systemd and restart firewall service
+
+
+  handlers:
+    - name: restart firewall service
+      systemd:
+        name: "firewall"
+        state: restarted
+
+    - name: reload systemd and restart firewall service
+      systemd:
+        name: "firewall"
+        state: restarted
+        daemon_reload: yes

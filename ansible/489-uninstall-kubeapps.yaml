@@ -1,0 +1,66 @@
+# TO BE DONE
+
+#---
+#- hosts: localhost
+#  gather_facts: false
+#  connection: local
+#  name: kubeapps helm uninstall
+#  vars:
+#    K: "{{ playbook_dir }}/.kubeconfig"
+#    NS: "kubeapps"
+#
+#  tasks:
+#    - name: Remove kubeapps
+#      kubernetes.core.helm:
+#        name: kubeapps
+#        namespace: "{{ NS }}"
+#        state: absent
+#        wait: true
+#        kubeconfig: "{{ K }}"
+#
+#    - name: Remove service account token
+#      kubernetes.core.k8s:
+#        state: absent
+#        kubeconfig: "{{ K }}"
+#        definition:
+#          apiVersion: v1
+#          kind: Secret
+#          metadata:
+#            name: kubeapps-operator-token
+#            namespace: "{{ NS }}"
+#
+#    - name: Remove ClusterRoleBinding
+#      kubernetes.core.k8s:
+#        state: absent
+#        kubeconfig: "{{ K }}"
+#        definition:
+#          apiVersion: rbac.authorization.k8s.io/v1
+#          kind: ClusterRoleBinding
+#          metadata:
+#            name: kubeapps-operator
+#
+#    - name: Remove service account
+#      kubernetes.core.k8s:
+#        state: absent
+#        kubeconfig: "{{ K }}"
+#        definition:
+#          apiVersion: v1
+#          kind: ServiceAccount
+#          metadata:
+#            name: kubeapps-operator
+#            namespace: "{{ NS }}"
+#
+#    - name: Remove CRD
+#      shell: "KUBECONFIG={{ K }} kubectl delete crd apprepositories.kubeapps.com"
+#
+#    - name: Remove namespace
+#      kubernetes.core.k8s:
+#        state: absent
+#        kubeconfig: "{{ K }}"
+#        definition:
+#          apiVersion: v1
+#          kind: namespace
+#          metadata:
+#            name: "{{ NS }}"
+
+# Reference: https://github.com/vmware-tanzu/kubeapps/blob/main/chart/kubeapps/README.md#how-to-uninstall-kubeapps

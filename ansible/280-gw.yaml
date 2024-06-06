@@ -1,0 +1,41 @@
+# setup gw
+---
+- 
+  hosts: gateway
+  gather_facts: no
+
+  tasks:
+  - name: Install misc gateway packages
+    apt:
+      pkg:
+      - apache2-utils
+
+  - name: Install nginx
+    apt:
+      name: nginx
+      state: latest
+
+  - name: remove nginx default site available
+    file:
+      path: /etc/nginx/sites-enabled/default 
+      state: absent
+    notify: restart nginx
+  
+  - name: copy nginx config file
+    template:
+      src: files/kubesol-gw/nginx.j2
+      dest: /etc/nginx/nginx.conf
+    notify: restart nginx
+
+  - name: enable nginx
+    service:
+      name: nginx
+      state: started
+      enabled: true
+
+  handlers:
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted
+   

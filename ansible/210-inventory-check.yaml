@@ -1,0 +1,9 @@
+---
+- 
+  hosts: all
+  gather_facts: no
+
+  tasks:
+  - name: Ansible ping
+    ping: 
+
