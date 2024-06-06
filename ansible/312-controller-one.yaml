@@ -76,7 +76,7 @@
   - name: Starting rke2 server
     systemd:
       name: rke2-server
-      state: started
+      state: restarted
       enabled: true
 
   - name: kubeconfig directory

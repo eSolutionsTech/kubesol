@@ -42,6 +42,6 @@
   - name: Starting rke2 agent
     systemd:
       name: rke2-agent
-      state: started
+      state: restarted
       enabled: true
 
