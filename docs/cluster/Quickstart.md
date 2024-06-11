@@ -64,19 +64,23 @@ trivy_chart_version="0.23.2"
 hosts_gw="kubesol-dev4-c1"
 
 [controller_one]
-kubesol-dev4-c1.YOUR_DOMAIN_COM int_ip=10.135.187.238 controller_worker=true ansible_connection=local 
+kubesol-dev4-c1    int_ip=10.135.187.238 controller_worker=true ansible_connection=local 
 ```
 
-7. run `ansible-playbook 200-inventory-check.yaml`. if all ok, continue, else debug and re-run the playbook
+7. run `ansible-playbook 200-prep.yaml`. If all ok, continue, else debug and re-run the playbook
 
-8. run `ansible-playbook 300-new-rke2.yaml`. if all ok, continue, else debug and re-run the playbook
+8. run `ansible-playbook 300-new-rke2.yaml`. This will take 2-3 minutes. If all ok, continue, else debug and re-run the playbook
 
 9. you now have a Kubernetes cluster with one node. you could use it with:
 
 ```
-export KUBECONFIG=$(pwd)/.kubeconfig
-kubectl get nodes
+$ kubectl get nodes
+
+NAME              STATUS     ROLES                       AGE   VERSION
+kubesol-dev4-c1   NotReady   control-plane,etcd,master   78s   v1.29.4+rke2r1
 ```
+
+Wait until you see the node STATUS Ready.
 
 10. For the playbooks >400 we recommend running them one by one and checking status after each one. For example:
 
