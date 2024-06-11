@@ -2,8 +2,10 @@
 
 A full production Kubesol setup will require at least 7 VMs (one gateway, 3 controller nodes, 3 worker nodes). But you may experiment on a single VM even with some limitations.
 
-## Step by step on DigitalOcean
+This procedure will use the same VM as Ansible run host and destination host, that's why we have in 
+the Inventory file `ansible_connection=local`. So you just ssh to the VM and run everything there.
 
+## Step by step on DigitalOcean
 
 1. Create a Virtual Machine with Ubuntu Linux 24.04 and 8GB RAM, 4 CPU cores (it will have 150 GB disk but 50GB is enough). 
 I have used the name `kubesol-dev4-c1` for the VM.
