@@ -163,7 +163,8 @@ Access the web interface and browse, for example, to Dashboards -> Kubernetes / 
 
 ## That's all for now
 
-Check out our full documentation for more components.
+Check out our full documentation for more components. Please note some components 
+won't work without additional effort in this single-VM case (for example vault).
 
 
 
