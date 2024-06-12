@@ -1,0 +1,31 @@
+---
+- hosts: controller_one,controller
+  serial: 1
+  gather_facts: no
+
+  tasks:
+  - name: stop rke2-server
+    systemd:
+      name: rke2-server
+      state: stopped
+
+  - name: rke2 certificate rotate
+    shell:
+      cmd: rke2 certificate rotate
+
+  - name: start rke2-server
+    systemd:
+      name: rke2-server
+      state: started 
+
+
+- hosts: worker
+  serial: 1
+  gather_facts: no
+
+  tasks:
+  - name: restart rke2-agent
+    systemd:
+      name: rke2-agent
+      state: restarted
+  
