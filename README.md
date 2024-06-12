@@ -6,4 +6,3 @@ For commercial support, please contact [esolutions.tech](https://www.esolutions.
 
 Project documentation is [in this directory](docs#kubesol).
 
-
