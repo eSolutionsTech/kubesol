@@ -15,6 +15,7 @@
         name: cnpg
         namespace: cnpg-system
         chart_ref: cnpg/cloudnative-pg
+        chart_version: "{{ cnpg_chart_version|default('') }}"
         create_namespace: yes
         kubeconfig: "{{ K }}"
 

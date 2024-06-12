@@ -15,6 +15,7 @@
         name: kubernetes-dashboard
         namespace: kubernetes-dashboard
         chart_ref: kubernetes-dashboard/kubernetes-dashboard
+        chart_version: "{{ kubernetes_dashboard_chart_version|default('') }}"
         create_namespace: yes
         kubeconfig: "{{ K }}"
 

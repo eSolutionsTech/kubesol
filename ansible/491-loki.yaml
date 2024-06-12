@@ -17,6 +17,7 @@
         name: loki
         namespace: "{{ NS }}"
         chart_ref: grafana/loki
+        chart_version: "{{ loki_chart_version|default('') }"
         create_namespace: yes
         kubeconfig: "{{ K }}"
         values_files:
@@ -27,7 +28,9 @@
         name: promtail
         namespace: "{{ NS }}"
         chart_ref: grafana/promtail
+        chart_version: "{{ promtail_chart_version|default('') }}"
         create_namespace: yes
         kubeconfig: "{{ K }}"
         values_files:
           - files/loki/promtail.yaml
+

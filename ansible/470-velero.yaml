@@ -15,11 +15,9 @@
         name: velero
         namespace: velero
         chart_ref: vmware-tanzu/velero
+        chart_version: "{{ velero_chart_version|default('') }}"
         create_namespace: yes
         kubeconfig: "{{ K }}"
         values_files:
           - files/velero/values-velero.yaml  
     
-    - debug:
-        msg: "NOT IMPLEMENTED YET"
-

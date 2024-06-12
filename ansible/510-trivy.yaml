@@ -15,7 +15,7 @@
         name: trivy
         namespace: trivy-system
         chart_ref: aqua/trivy-operator
-        chart_version: "{{ trivy_chart_version }}"
+        chart_version: "{{ trivy_chart_version|default('') }}"
         create_namespace: yes
         kubeconfig: "{{ K }}"
         values_files:

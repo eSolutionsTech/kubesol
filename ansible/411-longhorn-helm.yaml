@@ -15,7 +15,7 @@
           name: longhorn
           namespace: longhorn-system
           chart_ref: longhorn/longhorn
-          chart_version: "{{ longhorn_version }}"
+          chart_version: "{{ longhorn_chart_version|default('') }}"
           create_namespace: yes
           kubeconfig: "{{ K }}"
 

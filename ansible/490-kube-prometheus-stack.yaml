@@ -55,6 +55,7 @@
         name: kube-prometheus-stack
         namespace: monitoring
         chart_ref: prometheus-community/kube-prometheus-stack
+        chart_version: "{{ kube_prometheus_stack_chart_version|default('') }}"
         create_namespace: yes
         kubeconfig: "{{ K }}"
         values_files:

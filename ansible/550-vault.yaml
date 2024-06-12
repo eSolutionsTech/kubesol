@@ -45,7 +45,7 @@
         name: vault
         release_namespace: vault
         chart_ref: hashicorp/vault
-        chart_version: "{{ vault_chart_version }}"
+        chart_version: "{{ vault_chart_version|default('') }}"
         kubeconfig: "{{ K }}"
         values:
           global:

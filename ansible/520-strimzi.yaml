@@ -10,6 +10,7 @@
     - kubernetes.core.helm:
         name: strimzi
         chart_ref: "oci://quay.io/strimzi-helm/strimzi-kafka-operator"
+        chart_version: "{{ strimzi_chart_version|default('') }}"
         release_namespace: strimzi
         create_namespace: yes
         kubeconfig: "{{ K }}"

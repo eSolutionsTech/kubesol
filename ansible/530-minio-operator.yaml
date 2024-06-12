@@ -45,7 +45,7 @@
       kubernetes.core.helm:
         name: minio-operator
         chart_ref: minio-operator/operator
-        chart_version: "{{ minio_operator_chart_version }}"
+        chart_version: "{{ minio_operator_chart_version|default('') }}"
         release_namespace: minio-operator
         kubeconfig: "{{ K }}"
         values:

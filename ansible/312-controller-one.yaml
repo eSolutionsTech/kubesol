@@ -71,7 +71,7 @@
   - name: Installing rke2 server
     command: /root/rke2.sh
     environment: 
-      INSTALL_RKE2_VERSION: "{{ rke2_version }}"
+      INSTALL_RKE2_VERSION: "{{ rke2_version|default('') }}"
 
   - name: Starting rke2 server
     systemd:

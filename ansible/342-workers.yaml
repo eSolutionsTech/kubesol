@@ -36,7 +36,7 @@
     shell: ./rke2.sh
     notify: "rke2-agent service restart"
     environment: 
-      INSTALL_RKE2_VERSION: "{{ rke2_version }}"
+      INSTALL_RKE2_VERSION: "{{ rke2_version|default('') }}"
       INSTALL_RKE2_TYPE: "agent" 
 
   - name: Starting rke2 agent

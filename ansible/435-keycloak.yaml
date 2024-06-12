@@ -43,6 +43,7 @@
           chart_ref: keycloak/keycloak
           namespace: "{{ NS }}"
           kubeconfig: "{{ K }}"
+          chart_version: "{{ keycloak_chart_version|default('') }}"
           disable_hook: true
           values_files:
             - .values-keycloak.yaml
