@@ -25,6 +25,8 @@ I have used the name `kubesol-dev4-c1` for the VM.
 ```
 apt update -y
 apt install ansible python3-kubernetes pwgen -y
+
+ansible-galaxy collection install kubernetes.core
 ```
 
 5. `git clone https://github.com/eSolutionsGrup/kubesol.git`

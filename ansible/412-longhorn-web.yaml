@@ -5,7 +5,6 @@
   name: Longhorn web interface
 
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
     NS: "longhorn-system"
     SECRET: "longhorn-ui"
 
@@ -14,7 +13,6 @@
         kind: secret
         namespace: "{{ NS }}"
         name: "{{ SECRET }}"
-        kubeconfig: "{{ K }}"
       register: ks8_secret
 
     - debug:
@@ -35,7 +33,6 @@
     - name: Create kubernetes secret
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: v1
           kind: Secret
@@ -57,7 +54,6 @@
     - name: Delete basic-auth secret if exists
       kubernetes.core.k8s:
         state: absent
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: v1
           kind: Secret
@@ -68,13 +64,10 @@
     - name: Create basic-auth secret
       shell: 
         cmd: kubectl -n "{{ NS }}" create secret generic basic-auth --from-file=auth
-      environment:
-        KUBECONFIG: "{{ K }}"
 
     - name: Create issuer
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: cert-manager.io/v1
           kind: Issuer
@@ -95,7 +88,6 @@
     - name: Create longhorn ingress
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: networking.k8s.io/v1
           kind: Ingress

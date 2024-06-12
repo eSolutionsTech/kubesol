@@ -4,7 +4,6 @@
   connection: local
   name: kube-prometheus-stack helm install
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
     NS: "monitoring"
     SECRET: "grafana-credentials"
 
@@ -20,14 +19,12 @@
         api_version: v1
         kind: Namespace
         state: present
-        kubeconfig: "{{ K }}"
 
     - name: Check if grafana-credentials secret exists
       kubernetes.core.k8s_info:
         kind: secret
         namespace: "{{ NS }}"
         name: "{{ SECRET }}"
-        kubeconfig: "{{ K }}"
       register: k8s_secret
 
     - name: Generate grafana password
@@ -38,7 +35,6 @@
     - name: Create kubernetes secret
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: v1
           kind: Secret
@@ -57,7 +53,6 @@
         chart_ref: prometheus-community/kube-prometheus-stack
         chart_version: "{{ kube_prometheus_stack_chart_version|default('') }}"
         create_namespace: yes
-        kubeconfig: "{{ K }}"
         values_files:
           - files/kube-prometheus-stack/values.yaml
 

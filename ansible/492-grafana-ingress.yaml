@@ -4,13 +4,11 @@
   connection: local
   name: Install Grafana ingress
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: Grafana cluster issuer
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: cert-manager.io/v1
           kind: Issuer
@@ -31,7 +29,6 @@
     - name: Grafana ingress
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: networking.k8s.io/v1
           kind: Ingress

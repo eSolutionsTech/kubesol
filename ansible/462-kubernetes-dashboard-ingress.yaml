@@ -3,14 +3,11 @@
   gather_facts: false
   connection: local
   name: Install Kubernetes dashboard ingress
-  vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: kubernetes dashboard cluster issuer
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: cert-manager.io/v1
           kind: Issuer
@@ -31,7 +28,6 @@
     - name: kubernetes dashboard ingress
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}" 
         definition:
           apiVersion: networking.k8s.io/v1
           kind: Ingress

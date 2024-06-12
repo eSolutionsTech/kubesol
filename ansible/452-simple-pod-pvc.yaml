@@ -4,13 +4,11 @@
   connection: local
   name: Install dummy
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: Create PVC directPV
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: v1
           kind: PersistentVolumeClaim
@@ -28,7 +26,6 @@
     - name: Create simple-pod-pvc directPV
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: v1
           kind: Pod

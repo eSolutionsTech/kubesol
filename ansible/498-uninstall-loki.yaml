@@ -4,7 +4,6 @@
   connection: local
   name: loki helm uninstall
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: Remove loki
@@ -13,7 +12,6 @@
         namespace: monitoring
         state: absent
         wait: true
-        kubeconfig: "{{ K }}"
 
     - name: Remove Promtail
       kubernetes.core.helm:
@@ -21,6 +19,4 @@
         namespace: monitoring
         state: absent
         wait: true
-        kubeconfig: "{{ K }}"
-
 

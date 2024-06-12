@@ -4,13 +4,13 @@
   connection: local
   name: Install dummy
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
+    D: "/root/.kubesol"
 
   tasks:
     - name: dummy template j2 -> yaml
       template:
         src: "files/dummy/{{ item }}.j2"
-        dest: "./.{{ item }}.yaml"
+        dest: "{{ D }}/.{{ item }}.yaml"
       with_items:
         - dummy-ns
         - dummy-ing
@@ -21,8 +21,7 @@
     - name: dummy apply yamls
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
-        src: "./.{{ item }}.yaml"
+        src: "{{ D }}/.{{ item }}.yaml"
       with_items:
         - dummy-ns
         - dummy-ing

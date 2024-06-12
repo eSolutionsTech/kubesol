@@ -3,14 +3,11 @@
   gather_facts: false
   connection: local
   name: Install dummy
-  vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: Create simple-pod
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: v1
           kind: Pod

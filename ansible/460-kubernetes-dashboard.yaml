@@ -3,8 +3,6 @@
   gather_facts: false
   connection: local
   name: Install Kubernetes dashboard
-  vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - kubernetes.core.helm_repository:
@@ -17,13 +15,11 @@
         chart_ref: kubernetes-dashboard/kubernetes-dashboard
         chart_version: "{{ kubernetes_dashboard_chart_version|default('') }}"
         create_namespace: yes
-        kubeconfig: "{{ K }}"
 
 # https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
     - name: service account admin-user
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: v1
           kind: ServiceAccount
@@ -34,7 +30,6 @@
     - name: clusterRoleBinding admin-user
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: rbac.authorization.k8s.io/v1
           kind: ClusterRoleBinding
@@ -52,7 +47,6 @@
     - name: secret admin-user
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}" 
         definition:
           apiVersion: v1
           kind: Secret

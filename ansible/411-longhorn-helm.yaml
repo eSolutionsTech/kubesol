@@ -3,8 +3,6 @@
   gather_facts: false
   connection: local
   name: Longhorn helm install
-  vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
       - kubernetes.core.helm_repository:
@@ -17,5 +15,4 @@
           chart_ref: longhorn/longhorn
           chart_version: "{{ longhorn_chart_version|default('') }}"
           create_namespace: yes
-          kubeconfig: "{{ K }}"
 

@@ -4,8 +4,8 @@
   connection: local
   name: loki helm install
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
     NS: "monitoring"
+
   tasks:
     - name: Add grafana helm repository
       kubernetes.core.helm_repository:
@@ -19,7 +19,6 @@
         chart_ref: grafana/loki
         chart_version: "{{ loki_chart_version|default('') }"
         create_namespace: yes
-        kubeconfig: "{{ K }}"
         values_files:
           - files/loki/values.yaml
 
@@ -30,7 +29,6 @@
         chart_ref: grafana/promtail
         chart_version: "{{ promtail_chart_version|default('') }}"
         create_namespace: yes
-        kubeconfig: "{{ K }}"
         values_files:
           - files/loki/promtail.yaml
 

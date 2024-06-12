@@ -7,3 +7,5 @@
 .values-keycloak.yaml
 .vault-keys.txt
 auth
+Inventory
+ansible.cfg

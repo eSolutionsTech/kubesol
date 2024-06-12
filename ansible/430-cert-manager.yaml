@@ -4,11 +4,10 @@
   connection: local
   name: cert-manager helm install
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
     NS: "cert-manager"
   
   tasks:
-    - name: Add vert-manager helm repository
+    - name: Add cert-manager helm repository
       kubernetes.core.helm_repository:
         name: jetstack
         repo_url: https://charts.jetstack.io 
@@ -20,7 +19,6 @@
         chart_ref: jetstack/cert-manager
         chart_version: "{{ cert_manager_chart_version|default('') }}"
         create_namespace: yes
-        kubeconfig: "{{ K }}"
         values:
           crds:
             enabled: true

@@ -4,9 +4,8 @@
   connection: local
   name: Install keycloak
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
     NS: "keycloak"
-
+    D: "/root/.kubesol"
 
   tasks:
       - name: Ensure namespace for keycloak exists.
@@ -15,7 +14,6 @@
           kind: Namespace
           name: "{{ NS }}"
           state: present
-          kubeconfig: "{{ K }}"
 
       - name: Create db cluster for keycloak
         kubernetes.core.k8s:
@@ -23,7 +21,6 @@
           namespace: "{{ NS }}"
           state: present
           src: files/keycloak/keycloak-cnpg.yaml
-          kubeconfig: "{{ K }}"
 
       - name: Generate a new password
         shell: pwgen 16 1
@@ -32,7 +29,7 @@
       - name: keycloak template j2 -> yaml
         template:
           src: "files/keycloak/values-keycloak.j2"
-          dest: ".values-keycloak.yaml"
+          dest: "{{ D }}/.values-keycloak.yaml"
 
       - kubernetes.core.helm_repository:
           name: keycloak
@@ -42,16 +39,14 @@
           name: keycloak
           chart_ref: keycloak/keycloak
           namespace: "{{ NS }}"
-          kubeconfig: "{{ K }}"
           chart_version: "{{ keycloak_chart_version|default('') }}"
           disable_hook: true
           values_files:
-            - .values-keycloak.yaml
+            - "{{ D }}/.values-keycloak.yaml"
 
       - name: Create issuer
         kubernetes.core.k8s:
           state: present
-          kubeconfig: "{{ K }}"
           definition:
             apiVersion: cert-manager.io/v1
             kind: Issuer
@@ -72,7 +67,6 @@
       - name: Create keycloak ingress
         kubernetes.core.k8s:
           state: present
-          kubeconfig: "{{ K }}"
           definition:
             apiVersion: networking.k8s.io/v1
             kind: Ingress

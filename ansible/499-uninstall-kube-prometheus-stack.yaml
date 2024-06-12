@@ -4,7 +4,6 @@
   connection: local
   name: kube-prometheus-stack helm uninstall
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
 
   # https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#uninstall-helm-chart
@@ -16,10 +15,9 @@
         namespace: monitoring
         state: absent
         wait: true
-        kubeconfig: "{{ K }}"
 
     - name: Remove CRDs
-      shell: "KUBECONFIG={{ K }} kubectl delete crd {{ item }}"
+      shell: "kubectl delete crd {{ item }}"
       loop:
         - alertmanagerconfigs.monitoring.coreos.com
         - alertmanagers.monitoring.coreos.com
@@ -31,3 +29,4 @@
         - scrapeconfigs.monitoring.coreos.com
         - servicemonitors.monitoring.coreos.com
         - thanosrulers.monitoring.coreos.com
+

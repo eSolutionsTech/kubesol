@@ -4,7 +4,6 @@
   connection: local
   name: Install velero
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - kubernetes.core.helm_repository:
@@ -17,7 +16,6 @@
         chart_ref: vmware-tanzu/velero
         chart_version: "{{ velero_chart_version|default('') }}"
         create_namespace: yes
-        kubeconfig: "{{ K }}"
         values_files:
           - files/velero/values-velero.yaml  
     
