@@ -1,7 +1,6 @@
 .ansible.log
 .kube
 .kubeconfig
-[0-9]*.yaml
 .directpv.yaml
 .drives*
 .dummy*yaml
