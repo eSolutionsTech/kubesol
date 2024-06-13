@@ -7,6 +7,12 @@
     HELM_ARCHIVE: "helm-v3.15.1-linux-amd64.tar.gz"
 
   tasks:
+  - name: create directory {{ D }}
+    file:
+      path: "{{ D }}"
+      state: directory
+      mode: '0700'
+ 
 # install helm
   - name: get helm binary tar.gz
     get_url:

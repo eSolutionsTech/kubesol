@@ -1,6 +1,6 @@
 ---
 - 
-  hosts: all
+  hosts: workers
   gather_facts: no
   name: Longhorn prep
 

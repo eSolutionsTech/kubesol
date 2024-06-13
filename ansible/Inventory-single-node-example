@@ -3,6 +3,8 @@
 ext_dns_name="dev4.example.com"
 letsencrypt_email="root@example.com"
 
+D="/root/.kubesol"
+
 hosts_gw="kubesol-dev4-c1"
 
 [controller_one]
