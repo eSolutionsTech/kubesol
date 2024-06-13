@@ -2,15 +2,18 @@
 
 ## What is Kubesol
 
-**Kubesol** is a Kubernetes distribution, free and open-source but with optional commercial support by [eSolutions.tech](https://www.esolutions.tech/kubesol). After creating the required Virtual Machines (VMs) and running the installer, the end product is a Kubernetes cluster with many useful and popular components installed (full list below).
+_Kubesol_ is a [free and open-source](LICENSE.md) Kubernetes distribution 
+with optional commercial support by [esolutions.tech](https://www.esolutions.tech/kubesol).
+
+After creating the required Virtual Machines (VMs) and running the installer, the end product is a Kubernetes cluster with many useful and popular components installed (full list below).
 
 Some of the advantages are:
 - It is free and open-source but with optional commercial support
-- Very easy to be understood and operate by a DevOps Engineer with minimal knowledge on Ansible, kubectl, Helm (and nothing more).
+- Very easy to understand and operated by a devops with minimal knowledge on Ansible, kubectl, Helm (and nothing more)
 - It simplifies and makes the installation and configuration process repeatable - all operations are based on Ansible playbooks.
 - It can create and upgrade Kubernetes clusters based on RKE2 - https://github.com/rancher/rke2
 - It comes with two pre-configured storage classes: Longhorn and DirectPV.
-- It comes with most usual Kubernetes components pre-configured, see list below
+- It comes with the most usual Kubernetes components pre-configured; see list below
 - It has documentation and example usage for many components
 
 See also the [FAQ](FAQ.md).

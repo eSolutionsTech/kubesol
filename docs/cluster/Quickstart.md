@@ -1,6 +1,7 @@
 # Kubesol quickstart
 
-A full production Kubesol setup will require at least 7 VMs (one gateway, 3 controller nodes, 3 worker nodes). But you may experiment on a single VM even with some limitations.
+A full production Kubesol setup will require at least 7 VMs (one gateway, 3 controller nodes, 3 worker nodes). 
+But may even experiment on a single VM with some limitations.
 
 This procedure will use the same VM as Ansible run host and destination host, that's why we have in 
 the Inventory file `ansible_connection=local`. So you just ssh to the VM and run everything there.
@@ -10,8 +11,9 @@ the Inventory file `ansible_connection=local`. So you just ssh to the VM and run
 1. Create a Virtual Machine with Ubuntu Linux 24.04 and 8GB RAM, 4 CPU cores (it will have 150 GB disk but 50GB is enough). 
 I have used the name `kubesol-dev4-c1` for the VM.
 
-2. Check you can ssh on it as root with ssh key. DigitalOcean VMs will have both a public and a private IP. Note them down 
-(run `ip a`)
+2. Check that you can ssh on it as root with the ssh key. 
+DigitalOcean VMs will have both a public and a private IP. 
+Note them down (run `ip a`).
 
 3. We need DNS for SSL certificates so, use the public IP from above and add 2 records to a domain. Something like this:
 
@@ -84,7 +86,7 @@ kubesol-dev4-c1   NotReady   control-plane,etcd,master   78s   v1.29.4+rke2r1
 
 Wait until you see the node STATUS Ready.
 
-10. For the playbooks >400 we recommend running them one by one and checking status after each one. For example:
+10. For playbooks >400 we recommend running them one by one and checking status after each one. For example:
 
 ## Kubernetes dashboard
 
