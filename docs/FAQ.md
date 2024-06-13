@@ -12,7 +12,7 @@ Even though Ansible roles are good for modularity and hide complexity, they are 
 **Why wouldn't I use the official RKE2 installer?**
 
 By all means, do it. But in our Ansible playbooks we have included a lot of knowledge for solving some problems, 
-results from repeating the official installation methods many times (and this is not only for RKE2 but for other components).
+results from repeating the official installation and upgrade methods many times (and this is not only for RKE2 but for other components).
 
 Also we think our documentation is very good for a quick start with many Kubernetes components.
 

@@ -1,18 +1,6 @@
 
-# setup
+# admin machine setup
 
-Stuff you need to have it installed:
-
-- ansible
-- ansible kubernetes module:
-  - https://github.com/ansible-collections/kubernetes.core
-  - `ansible-galaxy collection install kubernetes.core`
-  - `pip3 install kubernetes`
-- kubectl
-- helm
-- helm-diff module: 
-  - https://github.com/databus23/helm-diff
-  - `helm plugin install https://github.com/databus23/helm-diff`
-- kubectl-directpv ?
-- kubectl krew?
+We are no longer use this since we recommend running all the ansible playbooks directly from 
+the first controller, which is also used as admin machine or Ansible master host. See the quickstart quide.
 

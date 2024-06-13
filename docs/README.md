@@ -19,7 +19,7 @@ See also the [FAQ](FAQ.md).
 
 - [quickstart with a single VM](cluster/Quickstart.md)
 - [create a new cluster](cluster/create-new-cluster.md)
-- [use an existing cluster](cluster/use-existing-cluster.md). Short version: to run kubectl commands just `export KUBECONFIG=.kubeconfig` then run kubectl/helm commands targetting the cluster.
+- [use an existing cluster](cluster/use-existing-cluster.md). 
 - [upgrade an existing cluster](cluster/upgrade-cluster.md)
 - [reset/delete an existing cluster](cluster/reset-cluster.md)
 - [etcd backup/restore](cluster/etcd-backup-restore.md) and more debugging [etcd commands](cluster/etcd-commands.md).
@@ -28,6 +28,7 @@ See also the [FAQ](FAQ.md).
 
 The following components are included and we have documentation on how to use them:
 
+- [Cert-manager](components/cert-manager.md)
 - [kubernetes dashboard](components/kubernetes-dashboard.md) web interface
 - [metrics-server](components/kubernetes-metrics-server.md)
 - [nginx ingress controller](components/nginx-ingress-controller.yaml)
@@ -35,7 +36,6 @@ The following components are included and we have documentation on how to use th
 - [monitoring](components/monitoring.md) with web interface (Prometheus, AlertManager, Grafana, Grafana Loki)
 - [keycloak](components/keycloak.md) with web interface
 - [ArgoCD](components/argocd.md) with web interface
-- [Cert-manager](components/cert-manager.md)
 - [Examples](components/examples.md) demo for a full web app with yaml manifests, storage, ingress, ssl certificate
 - [DirectPV](components/directpv.md) storage class
 - [Minio operator](components/minio.md) (with web interface) for S3 compatible buckets
