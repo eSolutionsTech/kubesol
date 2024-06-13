@@ -4,7 +4,6 @@
   connection: local
   name: Install Vault
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - kubernetes.core.helm_repository:
@@ -17,12 +16,10 @@
         api_version: v1
         kind: Namespace
         state: present
-        kubeconfig: "{{ K }}"
 
     - name: vault issuer
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: cert-manager.io/v1
           kind: Issuer
@@ -46,7 +43,6 @@
         release_namespace: vault
         chart_ref: hashicorp/vault
         chart_version: "{{ vault_chart_version|default('') }}"
-        kubeconfig: "{{ K }}"
         values:
           global:
             resources:

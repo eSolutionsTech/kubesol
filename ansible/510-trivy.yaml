@@ -4,7 +4,6 @@
   connection: local
   name: Install trivy
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - kubernetes.core.helm_repository:
@@ -17,7 +16,6 @@
         chart_ref: aqua/trivy-operator
         chart_version: "{{ trivy_chart_version|default('') }}"
         create_namespace: yes
-        kubeconfig: "{{ K }}"
         values_files:
           - files/trivy/values-trivy.yaml  
     

@@ -4,12 +4,10 @@
   connection: local
   name: Add Trivy Grafana dashboard
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
 
     - name: Add Trivy Grafana Dashboard
       kubernetes.core.k8s:
-        kubeconfig: "{{ K }}"
         state: present
         src: files/trivy/grafana-dashboard.yaml

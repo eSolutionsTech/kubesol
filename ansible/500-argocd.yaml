@@ -4,7 +4,6 @@
   connection: local
   name: Install ArgoCD
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: argocd helm repo
@@ -18,12 +17,10 @@
         api_version: v1
         kind: Namespace
         state: present
-        kubeconfig: "{{ K }}"
 
     - name: argocd issuer
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: cert-manager.io/v1
           kind: Issuer
@@ -47,7 +44,6 @@
         chart_ref: argo/argo-cd
         chart_version: "{{ argocd_chart_version|default('') }}"
         release_namespace: argocd
-        kubeconfig: "{{ K }}"
         values:
           global:
             domain: "argocd.{{ ext_dns_name }}"

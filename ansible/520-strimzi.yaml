@@ -4,7 +4,6 @@
   connection: local
   name: Install strimzi kafka operator
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - kubernetes.core.helm:
@@ -13,7 +12,6 @@
         chart_version: "{{ strimzi_chart_version|default('') }}"
         release_namespace: strimzi
         create_namespace: yes
-        kubeconfig: "{{ K }}"
         values:
           watchAnyNamespace: true
             

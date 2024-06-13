@@ -4,7 +4,6 @@
   connection: local
   name: Install Minio operator
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: minio helm repo
@@ -18,12 +17,10 @@
         api_version: v1
         kind: Namespace
         state: present
-        kubeconfig: "{{ K }}"
 
     - name: minio issuer
       kubernetes.core.k8s:
         state: present
-        kubeconfig: "{{ K }}"
         definition:
           apiVersion: cert-manager.io/v1
           kind: Issuer
@@ -47,7 +44,6 @@
         chart_ref: minio-operator/operator
         chart_version: "{{ minio_operator_chart_version|default('') }}"
         release_namespace: minio-operator
-        kubeconfig: "{{ K }}"
         values:
           console:
             ingress:
