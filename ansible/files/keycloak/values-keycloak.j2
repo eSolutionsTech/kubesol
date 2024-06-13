@@ -5,8 +5,6 @@ auth:
   createAdminUser: false
   adminUser: admin
   adminPassword: {{ admin_password.stdout }}
-image:
-  tag: {{ keycloak_version }}
 ingress:
   enabled: false
 

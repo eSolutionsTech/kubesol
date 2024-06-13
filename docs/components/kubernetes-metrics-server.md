@@ -2,7 +2,9 @@
 
 Metrics Server is a resource metrics for Kubernetes used for autoscaling (HPA/VPA). Official docs at https://github.com/kubernetes-sigs/metrics-server
 
-You can use it in command line with `kubectl top`:
+## Usage
+
+It is installed by default. You can use it in command line with `kubectl top`:
 
 ```
 # check resources usage on nodes

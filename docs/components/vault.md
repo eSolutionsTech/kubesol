@@ -1,6 +1,6 @@
 # Vault and ExternalSecrets
 
-Vault is a system for securely storing secrets. I t can be ran in Kubernetes and it has a web-interface.
+Vault is a system for securely storing secrets. It can be ran in Kubernetes and it has a web-interface.
 
 ExternalSecrets is an operator for accessing those secrets from Kubernetes.
 

@@ -2,6 +2,8 @@
 
 We are providing some example manifests you could use for a quick start.
 
+## Install
+
 If you did not install it during cluster creation, you cand do it later with
 `ansible-playbook 454-dummy.yaml`.
 

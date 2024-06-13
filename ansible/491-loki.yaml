@@ -17,7 +17,7 @@
         name: loki
         namespace: "{{ NS }}"
         chart_ref: grafana/loki
-        chart_version: "{{ loki_chart_version|default('') }"
+        chart_version: "{{ loki_chart_version|default('') }}"
         create_namespace: yes
         values_files:
           - files/loki/values.yaml

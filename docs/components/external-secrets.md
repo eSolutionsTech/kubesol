@@ -4,7 +4,7 @@ __External Secrets Operator__ is a Kubernetes operator that reads information fr
 and automatically injects the values into Kubernetes secrets. Read more at https://github.com/external-secrets/external-secrets
  and https://external-secrets.io/latest/ .
 
-## Installation
+## Install
 
 If it's not installed, use `ansible-playbook 560-external-secrets.yaml`. Afterwards, you should see something like this:
 

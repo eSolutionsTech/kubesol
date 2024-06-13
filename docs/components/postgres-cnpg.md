@@ -2,23 +2,19 @@
 
 CNPG (Cloud Native Postgres operator) is an opetaror for deploying PostgreSQL cluster in Kubernetes. See https://cloudnative-pg.io 
 
-## Install and check
+## Install 
 
-If it's not installed, use `ansible-playbook 440-cnpg.yaml`. Then check:
+This will require a storage class (Longhorn or DirectPV).
+
+To check it:
 
 ```
 $ kubectl -n cnpg-system  get pods
 NAME                                  READY   STATUS    RESTARTS   AGE
 cnpg-cloudnative-pg-d74fdd8fb-xtb5v   1/1     Running   0          3m33s
-
-$ kubectl get crds | grep postgres
-backups.postgresql.cnpg.io                             2024-05-24T14:20:10Z
-clusterimagecatalogs.postgresql.cnpg.io                2024-05-31T13:35:54Z
-clusters.postgresql.cnpg.io                            2024-05-24T14:20:11Z
-imagecatalogs.postgresql.cnpg.io                       2024-05-31T13:35:56Z
-poolers.postgresql.cnpg.io                             2024-05-24T14:20:11Z
-scheduledbackups.postgresql.cnpg.io                    2024-05-24T14:20:10Z
 ```
+
+To install it: `ansible-playbook 440-cnpg.yaml`
 
 ## Usage
 

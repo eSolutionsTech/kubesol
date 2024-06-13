@@ -2,20 +2,17 @@
 
 Strimzi is an operator for creating Kafka resources in Kubernetes. See https://strimzi.io/documentation/ for details.
 
-If you did not install it during cluster creation, you cand do it later with
-`ansible-playbook 520-strimzi.yaml`. 
+## Install
 
-You can check if is running with:
+To check it: 
 
 ```
-  helm -n strimzi ls
-NAME   	NAMESPACE	REVISION	UPDATED                              	STATUS  	CHART                        	APP VERSION
-strimzi	strimzi  	2       	2024-05-30 17:01:34.238575 +0300 EEST	deployed	strimzi-kafka-operator-0.41.0	0.41.0     
-
-  kubectl -n strimzi get pods
+$ kubectl -n strimzi get pods
 NAME                                       READY   STATUS    RESTARTS   AGE
 strimzi-cluster-operator-74fc686c7-rn2f6   1/1     Running   0          24m
 ```
+
+To install it: `ansible-playbook 520-strimzi.yaml`.
 
 ## Usage
 

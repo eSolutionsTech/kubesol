@@ -1,7 +1,49 @@
 # Monitoring
 
-For monitoring, [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack), [Loki](https://github.com/grafana/loki/tree/main/production/helm/loki) and [Promtail](https://github.com/grafana/helm-charts/tree/main/charts/promtail) are installed, using Helm charts. kube-prometheus-stack includes Grafana, Prometheus and Alertmanager.
+For monitoring, 
+[kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack), 
+[Loki](https://github.com/grafana/loki/tree/main/production/helm/loki) 
+and [Promtail](https://github.com/grafana/helm-charts/tree/main/charts/promtail) 
+can be installed, using Helm charts. 
 
+kube-prometheus-stack includes Grafana, Prometheus and Alertmanager.
+
+## Install
+
+They will require Longhorn (or other default storage class).
+
+To check status:
+
+```
+$ kubectl -n monitoring get pods
+NAME                                                        READY   STATUS    RESTARTS   AGE
+alertmanager-kube-prometheus-stack-alertmanager-0           2/2     Running   0          16h
+kube-prometheus-stack-grafana-8449db8684-tppzl              3/3     Running   0          16h
+kube-prometheus-stack-kube-state-metrics-7f6967956d-m6pm9   1/1     Running   0          16h
+kube-prometheus-stack-operator-6f565678b9-p4wrk             1/1     Running   0          16h
+kube-prometheus-stack-prometheus-node-exporter-55vrt        1/1     Running   0          16h
+kube-prometheus-stack-prometheus-node-exporter-sd6fb        1/1     Running   0          16h
+kube-prometheus-stack-prometheus-node-exporter-wsf96        1/1     Running   0          16h
+loki-0                                                      1/1     Running   0          2m3s
+loki-canary-9kpt6                                           1/1     Running   0          2m3s
+loki-canary-l7hlb                                           1/1     Running   0          2m3s
+loki-canary-m7qf8                                           1/1     Running   0          2m3s
+loki-chunks-cache-0                                         0/2     Pending   0          2m3s
+loki-gateway-775bc49657-qks5z                               1/1     Running   0          2m3s
+loki-results-cache-0                                        2/2     Running   0          2m3s
+prometheus-kube-prometheus-stack-prometheus-0               2/2     Running   0          16h
+promtail-2skxc                                              1/1     Running   0          116s
+promtail-t2kn8                                              1/1     Running   0          116s
+promtail-xqmm5                                              1/1     Running   0          116s
+```
+
+To install:
+
+```
+ansible-playbook 490-kube-prometheus-stack.yaml 
+ansible-playbook 491-loki.yaml
+ansible-playbook 492-grafana-ingress.yaml 
+```
 
 ## Grafana 
 

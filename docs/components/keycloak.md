@@ -1,12 +1,28 @@
 # Keycloak
 
-Keycloak is an open-source identity and access management solution for modern applications and services. It provides comprehensive support for single sign-on (SSO), identity federation, and user management, enabling secure authentication and authorization across various platforms. Keycloak offers out-of-the-box integration with various authentication protocols like OAuth2, OpenID Connect, and SAML, making it easy to implement secure user authentication and authorization. It also features a user-friendly admin console, customizable login pages, and support for user self-service features.
+Keycloak is an identity and access management solution for applications and services.
 
-Official URLs for Keycloak:  
-https://www.keycloak.org/  
-https://www.keycloak.org/documentation  
-https://github.com/keycloak/keycloak  
+Official URLs for Keycloak: 
+ 
+- https://www.keycloak.org/  
+- https://www.keycloak.org/documentation  
+- https://github.com/keycloak/keycloak  
 
+## Install
+
+In our setup it requires CNPG (Postgres operator) which, in turn, uses the default storage class (Longhorn).
+
+To check it: 
+
+```
+$ kubectl -n keycloak get pods
+NAME                    READY   STATUS    RESTARTS   AGE
+keycloak-0              1/1     Running   0          19m
+keycloak-pg-cluster-1   1/1     Running   0          23m
+keycloak-pg-cluster-2   1/1     Running   0          21m
+```
+
+To install it: `ansible-playbook 435-keycloak.yaml`
 
 ## Keycloak web interface
 
