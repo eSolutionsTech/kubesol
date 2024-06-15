@@ -4,6 +4,8 @@
   connection: local
   name: Install ArgoCD
   vars:
+    NS: argocd
+    iname: argocd
 
   tasks:
     - name: argocd helm repo
@@ -11,39 +13,15 @@
         name: argo
         repo_url: https://argoproj.github.io/argo-helm
 
-    - name: create namespace argocd
-      kubernetes.core.k8s:
-        name: argocd
-        api_version: v1
-        kind: Namespace
-        state: present
+    - include_tasks: tasks/namespace.yaml
+    - include_tasks: tasks/issuer.yaml
 
-    - name: argocd issuer
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: cert-manager.io/v1
-          kind: Issuer
-          metadata:
-            name: letsencrypt-argocd
-            namespace: argocd
-          spec:
-            acme:
-              server: https://acme-v02.api.letsencrypt.org/directory
-              email: "{{ letsencrypt_email }}"
-              privateKeySecretRef:
-                name: letsencrypt-argocd
-              solvers:
-                - http01:
-                    ingress:
-                      ingressClassName: nginx
-          
     - name: argocd helm install
       kubernetes.core.helm:
         name: argocd
         chart_ref: argo/argo-cd
         chart_version: "{{ argocd_chart_version|default('') }}"
-        release_namespace: argocd
+        release_namespace: "{{ NS }}"
         values:
           global:
             domain: "argocd.{{ ext_dns_name }}"
@@ -67,7 +45,6 @@
               extraTls:
                 - hosts:
                   - "argocd.{{ ext_dns_name }}"
-                  # Based on the ingress controller used secret might be optional
                   secretName: argocd-tls
           
           redis-ha:

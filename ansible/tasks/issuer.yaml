@@ -1,0 +1,22 @@
+
+   - name: "{{ iname }} issuer"
+     kubernetes.core.k8s:
+       state: present
+       definition:
+         apiVersion: cert-manager.io/v1
+         kind: Issuer
+         metadata:
+           name: "letsencrypt-{{ iname }}"
+           namespace: "{{ NS }}"
+         spec:
+           acme:
+             server: https://acme-v02.api.letsencrypt.org/directory
+             email: "{{ letsencrypt_email }}"
+             privateKeySecretRef:
+               name: "letsencrypt-{{ iname }}"
+             solvers:
+               - http01:
+                   ingress:
+                     ingressClassName: nginx
+
+
