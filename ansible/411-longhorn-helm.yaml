@@ -3,6 +3,8 @@
   gather_facts: false
   connection: local
   name: Longhorn helm install
+  vars:
+    NS: longhorn-system
 
   tasks:
       - kubernetes.core.helm_repository:
@@ -11,7 +13,7 @@
 
       - kubernetes.core.helm:
           name: longhorn
-          namespace: longhorn-system
+          namespace: "{{ NS }}"
           chart_ref: longhorn/longhorn
           chart_version: "{{ longhorn_chart_version|default('') }}"
           create_namespace: yes
