@@ -3,6 +3,9 @@
 ---
 - 
   hosts: worker
+# when creating a new cluster, you could do workers in parallel
+# but when upgrading you would prefer to do it one by one for HA
+  serial: 1
   gather_facts: no
   vars:
     - CONFIG_FILE: /etc/rancher/rke2/config.yaml
