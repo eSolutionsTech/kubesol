@@ -4,20 +4,18 @@
   connection: local
   name: Install trivy
   vars:
-
+    NS: "trivy-system"
   tasks:
     - kubernetes.core.helm_repository:
         name: aqua
         repo_url:  https://aquasecurity.github.io/helm-charts/
 
+    - include_tasks: tasks/namespace.yaml
+
     - kubernetes.core.helm:
         name: trivy
-        namespace: trivy-system
+        namespace: "{{ NS }}"
         chart_ref: aqua/trivy-operator
         chart_version: "{{ trivy_chart_version|default('') }}"
-        create_namespace: yes
         values_files:
-          - files/trivy/values-trivy.yaml  
-    
-
-
+          - files/trivy/values-trivy.yaml

@@ -4,6 +4,7 @@
   connection: local
   name: Install Grafana ingress
   vars:
+    NS: "monitoring"
 
   tasks:
     - name: Grafana cluster issuer
@@ -14,7 +15,7 @@
           kind: Issuer
           metadata:
             name: letsencrypt-grafana
-            namespace: monitoring
+            namespace: "{{ NS }}"
           spec:
             acme:
               server: https://acme-v02.api.letsencrypt.org/directory
@@ -34,7 +35,7 @@
           kind: Ingress
           metadata:
             name: grafana
-            namespace: monitoring
+            namespace: "{{ NS }}"
             annotations:
               nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
               cert-manager.io/issuer: "letsencrypt-grafana"

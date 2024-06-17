@@ -3,10 +3,8 @@
   gather_facts: false
   connection: local
   name: Add Trivy Grafana dashboard
-  vars:
 
   tasks:
-
     - name: Add Trivy Grafana Dashboard
       kubernetes.core.k8s:
         state: present

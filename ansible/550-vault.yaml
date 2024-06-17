@@ -4,18 +4,14 @@
   connection: local
   name: Install Vault
   vars:
+    NS: "vault"
 
   tasks:
     - kubernetes.core.helm_repository:
         name: hashicorp
         repo_url:  https://helm.releases.hashicorp.com
 
-    - name: create namespace vault
-      kubernetes.core.k8s:
-        name: vault
-        api_version: v1
-        kind: Namespace
-        state: present
+    - include_tasks: tasks/namespace.yaml
 
     - name: vault issuer
       kubernetes.core.k8s:
@@ -25,7 +21,7 @@
           kind: Issuer
           metadata:
             name: letsencrypt-vault
-            namespace: vault
+            namespace: "{{ NS }}"
           spec:
             acme:
               server: https://acme-v02.api.letsencrypt.org/directory
@@ -40,7 +36,7 @@
     - name: vault install helm chart
       kubernetes.core.helm:
         name: vault
-        release_namespace: vault
+        release_namespace: "{{ NS }}"
         chart_ref: hashicorp/vault
         chart_version: "{{ vault_chart_version|default('') }}"
         values:

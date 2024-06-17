@@ -3,6 +3,8 @@
   gather_facts: false
   connection: local
   name: Install Kubernetes dashboard ingress
+  vars:
+    NS: "kubernetes-dashboard"
 
   tasks:
     - name: kubernetes dashboard cluster issuer
@@ -13,7 +15,7 @@
           kind: Issuer
           metadata:
             name: letsencrypt-kubernetes-dashboard
-            namespace: kubernetes-dashboard
+            namespace: "{{ NS }}"
           spec:
             acme:
               server: https://acme-v02.api.letsencrypt.org/directory
@@ -33,7 +35,7 @@
           kind: Ingress
           metadata:
             name: kubernetes-dashboard
-            namespace: kubernetes-dashboard
+            namespace: "{{ NS }}"
             annotations:
               nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
               nginx.ingress.kubernetes.io/ssl-passthrough: "true"

@@ -3,16 +3,19 @@
   gather_facts: false
   connection: local
   name: Install CNPG - Cloud Native Postgres
+  vars:
+    NS: "cnpg-system"
 
   tasks:
     - kubernetes.core.helm_repository:
         name: cnpg
         repo_url: https://cloudnative-pg.github.io/charts
 
+    - include_tasks: tasks/namespace.yaml
+
     - kubernetes.core.helm:
         name: cnpg
-        namespace: cnpg-system
+        namespace: "{{ NS }}"
         chart_ref: cnpg/cloudnative-pg
         chart_version: "{{ cnpg_chart_version|default('') }}"
-        create_namespace: yes
 
