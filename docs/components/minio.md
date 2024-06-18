@@ -20,8 +20,7 @@ To install it: `ansible-playbook 530-minio-operator.yaml`
 
 ## Usage
 
-Minio operator is installed in namespace `minio-operator`, but you must create
-__tenants__ and __buckets__ (either with the web interface or with `mc` tool).
+Minio operator is installed in the `minio-operator` namespace, but you must create __tenants__ and __buckets__ (either with the web interface or with `mc` tool).
 
 ## Web interface
 
@@ -39,7 +38,7 @@ and access in browser `https://minio...`.
 
 ## To create and play with a minimal tenant and bucket
 
-See screenshots for our recommendations on your first tenant. Please note if you have less than 4 nodes, when create the tenant, change **"Pod Placement"**!
+See the screenshots for our recommendations on your first tenant. Please note that if you have less than 4 nodes, when creating the tenant, change **"Pod Placement"**!
 
 ![](minio1.png "")
 

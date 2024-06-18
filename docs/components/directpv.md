@@ -2,7 +2,7 @@
 
 DirectPV is a storage class used by default by Minio: https://min.io/directpv
 
-Unlike Longhorn, DirectPV don't replicate the volumes so that must be done at the application level. This means if a node is down, the volume on that node is down and the application must handle the problem.
+Unlike Longhorn, DirectPV doesn't replicate the volumes so that must be done at the application level. This means if a node is down, the volume on that node is down and the application must handle the problem.
 
 Good use cases are: Minio, Kafka, Zookeeper, PostgreSQL with replicas. 
 
