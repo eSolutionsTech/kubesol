@@ -1,6 +1,6 @@
 # Vault and ExternalSecrets
 
-Vault is a system for securely storing secrets. It can be ran in Kubernetes and it has a web-interface.
+Vault is a system for securely storing secrets. It can be run in Kubernetes and it has a web-interface.
 
 ExternalSecrets is an operator for accessing those secrets from Kubernetes.
 
@@ -31,7 +31,7 @@ Vault initialized with 5 key shares and a key threshold of 3.
 
 ## Vault raft joining
 
-To add second and third node and create a VAult cluster, run:
+To add the second and third nodes and create a Vault cluster, run:
 
 ```
 $ kubectl -n vault exec -ti vault-1 -- vault operator raft join http://vault-0.vault-internal:8200
@@ -47,7 +47,7 @@ Joined    true
 
 ## Vault unseal
 
-Run this command 3 times, each time give a different key:
+Run this command 3 times, each time give it a different key:
 
 ```
 $ kubectl -n vault exec -it vault-0 -- vault operator unseal 
@@ -63,7 +63,7 @@ Initialized             true
 Sealed                  false
 ```
 
-DO the same for other pods, unseal three times:
+Do the same for other pods, unseal three times:
 ```
 kubectl -n vault exec -it vault-1 -- vault operator unseal 
 [...

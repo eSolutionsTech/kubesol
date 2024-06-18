@@ -36,12 +36,12 @@ If needed, you can use a `~/.ssh/config` to ensure you can ssh on those machines
 
 To access it from outside and use Letsencrypt SSL certificates you will need:
 
-- The DNS name _ext_dns_name_ (defined in Ansible Inventory, see below) to point out to a public IP. This IP to be redirected to the private IP of _clusterName_-gw 
+- The DNS name _ext_dns_name_ (defined in Ansible Inventory, see below) to point out to a public IP. This IP is to be redirected to the private IP of _clusterName_-gw 
 - Catch-all DNS name *._ext_dns_name_ to point out to the same public IP
 
 ### Ansible Inventory file
 
-You must create a file called `Inventory`. This contains variables and hostnames used by project. Most of them are self explanatory. Variables `rke2_version` and the rest named `*_chart_version` can be commented out to install the latest version available. 
+You must create a file called `Inventory`. This contains variables and hostnames used by the project. Most of them are self explanatory. Variables `rke2_version` and the rest named `*_chart_version` can be commented out to install the latest version available. 
 
 On controller_one host, this part `ansible_connection=local` is new since we decided to run Ansible playbooks from this host.
 

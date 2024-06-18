@@ -1,6 +1,6 @@
 # Postgresql CNPG
 
-CNPG (Cloud Native Postgres operator) is an opetaror for deploying PostgreSQL cluster in Kubernetes. See https://cloudnative-pg.io 
+CNPG (Cloud Native Postgres operator) is an operator for deploying PostgreSQL cluster in Kubernetes. See https://cloudnative-pg.io 
 
 ## Install 
 
@@ -18,7 +18,7 @@ To install it: `ansible-playbook 440-cnpg.yaml`
 
 ## Usage
 
-First note we have two storage classes and you can choose between them. Postgres cluster with Longhorn storage class will be safe but slow since they both do replication (so, use it only for very small and critical databases). It's better to use DirectPV and Postgres cluster with 3 reoplicas (one master and two slaves).
+First note that we have two storage classes and you can choose between them. Postgres cluster with Longhorn storage class will be safe but slow since they both do replication (so, use it only for very small and critical databases). It's better to use DirectPV and Postgres cluster with 3 replicas (one master and two slaves).
 
 As a quick example, you may create those objects:
 

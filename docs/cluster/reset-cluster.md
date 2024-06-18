@@ -1,6 +1,6 @@
 # To reset an existing cluster
 
-This will remove and existing cluster and cleanup the virtual machines:
+This will remove an existing cluster and cleanup the virtual machines:
 
 ```
     ansible-playbook 429-Uninstall-directpv.yaml
