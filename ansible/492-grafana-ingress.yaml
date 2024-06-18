@@ -5,27 +5,10 @@
   name: Install Grafana ingress
   vars:
     NS: "monitoring"
+    iname: "grafana"
 
   tasks:
-    - name: Grafana cluster issuer
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: cert-manager.io/v1
-          kind: Issuer
-          metadata:
-            name: letsencrypt-grafana
-            namespace: "{{ NS }}"
-          spec:
-            acme:
-              server: https://acme-v02.api.letsencrypt.org/directory
-              email: "{{ letsencrypt_email }}"
-              privateKeySecretRef:
-                name: letsencrypt-grafana
-              solvers:
-                - http01:
-                    ingress:
-                      ingressClassName: nginx
+    - include_tasks: tasks/issuer.yaml
 
     - name: Grafana ingress
       kubernetes.core.k8s:

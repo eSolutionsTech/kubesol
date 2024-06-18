@@ -5,6 +5,7 @@
   name: Install Vault
   vars:
     NS: "vault"
+    iname: "vault"
 
   tasks:
     - kubernetes.core.helm_repository:
@@ -13,25 +14,7 @@
 
     - include_tasks: tasks/namespace.yaml
 
-    - name: vault issuer
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: cert-manager.io/v1
-          kind: Issuer
-          metadata:
-            name: letsencrypt-vault
-            namespace: "{{ NS }}"
-          spec:
-            acme:
-              server: https://acme-v02.api.letsencrypt.org/directory
-              email: "{{ letsencrypt_email }}"
-              privateKeySecretRef:
-                name: letsencrypt-vault
-              solvers:
-                - http01:
-                    ingress:
-                      ingressClassName: nginx
+    - include_tasks: tasks/issuer.yaml
           
     - name: vault install helm chart
       kubernetes.core.helm:

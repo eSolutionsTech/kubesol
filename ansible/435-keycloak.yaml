@@ -6,6 +6,7 @@
   vars:
     NS: "keycloak"
     D: "/root/.kubesol"
+    iname: "keycloak"
 
   tasks:
     - include_tasks: tasks/namespace.yaml
@@ -39,25 +40,7 @@
         values_files:
           - "{{ D }}/.values-keycloak.yaml"
 
-    - name: Create issuer
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: cert-manager.io/v1
-          kind: Issuer
-          metadata:
-            name: letsencrypt-keycloak
-            namespace: "{{ NS }}"
-          spec:
-            acme:
-              server: https://acme-v02.api.letsencrypt.org/directory
-              email: "{{ letsencrypt_email }}"
-              privateKeySecretRef:
-                name: letsencrypt-keycloak
-              solvers:
-              - http01:
-                  ingress:
-                    ingressClassName: nginx
+    - include_tasks: tasks/issuer.yaml
 
     - name: Create keycloak ingress
       kubernetes.core.k8s:
