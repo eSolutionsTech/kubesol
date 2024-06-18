@@ -19,7 +19,7 @@
     - name: vault install helm chart
       kubernetes.core.helm:
         name: vault
-        release_namespace: "{{ NS }}"
+        namespace: "{{ NS }}"
         chart_ref: hashicorp/vault
         chart_version: "{{ vault_chart_version|default('') }}"
         values:

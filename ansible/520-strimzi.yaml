@@ -13,6 +13,6 @@
         name: strimzi
         chart_ref: "oci://quay.io/strimzi-helm/strimzi-kafka-operator"
         chart_version: "{{ strimzi_chart_version|default('') }}"
-        release_namespace: "{{ NS }}"
+        namespace: "{{ NS }}"
         values:
           watchAnyNamespace: true

@@ -21,7 +21,7 @@
         name: minio-operator
         chart_ref: minio-operator/operator
         chart_version: "{{ minio_operator_chart_version|default('') }}"
-        release_namespace: "{{ NS }}"
+        namespace: "{{ NS }}"
         values:
           console:
             ingress:

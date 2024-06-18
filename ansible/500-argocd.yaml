@@ -21,7 +21,7 @@
         name: argocd
         chart_ref: argo/argo-cd
         chart_version: "{{ argocd_chart_version|default('') }}"
-        release_namespace: "{{ NS }}"
+        namespace: "{{ NS }}"
         values:
           global:
             domain: "argocd.{{ ext_dns_name }}"
