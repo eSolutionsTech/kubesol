@@ -4,7 +4,7 @@
   connection: local
   name: kube-prometheus-stack helm uninstall
   vars:
-
+    NS: "monitoring"
 
   # https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#uninstall-helm-chart
 
@@ -12,7 +12,7 @@
     - name: Remove kube-prometheus-stack release and waiting suppression ending
       kubernetes.core.helm:
         name: kube-prometheus-stack
-        namespace: monitoring
+        namespace: "{{ NS }}"
         state: absent
         wait: true
 

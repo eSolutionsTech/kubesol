@@ -7,6 +7,7 @@
   vars:
     NS: "longhorn-system"
     SECRET: "longhorn-ui"
+    iname: "longhorn"
 
   tasks:
     - kubernetes.core.k8s_info:
@@ -65,25 +66,7 @@
       shell: 
         cmd: kubectl -n "{{ NS }}" create secret generic basic-auth --from-file=auth
 
-    - name: Create issuer
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: cert-manager.io/v1
-          kind: Issuer
-          metadata:
-            name: letsencrypt-longhorn
-            namespace: "{{ NS }}"
-          spec:
-            acme:
-              server: https://acme-v02.api.letsencrypt.org/directory
-              email: "{{ letsencrypt_email }}"
-              privateKeySecretRef:
-                name: letsencrypt-longhorn
-              solvers:
-              - http01:
-                  ingress:
-                    ingressClassName: nginx
+    - include_tasks: tasks/issuer.yaml
 
     - name: Create longhorn ingress
       kubernetes.core.k8s:

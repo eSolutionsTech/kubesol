@@ -4,19 +4,19 @@
   connection: local
   name: loki helm uninstall
   vars:
-
+    NS: "monitoring"
   tasks:
     - name: Remove loki
       kubernetes.core.helm:
         name: loki
-        namespace: monitoring
+        namespace: "{{ NS }}"
         state: absent
         wait: true
 
     - name: Remove Promtail
       kubernetes.core.helm:
         name: promtail
-        namespace: monitoring
+        namespace: "{{ NS }}"
         state: absent
         wait: true
 

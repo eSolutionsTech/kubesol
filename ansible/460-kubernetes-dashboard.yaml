@@ -3,18 +3,21 @@
   gather_facts: false
   connection: local
   name: Install Kubernetes dashboard
+  vars:
+    NS: "kubernetes-dashboard"
 
   tasks:
     - kubernetes.core.helm_repository:
         name: kubernetes-dashboard
         repo_url: https://kubernetes.github.io/dashboard/
 
+    - include_tasks: tasks/namespace.yaml
+
     - kubernetes.core.helm:
         name: kubernetes-dashboard
-        namespace: kubernetes-dashboard
+        namespace: "{{ NS }}"
         chart_ref: kubernetes-dashboard/kubernetes-dashboard
         chart_version: "{{ kubernetes_dashboard_chart_version|default('') }}"
-        create_namespace: yes
 
 # https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
     - name: service account admin-user
@@ -25,7 +28,7 @@
           kind: ServiceAccount
           metadata:
             name: admin-user
-            namespace: kubernetes-dashboard
+            namespace: "{{ NS }}"
 
     - name: clusterRoleBinding admin-user
       kubernetes.core.k8s:
@@ -42,7 +45,7 @@
           subjects:
           - kind: ServiceAccount
             name: admin-user
-            namespace: kubernetes-dashboard
+            namespace: "{{ NS }}"
 
     - name: secret admin-user
       kubernetes.core.k8s:
@@ -52,7 +55,7 @@
           kind: Secret
           metadata:
             name: admin-user
-            namespace: kubernetes-dashboard
+            namespace: "{{ NS }}"
             annotations:
               kubernetes.io/service-account.name: "admin-user"   
           type: kubernetes.io/service-account-token  

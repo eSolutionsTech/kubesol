@@ -12,12 +12,13 @@
         name: bitnami
         repo_url: https://charts.bitnami.com/bitnami
 
+    - include_tasks: tasks/namespace.yaml
+
     - name: Install kubeapps helm chart
       kubernetes.core.helm:
         name: kubeapps
         namespace: "{{ NS }}"
         chart_ref: bitnami/kubeapps
-        create_namespace: yes
         values_files:
           - files/kubeapps/values-kubeapps.yaml
 
