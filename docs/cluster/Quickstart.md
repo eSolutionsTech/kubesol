@@ -31,7 +31,7 @@ apt install ansible python3-kubernetes pwgen -y
 ansible-galaxy collection install kubernetes.core
 ```
 
-5. `git clone https://github.com/eSolutionsGrup/kubesol.git`
+5. `git clone https://github.com/eSolutionsTech/kubesol.git`
 
 6. cd into this directory kubesol/ansible and create a file `ansible.cfg`:
 
