@@ -9,6 +9,9 @@ operator:
   scannerReportTTL: "96h"
   metricsVulnIdEnabled: true
 
+  # to avoid bug https://github.com/aquasecurity/trivy-operator/issues/2137
+  scanJobCompressLogs: false
+
 service:
   # -- if true, the Service doesn't allocate any IP
   headless: false
