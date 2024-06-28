@@ -12,7 +12,7 @@
 
 ##
 #- import_playbook: 440-cnpg.yaml
-#- import_playbook: 435-keycloak.yaml 
+#- import_playbook: 445-keycloak.yaml 
 #- import_playbook: 450-simple-pod.yaml
 #- import_playbook: 452-simple-pod-pvc.yaml
 #- import_playbook: 454-dummy.yaml
