@@ -2,19 +2,19 @@
 
 ## What is Kubesol
 
-_Kubesol_ is a [free and open-source](../LICENSE.md) Kubernetes distribution 
+_Kubesol_ is a [free and open-source](../LICENSE.md) Kubernetes distribution
 with optional commercial support by [esolutions.tech](https://www.esolutions.tech/kubesol).
 
 After creating the required Virtual Machines (VMs) and running the installer, the end product is a Kubernetes cluster with many useful and popular components installed (full list below).
 
-Some of the advantages are:
-- It is free and open-source but with optional commercial support
-- Very easy to understand and operated by a devops with minimal knowledge on Ansible, kubectl, Helm (and nothing more)
-- It simplifies and makes the installation and configuration process repeatable - all operations are based on Ansible playbooks.
-- It can create and upgrade Kubernetes clusters based on RKE2 - https://github.com/rancher/rke2
-- It comes with two pre-configured storage classes: Longhorn and DirectPV.
-- It comes with the most usual Kubernetes components pre-configured; see list below
-- It has documentation and example usage for many components
+## Here are the main advantages that make our product a standout choice:
+- **Free and Open-Source, just as our MOTTO** Enjoy the benefits of a cost-effective solution with the option for premium commercial support if needed.
+- **Streamlined Installation**: Simplify your setup with a repeatable installation and configuration process, all driven by efficient Ansible playbooks.
+- **Seamless Kubernetes Management**: Easily create and upgrade Kubernetes clusters with the reliable RKE2 system. Learn more at RKE2 GitHub.
+- **Pre-Configured Storage Classes**: Benefit from built-in Longhorn and DirectPV storage classes, ready to go out of the box.
+- **Comprehensive Kubernetes Components**: Start with the most common Kubernetes components already configured, saving you time and effort. See the full list below.
+- **Extensive Documentation**: Access detailed documentation and example usage guides for a wide range of components, ensuring you have all the support you need.
+- **User-Friendly**: Operate with ease, requiring only minimal knowledge of Ansible, kubectl, and Helm, making it accessible even for DevOps professionals with limited experience.
 
 See also the [FAQ](FAQ.md).
 
@@ -22,7 +22,7 @@ See also the [FAQ](FAQ.md).
 
 - [quickstart with a single VM](cluster/Quickstart.md)
 - [create a new cluster](cluster/create-new-cluster.md)
-- [use an existing cluster](cluster/use-existing-cluster.md). 
+- [use an existing cluster](cluster/use-existing-cluster.md).
 - [upgrade an existing cluster](cluster/upgrade-cluster.md)
 - [reset/delete an existing cluster](cluster/reset-cluster.md)
 - [etcd backup/restore](cluster/etcd-backup-restore.md) and more debugging [etcd commands](cluster/etcd-commands.md).
