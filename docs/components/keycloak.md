@@ -22,7 +22,7 @@ keycloak-pg-cluster-1   1/1     Running   0          23m
 keycloak-pg-cluster-2   1/1     Running   0          21m
 ```
 
-To install it: `ansible-playbook 435-keycloak.yaml`
+To install it: `ansible-playbook 445-keycloak.yaml`
 
 ## Keycloak web interface
 
