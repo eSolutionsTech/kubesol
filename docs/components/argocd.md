@@ -30,14 +30,16 @@ argocd-server-5bdd5f46fd-cjjvv                      1/1     Running     0       
 
 To install it: `ansible-playbook 500-argocd.yaml`
 
-## Web interface
+## ArgoCD Web interface
 To access the web interface:
 
+Retrieve the initial admin password with:
 ```
-# retrieve the initial admin password
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d ; echo
-
+```
 # get the access URL
+To use the ArgoCD  web interface. The URL is something like `https://argocd.<<ext_dns_name>>`, you can get the exact address with:
+```
 kubectl -n argocd get ingress
 ```
 
