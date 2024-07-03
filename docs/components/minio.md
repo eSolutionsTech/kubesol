@@ -24,17 +24,15 @@ Minio operator is installed in the `minio-operator` namespace, but you must crea
 
 ## Web interface
 
-To access the **minio console**:
-
+The URL is something like https://minio-operator.<<ext_dns_name>>, you can get the exact address with:
 ```
-# get the hostname
 kubectl -n minio-operator get ingress
+```
 
-# get JWT token
+# get JWT token with:
+```
 kubectl -n minio-operator  get secret console-sa-secret -o jsonpath="{.data.token}" | base64 --decode ; echo 
 ```
-
-and access in browser `https://minio...`.
 
 ## To create and play with a minimal tenant and bucket
 

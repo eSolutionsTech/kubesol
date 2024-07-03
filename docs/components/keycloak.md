@@ -27,7 +27,10 @@ To install it: `ansible-playbook 445-keycloak.yaml`
 ## Keycloak web interface
 
 To use the keycloak web interface. The URL is something like `https://keycloak.<<ext_dns_name>>`, 
-you can get the exact address with `kubectl -n keycloak get ingress`.
+You can get the exact address with:
+```
+kubectl -n keycloak get ingress
+```
 
 Retrieve the first admin password with:
 
