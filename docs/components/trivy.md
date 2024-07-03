@@ -34,5 +34,5 @@ $ kubectl describe vulnerabilityreports pod-pg-directpv-1-postgres
 
 ## Grafana dashboard
 
-TBD
+You can import predefined Trivy dashboards. Example: https://grafana.com/grafana/dashboards/16337-trivy-operator-vulnerabilities/
 

@@ -52,7 +52,10 @@ ansible-playbook 412-longhorn-web.yaml
 ## Longhorn web-interface
 
 The URL is something like `https://longhorn.<<ext_dns_name>>`, 
-you can get the exact address with `kubectl -n longhorn-system get ingress`.
+you can get the exact address with:
+```
+kubectl -n longhorn-system get ingress
+```
 
 Retrieve the admin password with:
 
