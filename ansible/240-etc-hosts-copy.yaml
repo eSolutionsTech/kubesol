@@ -1,12 +1,11 @@
 ---
--
+- name: Copy hosts
   hosts: all
-  gather_facts: no
+  gather_facts: false
 
   tasks:
-
-  - name: Create nice /etc/hosts on all
-    template:
-      src: files/etc-hosts/etc-hosts.j2
-      dest: /etc/hosts
-      mode: 0644
+    - name: Create nice /etc/hosts on all
+      template:
+        src: files/etc-hosts/etc-hosts.j2
+        dest: /etc/hosts
+        mode: '0644'

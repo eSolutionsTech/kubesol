@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Uninstall DirectPV
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Uninstall DirectPV
   vars:
     K: "{{ playbook_dir }}/.kubeconfig"
 
@@ -20,14 +20,15 @@
         cmd: kubectl --kubeconfig=.kubeconfig get pvc -A 2>/dev/null | grep directpv-min-io | wc -l | sed -e 's/ //g'
       register: how_many_pvc
 
-    - fail:
+    - name: Check PVC
+      fail:
         msg: |
             Found {{ how_many_pvc.stdout }} PVC with directpv-min-io storage class
             You will need to manually delete them then re-run this playbook.
       when: how_many_pvc.stdout != "0"
 
     - name: Uninstall directpv
-      shell: 
+      shell:
         cmd: kubectl-directpv uninstall --kubeconfig=.kubeconfig && rm .directpv.yaml .drives.yaml .drives.init
         removes: .directpv.yaml
 
@@ -40,17 +41,16 @@
         - ./.drives.yaml
         - ./.directpv.yaml
 
-- hosts: worker
+- name: Cleanup directpv on workers
+  hosts: worker
   gather_facts: false
-  name: Cleanup directpv on workers
-  
+
   tasks:
 
 # ansible mount module requires path which sucks
     - name: Umount device
       shell: umount "/dev/{{ directpv_device }}"
-      failed_when: none 
+      failed_when: none
 
-    - name: wipefs
+    - name: Wipefs
       shell: wipefs -a "/dev/{{ directpv_device }}"
-     

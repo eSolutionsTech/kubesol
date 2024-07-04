@@ -1,27 +1,27 @@
 ---
-- hosts: localhost
+- name: Longhorn web interface
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Longhorn web interface
-
   vars:
     NS: "longhorn-system"
     SECRET: "longhorn-ui"
     iname: "longhorn"
 
   tasks:
-    - kubernetes.core.k8s_info:
+    - name: Create secret
+      kubernetes.core.k8s_info:
         kind: secret
         namespace: "{{ NS }}"
         name: "{{ SECRET }}"
       register: ks8_secret
 
     - debug:
-        msg: "Found Longhorn ui password: {{ ks8_secret.resources[0].data.password |b64decode }} If you want to reset it, delete secret {{ SECRET }} from namespace {{ NS }}." 
-      when: ks8_secret.resources[0] is defined  
+        msg: "Found Longhorn ui password: {{ ks8_secret.resources[0].data.password | b64decode }} If you want to reset it, delete secret {{ SECRET }} from namespace {{ NS }}."
+      when: ks8_secret.resources[0] is defined
 
-# just exit now if the password is already defined
-    - meta: end_play
+    - name: Just exit now if the password is already defined
+      meta: end_play
       when: ks8_secret.resources[0] is defined
 
     - name: Generate a new password
@@ -50,7 +50,7 @@
         cmd: echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" > auth
       environment:
         - USER: admin
-        - PASSWORD: "{{ new_password.stdout }}"   
+        - PASSWORD: "{{ new_password.stdout }}"
 
     - name: Delete basic-auth secret if exists
       kubernetes.core.k8s:
@@ -63,7 +63,7 @@
             namespace: "{{ NS }}"
 
     - name: Create basic-auth secret
-      shell: 
+      shell:
         cmd: kubectl -n "{{ NS }}" create secret generic basic-auth --from-file=auth
 
     - include_tasks: tasks/issuer.yaml
@@ -99,4 +99,3 @@
                       name: longhorn-frontend
                       port:
                         number: 80
-

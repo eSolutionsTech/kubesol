@@ -1,10 +1,11 @@
 ---
-- hosts: localhost
+- name: loki helm uninstall
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: loki helm uninstall
   vars:
     NS: "monitoring"
+
   tasks:
     - name: Remove loki
       kubernetes.core.helm:
@@ -19,4 +20,3 @@
         namespace: "{{ NS }}"
         state: absent
         wait: true
-

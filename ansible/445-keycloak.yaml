@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Install keycloak
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install keycloak
   vars:
     NS: "keycloak"
     D: "/root/.kubesol"
@@ -27,15 +27,17 @@
         src: "files/keycloak/values-keycloak.j2"
         dest: "{{ D }}/.values-keycloak.yaml"
 
-    - kubernetes.core.helm_repository:
+    - name: Add helm repo
+      kubernetes.core.helm_repository:
         name: keycloak
         repo_url: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
 
-    - kubernetes.core.helm:
+    - name: Install
+      kubernetes.core.helm:
         name: keycloak
         chart_ref: keycloak/keycloak
         namespace: "{{ NS }}"
-        chart_version: "{{ keycloak_chart_version|default('') }}"
+        chart_version: "{{ keycloak_chart_version | default('') }}"
         disable_hook: true
         values_files:
           - "{{ D }}/.values-keycloak.yaml"
@@ -72,4 +74,3 @@
                       name: keycloak
                       port:
                         number: 80
-

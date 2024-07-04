@@ -1,46 +1,44 @@
 ---
-- 
+- name: Longhorn prep
   hosts: workers
-  gather_facts: no
-  name: Longhorn prep
+  gather_facts: false
 
   tasks:
-  - name: format longhorn device
-    filesystem:
-      fstype: ext4
-      dev: "/dev/{{ longhorn_device }}"
-    when: longhorn_device is defined
+    - name: Format longhorn device
+      filesystem:
+        fstype: ext4
+        dev: "/dev/{{ longhorn_device }}"
+      when: longhorn_device is defined
 
-  - name: mount longhorn device
-    mount:
-      path: "/var/lib/longhorn"
-      src: "/dev/{{ longhorn_device }}"
-      fstype: ext4
-      state: mounted
-    when: longhorn_device is defined
+    - name: Mount longhorn device
+      mount:
+        path: "/var/lib/longhorn"
+        src: "/dev/{{ longhorn_device }}"
+        fstype: ext4
+        state: mounted
+      when: longhorn_device is defined
 
-  - name: install longhorn requirements nfs for RWM
-    apt:
-      pkg:
-      - open-iscsi
-      - nfs-kernel-server
+    - name: Install longhorn requirements nfs for RWM
+      apt:
+        pkg:
+        - open-iscsi
+        - nfs-kernel-server
 
-# https://longhorn.io/kb/troubleshooting-volume-with-multipath/
-  - name: longhorn multipath.conf fix
-    copy: 
-      dest: /etc/multipath.conf
-      content: |
-        defaults {
-          user_friendly_names yes
-        }
-        blacklist {
-          devnode "^sd[a-z0-9]+"
-        } 
-    notify: restart multipathd 
+  # https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+    - name: Longhorn multipath.conf fix
+      copy: 
+        dest: /etc/multipath.conf
+        content: |
+          defaults {
+            user_friendly_names yes
+          }
+          blacklist {
+            devnode "^sd[a-z0-9]+"
+          } 
+      notify: restart multipathd 
 
   handlers:
-  - name: restart multipathd
-    service:
-      name: multipathd
-      state: restarted
-
+    - name: Restart multipathd
+      service:
+        name: multipathd
+        state: restarted

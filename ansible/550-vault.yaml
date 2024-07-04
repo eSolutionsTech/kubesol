@@ -1,27 +1,28 @@
 ---
-- hosts: localhost
+- name: Install Vault
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install Vault
   vars:
     NS: "vault"
     iname: "vault"
 
   tasks:
-    - kubernetes.core.helm_repository:
+    - name: Add helm repo
+      kubernetes.core.helm_repository:
         name: hashicorp
-        repo_url:  https://helm.releases.hashicorp.com
+        repo_url: https://helm.releases.hashicorp.com
 
     - include_tasks: tasks/namespace.yaml
 
     - include_tasks: tasks/issuer.yaml
-          
-    - name: vault install helm chart
+
+    - name: Vault install helm chart
       kubernetes.core.helm:
         name: vault
         namespace: "{{ NS }}"
         chart_ref: hashicorp/vault
-        chart_version: "{{ vault_chart_version|default('') }}"
+        chart_version: "{{ vault_chart_version | default('') }}"
         values:
           global:
             resources:
@@ -30,18 +31,15 @@
                 cpu: 250m
               limits:
                 memory: 256Mi
-
           ui:
-            enabled: true 
-
+            enabled: true
           injector:
             enabled: false
-          
           server:
             ingress:
               enabled: true
               ingressClassName: "nginx"
-              annotations: 
+              annotations:
                 nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
                 nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
                 cert-manager.io/issuer: "letsencrypt-vault"
@@ -52,12 +50,10 @@
                 - secretName: vault-tls
                   hosts:
                     - "vault.{{ ext_dns_name }}"
-
             dataStorage:
               enabled: true
               size: 1Gi
               storageClass: longhorn
-              
             ha:
               enabled: true
               replicas: 3
@@ -74,5 +70,3 @@
                     path = "/vault/data"
                   }
                   service_registration "kubernetes" {}
-          
-          

@@ -1,58 +1,58 @@
 ---
-- 
+- name: Setup the workers
   hosts: worker
 # when creating a new cluster, you could do workers in parallel
 # but when upgrading you would prefer to do it one by one for HA
   serial: 1
-  gather_facts: no
+  gather_facts: false
   vars:
-    - CONFIG_FILE: /etc/rancher/rke2/config.yaml
+    CONFIG_FILE: /etc/rancher/rke2/config.yaml
 
   tasks:
-  - name: get the token
-    shell: cat /var/lib/rancher/rke2/server/node-token
-    delegate_to: "{{ groups['controller_one'][0] }}"
-    register: TOKEN
-    changed_when: False    
-    run_once: True
+    - name: Get the token
+      shell: cat /var/lib/rancher/rke2/server/node-token
+      delegate_to: "{{ groups['controller_one'][0] }}"
+      register: TOKEN
+      changed_when: false
+      run_once: true
 
-  - name: create directories
-    file:
-      path: "{{ item }}"
-      state: directory
-      owner: root
-      group: root
-      recurse: yes
-    loop:
-      - /etc/rancher/rke2
-      - /var/lib/rancher/rke2/server/manifests
+    - name: Create directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+      loop:
+        - /etc/rancher/rke2
+        - /var/lib/rancher/rke2/server/manifests
 
-  - name: Creating the config.yaml
-    copy:
-      dest: "{{ CONFIG_FILE }}"
-      content: |
-        token: {{ TOKEN.stdout }}
-        server: https://{{ hosts_gw }}:9345
-    notify: "rke2-agent service restart"
+    - name: Creating the config.yaml
+      copy:
+        dest: "{{ CONFIG_FILE }}"
+        content: |
+          token: {{ TOKEN.stdout }}
+          server: https://{{ hosts_gw }}:9345
+      notify: "rke2-agent service restart"
 
-  - name: download rke2.sh
-    get_url:
-      url: https://get.rke2.io
-      dest: /root/rke2.sh
-      mode: '0700'
+    - name: Download rke2.sh
+      get_url:
+        url: https://get.rke2.io
+        dest: /root/rke2.sh
+        mode: '0700'
 
-  - name: Installing rke2 agent
-    shell: ./rke2.sh
-    notify: "rke2-agent service restart"
-    environment: 
-      INSTALL_RKE2_VERSION: "{{ rke2_version|default('') }}"
-      INSTALL_RKE2_TYPE: "agent" 
+    - name: Installing rke2 agent
+      shell: ./rke2.sh
+      notify: "rke2-agent service restart"
+      environment:
+        INSTALL_RKE2_VERSION: "{{ rke2_version | default('') }}"
+        INSTALL_RKE2_TYPE: "agent"
 
-  - name: Starting rke2 agent
-    systemd:
-      name: rke2-agent
-      state: restarted
-      enabled: true
+    - name: Starting rke2 agent
+      systemd:
+        name: rke2-agent
+        state: restarted
+        enabled: true
 
   handlers:
     - name: Make sure a service unit is restarted
@@ -61,4 +61,3 @@
         state: restarted
         enabled: true
       listen: "rke2-agent service restart"
-

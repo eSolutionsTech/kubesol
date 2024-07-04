@@ -1,31 +1,31 @@
 ---
-- hosts: controller_one,controller
+- name: Setup certificate rotate on controllers
+  hosts: controller_one, controller
   serial: 1
-  gather_facts: no
+  gather_facts: false
 
   tasks:
-  - name: stop rke2-server
-    systemd:
-      name: rke2-server
-      state: stopped
+    - name: Stop rke2-server
+      systemd:
+        name: rke2-server
+        state: stopped
 
-  - name: rke2 certificate rotate
-    shell:
-      cmd: rke2 certificate rotate
+    - name: Rke2 certificate rotate
+      shell:
+        cmd: rke2 certificate rotate
 
-  - name: start rke2-server
-    systemd:
-      name: rke2-server
-      state: started 
+    - name: start rke2-server
+      systemd:
+        name: rke2-server
+        state: started
 
-
-- hosts: worker
+- name: Setup certificate rotate on workers
+  hosts: worker
   serial: 1
-  gather_facts: no
+  gather_facts: false
 
   tasks:
-  - name: restart rke2-agent
-    systemd:
-      name: rke2-agent
-      state: restarted
-  
+    - name: Restart rke2-agent
+      systemd:
+        name: rke2-agent
+        state: restarted

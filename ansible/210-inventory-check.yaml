@@ -1,9 +1,8 @@
 ---
-- 
+- name: Inventory check
   hosts: all
-  gather_facts: no
+  gather_facts: false
 
   tasks:
-  - name: Ansible ping
-    ping: 
-
+    - name: Ansible ping
+      ansible.builtin.ping:

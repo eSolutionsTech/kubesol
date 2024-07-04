@@ -1,40 +1,38 @@
 ---
-- 
+- name: Add some handy tools on controller one c1
   hosts: controller_one
-  gather_facts: no
-  name: Add some handy tools on controller one c1
+  gather_facts: false
   vars:
     HELM_ARCHIVE: "helm-v3.15.1-linux-amd64.tar.gz"
 
   tasks:
-  - name: create directory {{ D }}
-    file:
-      path: "{{ D }}"
-      state: directory
-      mode: '0700'
- 
-# install helm
-  - name: get helm binary tar.gz
-    get_url:
-      url: "https://get.helm.sh/{{ HELM_ARCHIVE }}"
-      dest: /root
-      mode: '0644'
+    - name: Create directory {{ D }}
+      file:
+        path: "{{ D }}"
+        state: directory
+        mode: '0700'
 
-  - name: unpack helm tar.gz
-    unarchive:
-      src: "/root/{{ HELM_ARCHIVE }}"
-      dest: /root
-      remote_src: yes
+  # install helm
+    - name: Get helm binary tar.gz
+      get_url:
+        url: "https://get.helm.sh/{{ HELM_ARCHIVE }}"
+        dest: /root
+        mode: '0644'
 
-  - name: copy helm binary to /usr/local/bin
-    copy: 
-      remote_src: True 
-      src: /root/linux-amd64/helm
-      dest: /usr/local/bin
-      mode: '0755'
+    - name: Unpack helm tar.gz
+      unarchive:
+        src: "/root/{{ HELM_ARCHIVE }}"
+        dest: /root
+        remote_src: true
 
-  - name: helm diff plugin
-    kubernetes.core.helm_plugin:
-      plugin_path: "https://github.com/databus23/helm-diff"
-      state: present
+    - name: Copy helm binary to /usr/local/bin
+      copy:
+        remote_src: true
+        src: /root/linux-amd64/helm
+        dest: /usr/local/bin
+        mode: '0755'
 
+    - name: Helm diff plugin
+      kubernetes.core.helm_plugin:
+        plugin_path: "https://github.com/databus23/helm-diff"
+        state: present

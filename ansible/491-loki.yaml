@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: loki helm install
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: loki helm install
   vars:
     NS: "monitoring"
 
@@ -19,7 +19,7 @@
         name: loki
         namespace: "{{ NS }}"
         chart_ref: grafana/loki
-        chart_version: "{{ loki_chart_version|default('') }}"
+        chart_version: "{{ loki_chart_version | default('') }}"
         values_files:
           - files/loki/values.yaml
 
@@ -28,7 +28,6 @@
         name: promtail
         namespace: "{{ NS }}"
         chart_ref: grafana/promtail
-        chart_version: "{{ promtail_chart_version|default('') }}"
+        chart_version: "{{ promtail_chart_version | default('') }}"
         values_files:
           - files/loki/promtail.yaml
-

@@ -1,19 +1,19 @@
 ---
-- 
+- name: Install the required packages
   hosts: all
-  gather_facts: no
+  gather_facts: false
 
   tasks:
-  - name: Update APT package cache
-    apt: update_cache=yes cache_valid_time=36000
+    - name: Update APT package cache
+      apt: update_cache=yes cache_valid_time=36000
 
-#  - name: Update all packages to the latest version
-#    apt:
-#      upgrade: dist
+  #  - name: Update all packages to the latest version
+  #    apt:
+  #      upgrade: dist
 
-  - name: Install packages
-    apt:
-      pkg:
-      - net-tools
-      - busybox-static
-    ignore_errors: true
+    - name: Install packages
+      apt:
+        pkg:
+          - net-tools
+          - busybox-static
+      ignore_errors: true

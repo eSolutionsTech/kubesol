@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Install DirectPV
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install DirectPV
   vars:
     D: "/root/.kubesol"
     bin: "https://github.com/minio/directpv/releases/download/v4.0.10/kubectl-directpv_4.0.10_linux_amd64"
@@ -15,7 +15,7 @@
         mode: '0755'
 
     - name: Creating file .directpv.yaml
-      shell: 
+      shell:
         cmd: kubectl-directpv install -o yaml >{{ D }}/.directpv.yaml
         creates: "{{ D }}/.directpv.yaml"
 
@@ -41,4 +41,3 @@
       shell:
         cmd: kubectl-directpv init {{ D }}/.drives.yaml --dangerous && touch {{ D }}/.drives.init
         creates: "{{ D }}/.drives.init"
-      

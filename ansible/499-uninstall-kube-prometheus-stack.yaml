@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: kube-prometheus-stack helm uninstall
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: kube-prometheus-stack helm uninstall
   vars:
     NS: "monitoring"
 
@@ -29,4 +29,3 @@
         - scrapeconfigs.monitoring.coreos.com
         - servicemonitors.monitoring.coreos.com
         - thanosrulers.monitoring.coreos.com
-

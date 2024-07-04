@@ -1,9 +1,8 @@
 ---
-- hosts: localhost
+- name: Install dummy
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install dummy
-  vars:
 
   tasks:
     - name: Create PVC directPV
@@ -36,7 +35,7 @@
             containers:
             - image: vvang/dummy:amd64
               name: c1
-              resources: 
+              resources:
                 requests:
                   cpu: 0.1
                   memory: 10Mi
@@ -50,4 +49,3 @@
             - name: vol1
               persistentVolumeClaim:
                 claimName: simple-pod-pvc
-      

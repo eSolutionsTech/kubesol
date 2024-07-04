@@ -1,22 +1,24 @@
 ---
-- hosts: localhost
+- name: Install velero
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install velero
   vars:
     NS: "velero"
 
   tasks:
-    - kubernetes.core.helm_repository:
+    - name: Add helm repo
+      kubernetes.core.helm_repository:
         name: velero
         repo_url: https://vmware-tanzu.github.io/helm-charts
 
     - include_tasks: tasks/namespace.yaml
 
-    - kubernetes.core.helm:
+    - name: Install
+      kubernetes.core.helm:
         name: velero
         namespace: "{{ NS }}"
         chart_ref: vmware-tanzu/velero
-        chart_version: "{{ velero_chart_version|default('') }}"
+        chart_version: "{{ velero_chart_version | default('') }}"
         values_files:
           - files/velero/values-velero.yaml

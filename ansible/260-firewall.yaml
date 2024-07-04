@@ -6,9 +6,9 @@
   tasks:
     - name: Configure Firewall Service
       template:
-          src: files/firewall/firewall-rules.sh.j2
-          dest: /usr/local/bin/firewall-rules.sh
-          mode: 0755
+        src: files/firewall/firewall-rules.sh.j2
+        dest: /usr/local/bin/firewall-rules.sh
+        mode: '0755'
       notify: restart firewall service
 
     - name: Create systemd service unit for firewall
@@ -17,15 +17,14 @@
         dest: /etc/systemd/system/firewall.service
       notify: reload systemd and restart firewall service
 
-
   handlers:
-    - name: restart firewall service
+    - name: Restart firewall service
       systemd:
         name: "firewall"
         state: restarted
 
-    - name: reload systemd and restart firewall service
+    - name: Reload systemd and restart firewall service
       systemd:
         name: "firewall"
         state: restarted
-        daemon_reload: yes
+        daemon_reload: true

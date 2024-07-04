@@ -1,18 +1,19 @@
 ---
-- hosts: localhost
+- name: Install strimzi kafka operator
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install strimzi kafka operator
   vars:
     NS: "strimzi"
 
   tasks:
     - include_tasks: tasks/namespace.yaml
 
-    - kubernetes.core.helm:
+    - name: Install
+      kubernetes.core.helm:
         name: strimzi
         chart_ref: "oci://quay.io/strimzi-helm/strimzi-kafka-operator"
-        chart_version: "{{ strimzi_chart_version|default('') }}"
+        chart_version: "{{ strimzi_chart_version | default('') }}"
         namespace: "{{ NS }}"
         values:
           watchAnyNamespace: true

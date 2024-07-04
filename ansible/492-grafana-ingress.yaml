@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Install Grafana ingress
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install Grafana ingress
   vars:
     NS: "monitoring"
     iname: "grafana"

@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: kube-prometheus-stack helm install
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: kube-prometheus-stack helm install
   vars:
     NS: "monitoring"
     SECRET: "grafana-credentials"
@@ -46,7 +46,7 @@
         name: kube-prometheus-stack
         namespace: "{{ NS }}"
         chart_ref: prometheus-community/kube-prometheus-stack
-        chart_version: "{{ kube_prometheus_stack_chart_version|default('') }}"
+        chart_version: "{{ kube_prometheus_stack_chart_version | default('') }}"
         values_files:
           - files/kube-prometheus-stack/values.yaml
 
