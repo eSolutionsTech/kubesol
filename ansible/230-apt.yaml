@@ -7,10 +7,6 @@
     - name: Update APT package cache
       apt: update_cache=yes cache_valid_time=36000
 
-  #  - name: Update all packages to the latest version
-  #    apt:
-  #      upgrade: dist
-
     - name: Install packages
       apt:
         pkg:

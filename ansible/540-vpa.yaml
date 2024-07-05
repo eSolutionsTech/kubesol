@@ -16,7 +16,7 @@
       when: deploy_vpa.stdout != ""
 
     - name: Autoscaler git checkout
-      ansible.builtin.git:
+      git:
         repo: "https://github.com/kubernetes/autoscaler.git"
         dest: /root/vpa
 

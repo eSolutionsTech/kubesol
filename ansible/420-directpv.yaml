@@ -25,7 +25,7 @@
         src: "{{ D }}/.directpv.yaml"
 
     - name: Pause for 2 minutes to start directpv pods
-      ansible.builtin.pause:
+      pause:
         minutes: 2
 
     - name: Creating file .drives.yaml
