@@ -1,14 +1,14 @@
 ---
-- hosts: localhost
+- name: Install ArgoCD
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install ArgoCD
   vars:
     NS: argocd
     iname: argocd
 
   tasks:
-    - name: argocd helm repo
+    - name: Argocd helm repo
       kubernetes.core.helm_repository:
         name: argo
         repo_url: https://argoproj.github.io/argo-helm
@@ -16,20 +16,18 @@
     - include_tasks: tasks/namespace.yaml
     - include_tasks: tasks/issuer.yaml
 
-    - name: argocd helm install
+    - name: Argocd helm install
       kubernetes.core.helm:
         name: argocd
         chart_ref: argo/argo-cd
-        chart_version: "{{ argocd_chart_version|default('') }}"
+        chart_version: "{{ argocd_chart_version | default('') }}"
         namespace: "{{ NS }}"
         values:
           global:
             domain: "argocd.{{ ext_dns_name }}"
-          
           configs:
             params:
               server.insecure: true
-          
           server:
             autoscaling:
               enabled: true
@@ -46,20 +44,14 @@
                 - hosts:
                   - "argocd.{{ ext_dns_name }}"
                   secretName: argocd-tls
-          
           redis-ha:
             enabled: true
-          
           controller:
             replicas: 1
-          
           repoServer:
             autoscaling:
               enabled: true
               minReplicas: 1
               maxReplicas: 2
-          
           applicationSet:
             replicas: 1
-          
-#eof

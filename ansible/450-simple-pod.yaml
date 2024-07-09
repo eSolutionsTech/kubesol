@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Install dummy
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install dummy
 
   tasks:
     - name: Create simple-pod
@@ -18,11 +18,10 @@
             containers:
             - image: vvang/dummy:amd64
               name: c1
-              resources: 
+              resources:
                 requests:
                   cpu: 0.1
                   memory: 10Mi
                 limits:
                   cpu: 1
                   memory: 250Mi
-

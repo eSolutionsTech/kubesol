@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Install Kubernetes dashboard ingress
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install Kubernetes dashboard ingress
   vars:
     NS: "kubernetes-dashboard"
     iname: "kubernetes-dashboard"
@@ -10,7 +10,7 @@
   tasks:
     - include_tasks: tasks/issuer.yaml
 
-    - name: kubernetes dashboard ingress
+    - name: Kubernetes dashboard ingress
       kubernetes.core.k8s:
         state: present
         definition:
@@ -40,5 +40,3 @@
                         name: kubernetes-dashboard-kong-proxy
                         port:
                           number: 443
-          
-          

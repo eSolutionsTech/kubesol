@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Add Trivy Grafana dashboard
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Add Trivy Grafana dashboard
 
   tasks:
     - name: Add Trivy Grafana Dashboard

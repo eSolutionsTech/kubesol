@@ -1,26 +1,28 @@
 ---
-- hosts: localhost
+- name: Install Kubernetes dashboard
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install Kubernetes dashboard
   vars:
     NS: "kubernetes-dashboard"
 
   tasks:
-    - kubernetes.core.helm_repository:
+    - name: Add helm repo
+      kubernetes.core.helm_repository:
         name: kubernetes-dashboard
         repo_url: https://kubernetes.github.io/dashboard/
 
     - include_tasks: tasks/namespace.yaml
 
-    - kubernetes.core.helm:
+    - name: Install
+      kubernetes.core.helm:
         name: kubernetes-dashboard
         namespace: "{{ NS }}"
         chart_ref: kubernetes-dashboard/kubernetes-dashboard
         chart_version: "{{ kubernetes_dashboard_chart_version|default('') }}"
 
 # https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
-    - name: service account admin-user
+    - name: Service account admin-user
       kubernetes.core.k8s:
         state: present
         definition:
@@ -30,7 +32,7 @@
             name: admin-user
             namespace: "{{ NS }}"
 
-    - name: clusterRoleBinding admin-user
+    - name: ClusterRoleBinding admin-user
       kubernetes.core.k8s:
         state: present
         definition:
@@ -47,7 +49,7 @@
             name: admin-user
             namespace: "{{ NS }}"
 
-    - name: secret admin-user
+    - name: Secret admin-user
       kubernetes.core.k8s:
         state: present
         definition:
@@ -57,9 +59,8 @@
             name: admin-user
             namespace: "{{ NS }}"
             annotations:
-              kubernetes.io/service-account.name: "admin-user"   
-          type: kubernetes.io/service-account-token  
+              kubernetes.io/service-account.name: "admin-user"
+          type: kubernetes.io/service-account-token
 
     - debug:
         msg: "To get the token for kubernetes dashboard run: kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={.data.token} | base64 -d"
-    

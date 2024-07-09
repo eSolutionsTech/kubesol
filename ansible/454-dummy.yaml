@@ -1,13 +1,13 @@
 ---
-- hosts: localhost
+- name: Install dummy
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install dummy
   vars:
     D: "/root/.kubesol"
 
   tasks:
-    - name: dummy template j2 -> yaml
+    - name: Dummy template j2 -> yaml
       template:
         src: "files/dummy/{{ item }}.j2"
         dest: "{{ D }}/.{{ item }}.yaml"
@@ -17,8 +17,8 @@
         - dummy-issuer
         - dummy-svc
         - dummy-sts
-        
-    - name: dummy apply yamls
+
+    - name: Dummy apply yamls
       kubernetes.core.k8s:
         state: present
         src: "{{ D }}/.{{ item }}.yaml"
@@ -28,4 +28,3 @@
         - dummy-issuer
         - dummy-svc
         - dummy-sts
-

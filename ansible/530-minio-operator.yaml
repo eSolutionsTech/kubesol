@@ -1,13 +1,14 @@
 ---
-- hosts: localhost
+- name: Install Minio operator
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install Minio operator
   vars:
     NS: "minio-operator"
     iname: "minio"
+
   tasks:
-    - name: minio helm repo
+    - name: Minio helm repo
       kubernetes.core.helm_repository:
         name: minio-operator
         repo_url: https://operator.min.io
@@ -16,11 +17,11 @@
 
     - include_tasks: tasks/issuer.yaml
 
-    - name: minio helm install
+    - name: Minio helm install
       kubernetes.core.helm:
         name: minio-operator
         chart_ref: minio-operator/operator
-        chart_version: "{{ minio_operator_chart_version|default('') }}"
+        chart_version: "{{ minio_operator_chart_version | default('') }}"
         namespace: "{{ NS }}"
         values:
           console:
@@ -31,7 +32,7 @@
               path: /
               pathType: Prefix
               number: 9090
-              annotations: 
+              annotations:
                 cert-manager.io/issuer: letsencrypt-minio
                 nginx.ingress.kubernetes.io/backend-protocol: HTTP
                 nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
@@ -39,6 +40,3 @@
               - hosts:
                 - "minio-operator.{{ ext_dns_name }}"
                 secretName: minio-tls
-
- 
-#eof

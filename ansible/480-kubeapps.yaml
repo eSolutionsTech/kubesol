@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
+- name: Install kubeapps
+  hosts: localhost
   gather_facts: false
   connection: local
-  name: Install kubeapps
   vars:
     NS: "kubeapps"
 
@@ -61,4 +61,3 @@
             annotations:
               kubernetes.io/service-account.name: "kubeapps-operator"
           type: kubernetes.io/service-account-token
-
