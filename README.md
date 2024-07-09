@@ -1,7 +1,7 @@
 # Kubesol
 
-_Kubesol_ is a [free and open-source](LICENSE.md) Kubernetes distribution 
-with optional commercial support by [esolutions.tech](https://www.esolutions.tech/kubesol).
+_Kubesol_ is a [free and open-source](../LICENSE.md) Kubernetes distribution
+with optional commercial support and / or license by [esolutions.tech](https://www.esolutions.tech/kubesol).
 
 ## Here are the main advantages that make our product a standout choice:
 - **Free and Open-Source, just as our MOTTO** Enjoy the benefits of a cost-effective solution with the option for premium commercial support if needed.
