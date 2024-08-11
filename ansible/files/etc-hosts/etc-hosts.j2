@@ -3,7 +3,13 @@
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
-{% for ansible_host in groups ['all'] %}
+
+{% for ansible_host in groups['all'] %}
 {%     set hostname = ansible_host.split('.').0 %}
+{%     if ansible_host == hosts_gw  %}
+{{  hostvars[ansible_host]['int_ip']  }}    {{ ansible_host }}    {{  hostname  }} {{ ext_dns_name }}
+{%     else %}
 {{  hostvars[ansible_host]['int_ip']  }}    {{ ansible_host }}    {{  hostname  }}
+{%     endif %}
 {% endfor %}
+
