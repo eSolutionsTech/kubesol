@@ -11,7 +11,7 @@
 
     - name: Install nginx
       apt:
-        name: nginx
+        name: nginx-full
         state: latest
 
     - name: Remove nginx default site available
