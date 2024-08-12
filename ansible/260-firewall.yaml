@@ -9,13 +9,13 @@
         src: files/firewall/firewall-rules.sh.j2
         dest: /usr/local/bin/firewall-rules.sh
         mode: '0755'
-      notify: restart firewall service
+      notify: Restart firewall service
 
     - name: Create systemd service unit for firewall
       copy:
         src: files/firewall/firewall.service
         dest: /etc/systemd/system/firewall.service
-      notify: reload systemd and restart firewall service
+      notify: Reload systemd and restart firewall service
 
   handlers:
     - name: Restart firewall service

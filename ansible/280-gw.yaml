@@ -18,13 +18,13 @@
       file:
         path: /etc/nginx/sites-enabled/default
         state: absent
-      notify: restart nginx
+      notify: Restart nginx
 
     - name: Copy nginx config file
       template:
         src: files/kubesol-gw/nginx.j2
         dest: /etc/nginx/nginx.conf
-      notify: restart nginx
+      notify: Restart nginx
 
     - name: Enable nginx
       service:
