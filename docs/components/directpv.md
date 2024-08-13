@@ -11,12 +11,12 @@ Good use cases are: Minio, Kafka, Zookeeper, PostgreSQL with replicas.
 In our setup, DirectPV is required by minio.
 
 This is difficult to install, even using our Ansible playbook. Please make sure
-- all the worker nodes are __Ready__ before running `ansible-playbook 420-directpv.yaml`
+- all the worker nodes are __Ready__ before running `ansible-playbook 440-directpv.yaml`
 - when Ansible shows the message __Check .drives.yaml now!__ you really check that file (in another terminal), making sure at least one block device per worker nodes is in that file!
 
 ## Uninstall / cleanup
 
-If you wish to uninstall DirectPV, we recommend using `ansible-playbook 429-Uninstall-directpv.yaml` for a clean job.
+If you wish to uninstall DirectPV, we recommend using `ansible-playbook 449-Uninstall-directpv.yaml` for a clean job.
 
 ## Check status
 

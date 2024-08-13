@@ -4,7 +4,14 @@ Cert-manager creates and renews TLS certificates for workloads in your Kubernete
 
 ## Install
 
-It is required (in our setup) by all Ingresses (that't it all web interfaces).
+It is required (in our setup) by all Ingresses (that't it all web interfaces). 
+
+Please note if you do not have 
+the DNS setup for the names defined in `ext_dns_name` variable as described in 
+[Quickstart guide](../cluster/Quickstart.md), 
+the certificate(s) will remain in the state `Ready: False`, 
+a generic default SSL certificate will be used
+and in browser you will see the well known SSL Certificate Warning.
 
 To check it: 
 
@@ -16,7 +23,7 @@ cert-manager-d7db49bf4-d5qbg               1/1     Running   0          16h
 cert-manager-webhook-f6c9958d-zr57m        1/1     Running   0          16h
 ```
 
-To install it: `ansible-playbook 430-cert-manager.yaml`
+To install it: `ansible-playbook 410-cert-manager.yaml`
 
 ## Usage
 

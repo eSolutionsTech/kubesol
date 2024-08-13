@@ -1,6 +1,9 @@
 # Upgrade cluster
 
-To upgrade an existing Kubernetes cluster you will just need to bump up the version (or create it) in `Inventory` file - variable `rke2_version` and run again `ansible-playbook 300-new-rke2.yaml`. You can see the available options by checking this page: https://github.com/rancher/rke2/releases
+To upgrade an existing Kubernetes cluster you will just need to bump up the version (or create it) 
+in `Inventory` file - variable `rke2_version` and run again 
+`ansible-playbook 300-rke2-cluster.yaml`. 
+You can see the available options by checking this page: https://github.com/rancher/rke2/releases
 
 Do not try to skip more than one major version at a time, for example this was tested upgrading from Kubernetes 1.26 to 1.27. The exact value for the variable name from the releases page: https://github.com/rancher/rke2/releases (for example `v1.30.0+rke2r1` etc).
 

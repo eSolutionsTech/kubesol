@@ -71,9 +71,9 @@ hosts_gw="kubesol-dev4-c1"
 kubesol-dev4-c1    int_ip=10.135.187.238 controller_worker=true ansible_connection=local 
 ```
 
-7. run `ansible-playbook 200-prep.yaml`. If all ok, continue, else debug and re-run the playbook
+7. run `ansible-playbook 200-prep-vms.yaml`. If all ok, continue, else debug and re-run the playbook
 
-8. run `ansible-playbook 300-new-rke2.yaml`. This will take 2-3 minutes. If all ok, continue, else debug and re-run the playbook
+8. run `ansible-playbook 300-rke2-cluster.yaml`. This will take 2-3 minutes. If all ok, continue, else debug and re-run the playbook
 
 9. you now have a Kubernetes cluster with one node. you could use it with:
 
@@ -92,12 +92,12 @@ Wait until you see the node STATUS Ready.
 
 ```
 # cert-manager
-ansible-playbook 430-cert-manager.yaml  # you will need this for ssl certificates
+ansible-playbook 410-cert-manager.yaml  # you will need this for ssl certificates
 kubectl -n cert-manager get pods        # wait for all pods to be Ready
 
 # kubernetes-dashboard
-ansible-playbook 460-kubernetes-dashboard.yaml
-ansible-playbook 462-kubernetes-dashboard-ingress.yaml 
+ansible-playbook 420-kubernetes-dashboard.yaml
+ansible-playbook 422-kubernetes-dashboard-ingress.yaml 
 kubectl -n kubernetes-dashboard get pods         # wait for all pods to be Ready
 kubectl -n kubernetes-dashboard get ingress      # note the URL
 kubectl -n kubernetes-dashboard get certificate  # SSL certificate is ready?
@@ -108,17 +108,17 @@ kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={.data.token} 
 
 ## Longhorn storage class
 
-Before installing Longhorn storage class, edit `410-longhorn-prep.yaml` and change `hosts: worker` to `hosts: all`. Then:
+Before installing Longhorn storage class, edit `430-longhorn-prep.yaml` and change `hosts: worker` to `hosts: all`. Then:
 
 ```
-# edit 410-longhorn-prep.yaml and change hosts: worker to hosts: all
-ansible-playbook 410-longhorn-prep.yaml
-ansible-playbook 411-longhorn-helm.yaml
-ansible-playbook 412-longhorn-web.yaml 
+# edit 430-longhorn-prep.yaml and change hosts: worker to hosts: all
+ansible-playbook 430-longhorn-prep.yaml
+ansible-playbook 431-longhorn-helm.yaml
+ansible-playbook 432-longhorn-web.yaml 
 
 kubectl -n longhorn-system get pods    # check all pods to be Ready
 kubectl -n longhorn-system get ingress # get hostname
-ansible-playbook 412-longhorn-web.yaml # run the playbook again to see the password
+ansible-playbook 432-longhorn-web.yaml # run the playbook again to see the password
 # open in browser
 ```
 

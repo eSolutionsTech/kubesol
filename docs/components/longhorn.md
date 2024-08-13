@@ -44,9 +44,9 @@ longhorn-ui-585bb57bf4-dtpk8                        1/1     Running   0         
 To install it:
 
 ```
-ansible-playbook 410-longhorn-prep.yaml 
-ansible-playbook 411-longhorn-helm.yaml  
-ansible-playbook 412-longhorn-web.yaml 
+ansible-playbook 430-longhorn-prep.yaml 
+ansible-playbook 431-longhorn-helm.yaml  
+ansible-playbook 432-longhorn-web.yaml 
 ```
 
 ## Longhorn web-interface
@@ -60,7 +60,7 @@ kubectl -n longhorn-system get ingress
 Retrieve the admin password with:
 
 ```
-ansible-playbook 412-longhorn-web.yaml
+ansible-playbook 432-longhorn-web.yaml
 ```
 
 ![](screenshot3.png "")
