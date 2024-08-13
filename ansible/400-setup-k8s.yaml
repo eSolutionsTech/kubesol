@@ -1,28 +1,33 @@
 ---
-- import_playbook: 430-cert-manager.yaml
-- import_playbook: 460-kubernetes-dashboard.yaml
-- import_playbook: 462-kubernetes-dashboard-ingress.yaml
+- import_playbook: 405-get-nodes.yaml
+- import_playbook: 410-cert-manager.yaml
+- import_playbook: 420-kubernetes-dashboard.yaml
+- import_playbook: 422-kubernetes-dashboard-ingress.yaml
 
 ## storage classes
-#- import_playbook: 410-longhorn-prep.yaml
-#- import_playbook: 411-longhorn-helm.yaml
-#- import_playbook: 412-longhorn-web.yaml
+- import_playbook: 430-longhorn-prep.yaml
+- import_playbook: 431-longhorn-helm.yaml
+- import_playbook: 432-longhorn-web.yaml
+- import_playbook: 440-directpv.yaml
 
-#- import_playbook: 420-directpv.yaml
+## dummy exmples
+- import_playbook: 450-simple-pod.yaml
+- import_playbook: 452-simple-pod-pvc.yaml
+- import_playbook: 454-dummy.yaml
 
-##
-#- import_playbook: 440-cnpg.yaml
-#- import_playbook: 445-keycloak.yaml 
-#- import_playbook: 450-simple-pod.yaml
-#- import_playbook: 452-simple-pod-pvc.yaml
-#- import_playbook: 454-dummy.yaml
-##- import_playbook: 470-velero.yaml
-#- import_playbook: 490-kube-prometheus-stack.yaml 
-#- import_playbook: 491-loki.yaml
-#- import_playbook: 500-argocd.yaml
-#- import_playbook: 520-strimzi.yaml
-#- import_playbook: 530-minio-operator.yaml
-#- import_playbook: 540-vpa.yaml 
-#- import_playbook: 550-vault.yaml
-#- import_playbook: 560-external-secrets.yaml
+## more components
+- import_playbook: 460-cnpg.yaml
+- import_playbook: 470-keycloak.yaml 
+#- import_playbook: 480-velero.yaml
+- import_playbook: 490-kube-prometheus-stack.yaml 
+- import_playbook: 491-loki.yaml
+- import_playbook: 492-grafana-ingress.yaml
+- import_playbook: 500-argocd.yaml
+- import_playbook: 510-trivy.yaml
+- import_playbook: 511-trivy-grafana-dash.yaml
+- import_playbook: 520-strimzi.yaml
+- import_playbook: 530-minio-operator.yaml
+- import_playbook: 540-vpa.yaml 
+- import_playbook: 550-vault.yaml
+- import_playbook: 560-external-secrets.yaml
 

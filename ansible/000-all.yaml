@@ -1,5 +1,5 @@
 ---
-- import_playbook: 200-prep.yaml
-- import_playbook: 300-new-rke2.yaml
+- import_playbook: 200-prep-vms.yaml
+- import_playbook: 300-rke2-cluster.yaml
 - import_playbook: 400-setup-k8s.yaml
 
