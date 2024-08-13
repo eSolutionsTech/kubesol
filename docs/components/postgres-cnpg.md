@@ -14,7 +14,7 @@ NAME                                  READY   STATUS    RESTARTS   AGE
 cnpg-cloudnative-pg-d74fdd8fb-xtb5v   1/1     Running   0          3m33s
 ```
 
-To install it: `ansible-playbook 440-cnpg.yaml`
+To install it: `ansible-playbook 460-cnpg.yaml`
 
 ## Usage
 

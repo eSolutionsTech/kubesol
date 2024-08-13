@@ -122,7 +122,7 @@ The result should look like:
 
 5. Install velero operator:
 ```
-ansible-playbook 470-velero.yaml
+ansible-playbook 480-velero.yaml
 ```
 
 6. Create a backup

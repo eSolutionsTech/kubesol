@@ -18,7 +18,7 @@ kubernetes-dashboard-metrics-scraper-555758b9bf-mlqtw   1/1     Running   0     
 kubernetes-dashboard-web-846f5f49b-z7rk5                1/1     Running   0          16h
 ```
 
-To install it: `ansible playbook 460-kubernetes-dashboard.yaml 462-kubernetes-dashboard-ingress.yaml`
+To install it: `ansible playbook 420-kubernetes-dashboard.yaml 422-kubernetes-dashboard-ingress.yaml`
 
 ## To access web interface
 
