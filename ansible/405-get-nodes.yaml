@@ -4,13 +4,13 @@
   gather_facts: false
   connection: local
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
+#    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: Get cluster info
       kubernetes.core.k8s_info:
         kind: Node
-        kubeconfig: "{{ K }}"
+#        kubeconfig: "{{ K }}"
       register: ks8_nodes
 
     - debug:

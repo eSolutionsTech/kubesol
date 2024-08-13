@@ -4,7 +4,7 @@
   gather_facts: false
   connection: local
   vars:
-    K: "{{ playbook_dir }}/.kubeconfig"
+#    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
     - name: List cluster components
