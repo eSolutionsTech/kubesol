@@ -10,7 +10,7 @@ Official URLs for Keycloak:
 
 ## Install
 
-In our setup it requires CNPG (Postgres operator) which, in turn, uses the default storage class (Longhorn).
+In our setup it requires [CNPG Postgres operator](postgres-cnpg.md) which, in turn, uses the default storage class (Longhorn).
 
 To check it: 
 

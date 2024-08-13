@@ -4,7 +4,7 @@ MinIO is a S3 compatible object store. See more at https://min.io and https://mi
 
 ## Install
 
-Minio will require DirectPV!
+Minio will require [DirectPV](directpv.md)!
 
 To check it: 
 
