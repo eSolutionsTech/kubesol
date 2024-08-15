@@ -1,0 +1,23 @@
+---
+- name: Copy hosts on c1
+  hosts: controller_one
+  gather_facts: false
+
+  tasks:
+    - name: Create /etc/hosts
+      template:
+        src: files/etc-hosts/etc-hosts.j2
+        dest: /etc/hosts
+        mode: '0644'
+
+- name: Copy hosts on all
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Create /etc/hosts
+      template:
+        src: files/etc-hosts/etc-hosts.j2
+        dest: /etc/hosts
+        mode: '0644'
+
