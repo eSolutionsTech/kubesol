@@ -49,6 +49,9 @@ A simple example is this:
 
 ```
 [all:vars]
+
+D="/root/.kubesol"
+
 #rke2_version="v1.27.12+rke2r1"
 
 longhorn_device="sdb"

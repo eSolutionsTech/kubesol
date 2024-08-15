@@ -51,6 +51,9 @@ and a file `Inventory` like this (use your hostname, email etc):
 
 ```
 [all:vars]
+
+D="/root/.kubesol"
+
 rke2_version="v1.29.4+rke2r1"
 
 ext_dns_name="dev4.YOUR_DOMAIN_COM"
