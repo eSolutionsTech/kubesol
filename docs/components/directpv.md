@@ -43,3 +43,38 @@ $ kubectl get pvc -A | grep directpv
 [...]
 ```
 
+## Other directpv informational commands
+
+Again on `c1` node you may use those `kubectl-directpv` commands:
+
+```
+# kubectl-directpv info
+┌───────────┬──────────┬───────────┬─────────┬────────┐
+│ NODE      │ CAPACITY │ ALLOCATED │ VOLUMES │ DRIVES │
+├───────────┼──────────┼───────────┼─────────┼────────┤
+│ • w1-dev5 │ 20 GiB   │ 0 B       │ 0       │ 1      │
+│ • w2-dev5 │ 20 GiB   │ 0 B       │ 0       │ 1      │
+│ • w3-dev5 │ 20 GiB   │ 10 MiB    │ 1       │ 1      │
+└───────────┴──────────┴───────────┴─────────┴────────┘
+
+10 MiB/60 GiB used, 1 volumes, 3 drives
+
+
+# kubectl-directpv list drives
+┌─────────┬──────┬───────────┬────────┬────────┬─────────┬────────┐
+│ NODE    │ NAME │ MAKE      │ SIZE   │ FREE   │ VOLUMES │ STATUS │
+├─────────┼──────┼───────────┼────────┼────────┼─────────┼────────┤
+│ w1-dev5 │ sdb  │ DO Volume │ 20 GiB │ 20 GiB │ -       │ Ready  │
+│ w2-dev5 │ sdb  │ DO Volume │ 20 GiB │ 20 GiB │ -       │ Ready  │
+│ w3-dev5 │ sdb  │ DO Volume │ 20 GiB │ 20 GiB │ 1       │ Ready  │
+└─────────┴──────┴───────────┴────────┴────────┴─────────┴────────┘
+
+
+# kubectl-directpv list volumes
+┌──────────────────────────────────────────┬──────────┬─────────┬───────┬────────────────┬──────────────┬─────────┐
+│ VOLUME                                   │ CAPACITY │ NODE    │ DRIVE │ PODNAME        │ PODNAMESPACE │ STATUS  │
+├──────────────────────────────────────────┼──────────┼─────────┼───────┼────────────────┼──────────────┼─────────┤
+│ pvc-6194b697-22b1-4410-9f37-6fdd74618422 │ 10 MiB   │ w3-dev5 │ sdb   │ simple-pod-pvc │ default      │ Bounded │
+└──────────────────────────────────────────┴──────────┴─────────┴───────┴────────────────┴──────────────┴─────────┘
+```
+

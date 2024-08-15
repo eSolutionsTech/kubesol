@@ -1,6 +1,18 @@
 #!/bin/bash
 # firewall-rules.sh
-ALLOWED_IPS=({% for ansible_host in groups ['all'] %} "{{hostvars[ansible_host]['int_ip']}}"{% endfor %}  )
+
+# this is a simle firewall to allow all access between all nodes IP
+# and external access from any IP for: ssh, http, https, 6443
+# you may replace it with something more restrictive if you wish
+
+ALLOWED_IPS_1=({% for ansible_host in groups ['all'] %} "{{hostvars[ansible_host]['int_ip']}}" {% endfor %}  )
+ALLOWED_IPS_2=({% for ansible_host in groups ['all'] %} "{{hostvars[ansible_host]['ansible_all_ipv4_addresses']}}" {% endfor %} )
+
+ALLOWED_IPS="$(echo ${ALLOWED_IPS_2[@]} | tr -d "'[]," )"  # flatten lists
+
+ALLOWED_IPS="$ALLOWED_IPS 10.42.0.0/16"  # add some extra ranges
+                                         # cluster-cidr network CIDRs to use for pod IPs
+					 # metrics server pod is trying to access node external IP
 
 function start_firewall() {
     # Flush all existing rules
@@ -22,30 +34,28 @@ function start_firewall() {
     iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
     iptables -A OUTPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-    # Allow incoming SSH, HTTP, and HTTPS and rke2 ports
+    # Allow from any incoming SSH, HTTP, and HTTPS 
     iptables -A INPUT -p tcp --dport 22 -j ACCEPT
     iptables -A INPUT -p tcp --dport 80 -j ACCEPT
     iptables -A INPUT -p tcp --dport 443 -j ACCEPT
     
-    # Control Plane Node(s):
+    # Allow from any - Control Plane Node(s):
     iptables -A INPUT -p tcp --dport 6443 -j ACCEPT # Kubernetes API server
 
-
-    
     # Allow incoming traffic on port all from the specified IP addresses
-    for ip in "${ALLOWED_IPS[@]}"; do
+    for ip in ${ALLOWED_IPS}; do
         iptables -A INPUT -p tcp -s $ip -j ACCEPT
     done
 
-    for ip in "${ALLOWED_IPS[@]}"; do
+    for ip in ${ALLOWED_IPS}; do
         iptables -A INPUT -p udp -s $ip -j ACCEPT
     done
 
     
     # Reject all inputs
+    iptables -A INPUT   -m state --state NEW -j LOG
     iptables -A INPUT   -p tcp -m state --state NEW -j REJECT --reject-with tcp-reset
     iptables -A INPUT   -p udp -m state --state NEW -j REJECT --reject-with icmp-port-unreachable
-    iptables -A INPUT   -m state --state NEW -j LOG
     iptables -A INPUT   -m state --state NEW -j DROP
 
 }

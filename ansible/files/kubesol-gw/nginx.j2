@@ -94,7 +94,7 @@ stream {
 
 #kubesol-dev2
   server {
-    listen {{ ext_dns_name }}:6443;
+    listen *:6443;
     proxy_pass {{ project_name }}_6443;
   }
   upstream {{ project_name }}_6443 {
@@ -121,7 +121,7 @@ stream {
 
 # kubesol-dev2 port 80
   server {
-    listen {{ ext_dns_name }}:80;
+    listen *:80;
     proxy_pass {{ project_name }}_80;
   }
   upstream {{ project_name }}_80 {
@@ -133,7 +133,7 @@ stream {
 
 # kubesol-dev2 port 443
   server {
-    listen {{ ext_dns_name }}:443;
+    listen *:443;
     proxy_pass {{ project_name }}_443;
   }
   upstream {{ project_name }}_443 {

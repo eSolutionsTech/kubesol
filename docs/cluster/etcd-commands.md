@@ -1,5 +1,8 @@
 # Etcd commands
 
+**NOTE 2024-08** Newer etcd pods no longer support `kubectl exec` since they do not have a builtin shell... 
+
+
 Useful commands for etcd debugging.
 
 based on https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf

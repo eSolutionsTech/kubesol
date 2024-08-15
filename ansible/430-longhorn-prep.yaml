@@ -1,6 +1,6 @@
 ---
 - name: Longhorn prep
-  hosts: workers
+  hosts: worker
   gather_facts: false
 
   tasks:
@@ -35,7 +35,7 @@
           blacklist {
             devnode "^sd[a-z0-9]+"
           } 
-      notify: restart multipathd 
+      notify: Restart multipathd 
 
   handlers:
     - name: Restart multipathd

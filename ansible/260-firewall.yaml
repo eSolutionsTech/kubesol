@@ -1,7 +1,7 @@
 ---
 - name: Add a local firewall file
   hosts: all
-  gather_facts: false
+  gather_facts: true
 
   tasks:
     - name: Configure Firewall Service
