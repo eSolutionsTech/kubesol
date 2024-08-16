@@ -17,6 +17,8 @@
         namespace: "{{ NS }}"
         state: present
         src: files/keycloak/keycloak-cnpg.yaml
+      retries: 10
+      delay: 20
 
     - name: Generate a new password
       shell: pwgen 16 1
