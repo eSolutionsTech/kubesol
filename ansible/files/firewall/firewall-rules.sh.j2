@@ -42,16 +42,11 @@ function start_firewall() {
     # Allow from any - Control Plane Node(s):
     iptables -A INPUT -p tcp --dport 6443 -j ACCEPT # Kubernetes API server
 
-    # Allow incoming traffic on port all from the specified IP addresses
+    # Allow incoming traffic from all ALLOWED_IPS
     for ip in ${ALLOWED_IPS}; do
-        iptables -A INPUT -p tcp -s $ip -j ACCEPT
+        iptables -A INPUT -s $ip -j ACCEPT
     done
 
-    for ip in ${ALLOWED_IPS}; do
-        iptables -A INPUT -p udp -s $ip -j ACCEPT
-    done
-
-    
     # Reject all inputs
     iptables -A INPUT   -m state --state NEW -j LOG
     iptables -A INPUT   -p tcp -m state --state NEW -j REJECT --reject-with tcp-reset
