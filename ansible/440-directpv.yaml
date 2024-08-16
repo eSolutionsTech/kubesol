@@ -33,6 +33,15 @@
         cmd: kubectl-directpv discover --output-file {{ D }}/.drives.yaml
         creates: "{{ D }}/.drives.yaml"
 
+    - command:
+        cmd: cat "{{ D }}/.drives.yaml"
+      register: out
+      changed_when: none
+
+    - name: Show "{{ D }}/.drives.yaml"
+      debug:
+        msg: "{{ out.stdout_lines }}"
+
     - name: Check .drives.yaml
       pause:
         prompt: Check {{ D }}/.drives.yaml file now! Press return to continue. Press Ctrl+c and then "a" to abort
