@@ -66,4 +66,5 @@ resources:
     memory: 800Mi
   limits:
     memory: 800Mi
-extraStartupArgs: "-Dkeycloak.profile.feature.scripts=enabled -Dkeycloak.profile.feature.upload_scripts=enabled --hostname=keycloak.{{ ext_dns_name }} --hostname-admin-url=https://keycloak.{{ ext_dns_name }}"
+extraStartupArgs: "-Dkeycloak.profile.feature.scripts=enabled -Dkeycloak.profile.feature.upload_scripts=enabled --hostname=keycloak.{{ ext_dns_name }}"
+
