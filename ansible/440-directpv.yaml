@@ -42,11 +42,15 @@
       debug:
         msg: "{{ out.stdout_lines }}"
 
-    - name: Check .drives.yaml
-      pause:
-        prompt: Check {{ D }}/.drives.yaml file now! Press return to continue. Press Ctrl+c and then "a" to abort
+### this pause is only for debug purposes
+### so it is commented out for now
+#    - name: Check .drives.yaml
+#      pause:
+#        prompt: Check {{ D }}/.drives.yaml file now! Press return to continue. Press Ctrl+c and then "a" to abort
+###
 
     - name: Init using .drives.yaml
       shell:
         cmd: kubectl-directpv init {{ D }}/.drives.yaml --dangerous && touch {{ D }}/.drives.init
         creates: "{{ D }}/.drives.init"
+
