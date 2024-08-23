@@ -4,7 +4,7 @@ Velero is a backup system for Kubernetes, storing the backups in a remote S3 buc
 
 Below we are describing step by step how to setup an AWS S3 bucket and use it in our setup.
 
-1. Install velero cli on the local machine:
+## Install velero cli on the local machine:
 
 Download the latest official release’s tarball for your client platform.
 <https://github.com/vmware-tanzu/velero/releases>
@@ -16,7 +16,7 @@ tar -xvf <RELEASE-TARBALL-NAME>.tar.gz
 
 Move velero binary in yout PATH (/usr/local/bin)
 
-2. Create an aws S3 bucket:
+## Create an aws S3 bucket:
 
 - Connect to the AWS Management Console and open CloudShell:
 
@@ -35,7 +35,7 @@ aws s3api create-bucket \
     --region <aws region>
 ```
 
-3. Create IAM user and policy using AWS cli:
+## Create IAM user and policy using AWS cli:
 
 - Create the IAM user:
 ```
@@ -112,7 +112,7 @@ The result should look like:
 }
 ```
 
-4. Modifify in kubesol-v1/ansible/files/velero/values-velero.yaml file the following parameters with the values from the previous step:
+## Modifify in kubesol-v1/ansible/files/velero/values-velero.yaml file the following parameters with the values from the previous step:
 
 - bucket: <bucket_name>
 - region: <aws_region>
@@ -120,12 +120,12 @@ The result should look like:
 - AccessKeyId: <AWS_ACCESS_KEY_ID>
 
 
-5. Install velero operator:
+## Install velero operator:
 ```
 ansible-playbook 480-velero.yaml
 ```
 
-6. Create a backup
+## Create a backup
 ```
 velero backup create <backup name> --include-namespaces <namespace name>
 ```
@@ -139,7 +139,7 @@ velero get backup
 ```
 
 
-7. Restore a backup; in case of data loss restore from existing backups
+## Restore a backup; in case of data loss restore from existing backups
 ```
 velero restore create --from-backup <backup name>
 ```
