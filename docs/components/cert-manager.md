@@ -42,3 +42,13 @@ A list of useful commands in our setup:
   kubectl -n dummy get ingress
 ```
 
+## Troubleshooting
+
+The official docs in very good on troubleshooting:
+
+- https://cert-manager.io/docs/troubleshooting/
+- https://cert-manager.io/docs/troubleshooting/acme/
+
+Basically check the CRDs in order with `get / describe` on each object: certificate, certificateRequest, issuer / clusterIssuer, order, challenges. Then also look at the `ingress` and try http requests from outside and DNS resolution from both inside and outside the kubernetes cluster. 
+
+
