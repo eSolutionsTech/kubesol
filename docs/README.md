@@ -22,7 +22,8 @@ See also the [FAQ](FAQ.md).
 
 - [quickstart with a single VM](cluster/Quickstart.md)
 - [create a new cluster](cluster/create-new-cluster.md)
-- [use an existing cluster](cluster/use-existing-cluster.md).
+- [use an existing cluster](cluster/use-existing-cluster.md)
+- [adding more worker nodes](cluster/adding-nodes.md)
 - [upgrade an existing cluster](cluster/upgrade-cluster.md)
 - [reset/delete an existing cluster](cluster/reset-cluster.md)
 - [etcd backup/restore](cluster/etcd-backup-restore.md) and more debugging [etcd commands](cluster/etcd-commands.md).
