@@ -6,4 +6,5 @@ To add one or more worker nodes after the initial setup, you can simply
 - on node `c1` where ansible files are, add one or more nodes to the `Inventory` file
 - run `ansible-playbook 340-workers.yaml`. If you wish to speed this up you can even use `--limit new-worker-name`
 to run it only on the newly added node.
+- in the end verify with `kubectl get nodes`
 
