@@ -22,16 +22,13 @@ Note them down (run `ip a`).
   *.dev4.YOUR_DOMAIN_COM  PUBLIC_IP
 ```
 
-4. ssh into VM and install some tools (as root): 
+4. `git clone https://github.com/eSolutionsTech/kubesol.git`
 
+5. install pre-requisites using the `start.sh` script:
 ```
-apt update -y
-apt install ansible python3-kubernetes pwgen -y
-
-ansible-galaxy collection install kubernetes.core
+cd kubesol
+./start.sh
 ```
-
-5. `git clone https://github.com/eSolutionsTech/kubesol.git`
 
 6. cd into this directory kubesol/ansible and create a file `ansible.cfg`:
 
