@@ -20,13 +20,33 @@ Our minimal configuration is like this:
 - _clusterName_-w1 : First worker node. 8 GB RAM, 4 CPU cores, 50 GB root filesystem plus 2 additional disks at least 10 GB each for storage classes.
 - _clusterName_-w2/3 : Additional worker nodes. Optional but highly recommended. Same specs as `w1`.
 
-### Networking
+### Hostname resolving
 
-All VMs should have the right hostname and private IP. A `etc-hosts` file can be generated and deployed based on `Inventory` if you define the variable `int_ip` for all VMs.
+Usually we deploy an `/etc/hosts` file with hostnames and internal IPs on all VMs. 
+If you already have that or you want to use the DNS names, you may skip 
+the playbook `205-etc-hosts-copy.yaml` (comment it out in `200-prep-vms.yaml`).
+
+The first method create an `/etc/hosts` if to have a file named `/tmp/hosts.txt` with the exact content needed. 
+In our setups, this is created automatically via Terraform when we create the VMs.
+
+Another way is to edit the `Inventory` file and define the variable `int_ip` for each VM, 
+for example like in this snippet:
+
+```
+[...]
+[controller_one]
+c1-dev5 int_ip=10.135.187.236 ansible_connection=local
+
+# second and third controller nodes
+[controller]
+c2-dev5 int_ip=10.135.187.243
+c3-dev5 int_ip=10.135.187.242
+[...]
+```
 
 ### External DNS
 
-To access it from outside and use Letsencrypt SSL certificates you will need:
+To access the system from outside and use Letsencrypt SSL certificates you will need:
 
 - The DNS name _ext_dns_name_ (defined in Ansible Inventory, see below) to point out to a public IP. This IP is to be redirected to the private IP of _clusterName_-gw
 - Catch-all DNS name *._ext_dns_name_ to point out to the same public IP
@@ -36,7 +56,7 @@ To access it from outside and use Letsencrypt SSL certificates you will need:
 
 We are using the first controller (`c1`) as the Ansible run host. So, on the developer machine you will just need to ssh into that. 
 
-As root on `c1` node, clone the git repo then run the `start.sh` script:
+As root on `c1` node, clone the git repo then run the `start.sh` script to install pre-requisites:
 
 ```
 c1 # cd /root
@@ -45,13 +65,14 @@ c1 # cd kubesol
 c1 # ./start.sh
 ```
 
-## Details on ansible Inventory file
+## Details on Ansible Inventory file
 
 In the `ansible` directory you must create a file called `Inventory`, see the example below.
 
-This file contains hostnames and variables used by the project. Most of them are self explanatory. Variables `rke2_version` and the rest named `*_chart_version` can be commented out to install the latest version available. 
+This file contains hostnames and variables used by the project. Most of them are self explanatory. 
+Variables `rke2_version` and the rest named `*_chart_version` can be commented out to install the latest version available. 
 
-On controller_one host, the `ansible_connection=local` is important since we decided to run Ansible playbooks from this host.
+On controller_one host, the `ansible_connection=local` is required since we decided to run Ansible playbooks from this host.
 
 A simple example is this:
 
@@ -80,22 +101,31 @@ letsencrypt_email="root@kubesol.com"
 # the internal name/IP used in rke2 config 
 hosts_gw="kubesol-dev2-gw"
 [gateway]
-kubesol-dev2-gw int_ip=192.168.40.96
+kubesol-dev2-gw 
 
 # the first controller node
 [controller_one]
-kubesol-dev2-c1 int_ip=192.168.40.85 ansible_connection=local
+kubesol-dev2-c1 ansible_connection=local
 
 # second and third controller nodes
 [controller]
-kubesol-dev2-c2 int_ip=192.168.40.86
-kubesol-dev2-c3 int_ip=192.168.40.87
+kubesol-dev2-c2 
+kubesol-dev2-c3
 
 # worker nodes
 [worker]
-kubesol-dev2-w1 int_ip=192.168.40.88
-kubesol-dev2-w2 int_ip=192.168.40.89
-kubesol-dev2-w3 int_ip=192.168.40.90
+kubesol-dev2-w1
+kubesol-dev2-w2 
+kubesol-dev2-w3
 ```
+
+## Running Ansible playbooks
+
+After you are done with the `Inventory` you can start the Ansible playbooks with:
+```
+  ansible-playbook 000-all.yaml 
+```
+or if you want a more controlled run, call each playbook in a row. 
+
 
 

@@ -21,20 +21,20 @@ letsencrypt_email="root@kubesol.com"
 # the internal name/IP used in rke2 config 
 hosts_gw="gw-dev5"
 [gateway]
-gw-dev5 int_ip=10.135.187.195
+gw-dev5 
 
 # the first controller node
 [controller_one]
-c1-dev5 int_ip=10.135.187.236 ansible_connection=local
+c1-dev5 ansible_connection=local
 
 # second and third controller nodes
 [controller]
-c2-dev5 int_ip=10.135.187.243
-c3-dev5 int_ip=10.135.187.242
+c2-dev5 
+c3-dev5
 
 # worker nodes
 [worker]
-w1-dev5 int_ip=10.135.187.239
-w2-dev5 int_ip=10.135.187.238
-w3-dev5 int_ip=10.135.187.240
+w1-dev5
+w2-dev5
+w3-dev5
 

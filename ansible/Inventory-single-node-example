@@ -8,5 +8,5 @@ D="/root/.kubesol"
 hosts_gw="kubesol-dev4-c1"
 
 [controller_one]
-kubesol-dev4-c1   int_ip=10.123.456.789 controller_worker=true ansible_connection=local 
+kubesol-dev4-c1  controller_worker=true ansible_connection=local 
 

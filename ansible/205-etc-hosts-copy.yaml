@@ -1,23 +1,45 @@
 ---
-- name: Copy hosts on c1
+
+# run only on c1
+- name: Generate /etc/hosts on c1
   hosts: controller_one
   gather_facts: false
 
   tasks:
-    - name: Create /etc/hosts
+    - name: Check if exists /tmp/hosts.txt
+      stat:
+        path: /tmp/hosts.txt
+      register: stat_result
+
+# either this file exists 
+    - name: Use /tmp/hosts.txt
+      copy:
+        src:  /tmp/hosts.txt
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: 0644
+      when: stat_result.stat.exists
+
+# or we must define the variable int_ip in Inventory
+    - name: Use template for /etc/hosts
       template:
         src: files/etc-hosts/etc-hosts.j2
         dest: /etc/hosts
         mode: '0644'
+     when: int_ip is defined
 
-- name: Copy hosts on all
-  hosts: all
+# run on all other hosts
+- name: Copy /etc/hosts on all
+  hosts: controller,worker
   gather_facts: false
 
   tasks:
-    - name: Create /etc/hosts
-      template:
-        src: files/etc-hosts/etc-hosts.j2
+    - name: Copy /etc/hosts from c1 to all others
+      copy:
+        src:  /etc/hosts
         dest: /etc/hosts
-        mode: '0644'
+        owner: root
+        group: root
+        mode: 0644
 

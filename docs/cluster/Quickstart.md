@@ -71,7 +71,7 @@ trivy_chart_version="0.23.2"
 hosts_gw="kubesol-dev4-c1"
 
 [controller_one]
-kubesol-dev4-c1    int_ip=10.135.187.238 controller_worker=true ansible_connection=local 
+kubesol-dev4-c1  controller_worker=true ansible_connection=local 
 ```
 
 7. run `ansible-playbook 200-prep-vms.yaml`. If all ok, continue, else debug and re-run the playbook
