@@ -38,7 +38,7 @@
 
 # run on all other hosts
 - name: Copy /etc/hosts on all
-  hosts: controller,worker
+  hosts: all
   gather_facts: false
 
   tasks:
