@@ -11,7 +11,14 @@
         path: /tmp/hosts.txt
       register: stat_result
 
-# either this file exists 
+# use /tmp/hosts.txt if exists
+    - name: add localhost to /tmp/hosts.txt
+      lineinfile: 
+        path: /tmp/hosts.txt
+        regexp: '^127\.0\.0\.1'
+        line: '127.0.0.1 localhost'
+      when: stat_result.stat.exists
+
     - name: Use /tmp/hosts.txt
       copy:
         src:  /tmp/hosts.txt
