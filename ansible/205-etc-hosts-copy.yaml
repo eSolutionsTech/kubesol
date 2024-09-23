@@ -18,7 +18,7 @@
         dest: /etc/hosts
         owner: root
         group: root
-        mode: 0644
+        mode: '0644'
       when: stat_result.stat.exists
 
 # or we must define the variable int_ip in Inventory
@@ -27,7 +27,7 @@
         src: files/etc-hosts/etc-hosts.j2
         dest: /etc/hosts
         mode: '0644'
-     when: int_ip is defined
+      when: int_ip is defined
 
 # run on all other hosts
 - name: Copy /etc/hosts on all
