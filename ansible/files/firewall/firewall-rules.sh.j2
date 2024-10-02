@@ -5,7 +5,6 @@
 # and external access from any IP for: ssh, http, https, 6443
 # you may replace it with something more restrictive if you wish
 
-ALLOWED_IPS_1=({% for ansible_host in groups ['all'] %} "{{hostvars[ansible_host]['int_ip']}}" {% endfor %}  )
 ALLOWED_IPS_2=({% for ansible_host in groups ['all'] %} "{{hostvars[ansible_host]['ansible_all_ipv4_addresses']}}" {% endfor %} )
 
 ALLOWED_IPS="$(echo ${ALLOWED_IPS_2[@]} | tr -d "'[]," )"  # flatten lists
