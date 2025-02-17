@@ -27,6 +27,12 @@
         - /etc/rancher/rke2
         - /var/lib/rancher/rke2/server/manifests
 
+    - name: Verify access to tcp host {{ hosts_gw }} port 9345
+      wait_for:
+        host: "{{ hosts_gw }}"
+        port: 9345
+        timeout: 2
+
     - name: Creating the config.yaml
       copy:
         dest: "{{ CONFIG_FILE }}"
@@ -34,6 +40,7 @@
           token: {{ TOKEN.stdout }}
           server: https://{{ hosts_gw }}:9345
       notify: "rke2-agent service restart"
+
 
     - name: Download rke2.sh
       get_url:
