@@ -27,7 +27,10 @@
 - import_playbook: 511-trivy-grafana-dash.yaml
 - import_playbook: 520-strimzi.yaml
 - import_playbook: 530-minio-operator.yaml
+
 - import_playbook: 540-vpa.yaml 
+- import_playbook: 542-goldilocks.yaml
+
 - import_playbook: 550-vault.yaml
 - import_playbook: 560-external-secrets.yaml
 

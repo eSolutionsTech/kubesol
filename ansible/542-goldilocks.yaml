@@ -1,10 +1,10 @@
 ---
-- name: Install Vertical Pod Autoscaler VPA
+- name: Install Goldilocks VPA
   hosts: localhost
   connection: local
   gather_facts: false
   vars:
-    NS: "vpa"
+    NS: "goldilocks"
 
   tasks:
     - name: Add fairwinds-stable helm repository
@@ -14,14 +14,12 @@
 
     - include_tasks: tasks/namespace.yaml
 
-    - name: Install VPA
+    - name: Install Goldilocks
       kubernetes.core.helm:
-        name: vpa
+        name: goldilocks
         namespace: "{{ NS }}"
-        chart_ref: fairwinds-stable/vpa
-        values:
-          updater:
-            enabled: false 
+        chart_ref: fairwinds-stable/goldilocks
 
-
+    - debug:
+        msg: "Goldilocks and VPA are ready. Read kubesol documentation on usage."
 
