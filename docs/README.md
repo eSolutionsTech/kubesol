@@ -16,7 +16,7 @@ After creating the required Virtual Machines (VMs) and running the installer, th
 - **Extensive Documentation**: Access detailed documentation and example usage guides for a wide range of components, ensuring you have all the support you need.
 - **User-Friendly**: Operate with ease, requiring only minimal knowledge of Ansible, kubectl, and Helm, making it accessible even for DevOps professionals with limited experience.
 
-See also the [FAQ](FAQ.md).
+See also the [FAQ](FAQ.md) and [Troubleshooting Guide](troubleshooting.md) for help with common issues.
 
 ## Usage
 
@@ -35,7 +35,7 @@ The following components are included and we have documentation on how to use th
 - [Cert-manager](components/cert-manager.md)
 - [kubernetes dashboard](components/kubernetes-dashboard.md) web interface
 - [metrics-server](components/kubernetes-metrics-server.md)
-- [nginx ingress controller](components/nginx-ingress-controller.yaml)
+- [nginx ingress controller](components/nginx-ingress-controller.md)
 - [longhorn](components/longhorn.md) storage class with web interface
 - [monitoring](components/monitoring.md) with web interface (Prometheus, AlertManager, Grafana, Grafana Loki)
 - [keycloak](components/keycloak.md) with web interface
@@ -52,5 +52,9 @@ The following components are included and we have documentation on how to use th
 
 
 The components are optional and you may choose to skip some of them (but there are some dependencies).
+
+## For Developers
+
+If you're contributing to Kubesol or extending its functionality, check out our [Developer Notes](developer-notes.md) for technical insights and best practices.
 
 
