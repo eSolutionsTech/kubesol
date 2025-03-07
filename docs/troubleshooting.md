@@ -27,12 +27,12 @@ This guide provides solutions for common issues you might encounter when deployi
 
 2. **Network Connectivity Issues**
    - Verify nodes can reach each other and the internet
-   - Check with: `ping`, `curl`, `traceroute`
-   - Ensure required ports are open: `sudo ufw status` or `sudo iptables -L`
+   - Check with: `ping`, `netcat`, `curl`
+   - Ensure required ports are open: `sudo iptables -n -v -L`
 
 3. **Package Repository Issues**
    - Verify package repositories are accessible
-   - Try: `sudo apt update` or equivalent for your OS
+   - Try: `sudo apt update && sudo apt upgrade` 
 
 4. **Conflicting Software**
    - Check for other container runtimes or Kubernetes installations
@@ -278,7 +278,7 @@ For more cert-manager troubleshooting, see: [Cert-Manager Troubleshooting](https
 
 - **journalctl**: `journalctl -u rke2-server -f`
 - **dmesg**: `dmesg | tail`
-- **top/htop**: `htop`
+- **top/htop**: `top`
 - **iotop**: `iotop`
 
 ### Network Debugging
