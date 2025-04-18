@@ -1,7 +1,5 @@
 deploymentMode: SingleBinary
 loki:
-  image:
-    tag: 3.0.0
   auth_enabled: false
   commonConfig:
     replication_factor: 1
