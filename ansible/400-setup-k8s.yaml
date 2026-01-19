@@ -1,8 +1,10 @@
 ---
 - import_playbook: 405-get-nodes.yaml
 - import_playbook: 410-cert-manager.yaml
-- import_playbook: 420-kubernetes-dashboard.yaml
-- import_playbook: 422-kubernetes-dashboard-ingress.yaml
+
+## https://github.com/kubernetes/dashboard -- No longer mantained
+#- import_playbook: 420-kubernetes-dashboard.yaml
+#- import_playbook: 422-kubernetes-dashboard-ingress.yaml
 
 ## storage classes
 - import_playbook: 430-longhorn-prep.yaml
