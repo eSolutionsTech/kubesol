@@ -49,7 +49,7 @@
         mode: '0700'
 
     - name: Installing rke2 agent
-      shell: ./rke2.sh
+      shell: /root/rke2.sh
       notify: "rke2-agent service restart"
       environment:
         INSTALL_RKE2_VERSION: "{{ rke2_version | default('') }}"
