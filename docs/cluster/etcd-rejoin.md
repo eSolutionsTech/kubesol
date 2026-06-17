@@ -1,7 +1,7 @@
 # etcd rejoin
 
 If the etcd database gets corrupted on one controller node (for example by an unclean shutdown)
-but the other two controllers are running ok, you can *reset* the darabase on the failing controller.
+but the other two controllers are running ok, you can *reset* the database on the failing controller.
 This is easier than the etcd backup-restore procedure.
 
 ## Detect the problem
@@ -14,7 +14,7 @@ You can use those commands to really confirm the etcd problem:
 
 ```
 /var/lib/rancher/rke2/bin/crictl -r unix:///run/k3s/containerd/containerd.sock ps -a | grep etcd 
-# you wil see the continuosly container restarting
+# you wil see the container continuosly restarting
 
 /var/lib/rancher/rke2/bin/crictl -r unix:///run/k3s/containerd/containerd.sock logs <CONTAINER_ID>
 # you will see messages about corrupted files/database
