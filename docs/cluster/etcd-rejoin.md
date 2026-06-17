@@ -20,6 +20,10 @@ You can use those commands to really confirm the etcd problem:
 # you will see messages about corrupted files/database
 ```
 
+## etcdctl
+
+You will need the `etcdctl` binary. On Ubuntu you can installing it with `apt install etcd-client`. 
+
 ## Repairing the problem
 
 If you have 2 controllers ok and one failing, you can basically 
