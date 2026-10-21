@@ -7,6 +7,10 @@
 #- import_playbook: 422-kubernetes-dashboard-ingress.yaml
 
 ## storage classes
+
+## for single node setups
+#- import_playbook: 425-local-path.yaml
+
 - import_playbook: 430-longhorn-prep.yaml
 - import_playbook: 431-longhorn-helm.yaml
 - import_playbook: 432-longhorn-web.yaml
