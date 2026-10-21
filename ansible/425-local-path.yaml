@@ -1,0 +1,16 @@
+---
+- name: Local path provisioner
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  vars:
+
+# https://github.com/rancher/local-path-provisioner
+    URL: "kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.37/deploy/local-path-storage.yaml"
+
+  tasks:
+    - name: Install local-path-provisioner
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ URL }}"
+
