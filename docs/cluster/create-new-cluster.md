@@ -91,7 +91,7 @@ ext_dns_name="dev2.kubesol.com"
 letsencrypt_email="root@kubesol.com"
 
 #longhorn_chart_version="1.6.1"
-#certmanager_chart_version="v1.14.4"
+#cert_manager_chart_version="v1.14.4"
 #argocd_chart_version="7.0.0"
 #minio_operator_chart_version="5.0.15"
 
