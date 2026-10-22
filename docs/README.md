@@ -36,7 +36,7 @@ See also the [FAQ](FAQ.md) and [Troubleshooting Guide](troubleshooting.md) for h
 The following components are included and we have documentation on how to use them:
 
 - [Cert-manager](components/cert-manager.md)
-- [kubernetes dashboard](components/kubernetes-dashboard.md) web interface
+- [kubernetes dashboard](components/kubernetes-dashboard.md) web interface (optional, not installed by default, upstream no longer maintained)
 - [metrics-server](components/kubernetes-metrics-server.md)
 - [nginx ingress controller](components/nginx-ingress-controller.md)
 - [longhorn](components/longhorn.md) storage class with web interface
@@ -48,10 +48,10 @@ The following components are included and we have documentation on how to use th
 - [Minio operator](components/minio.md) (with web interface) for S3 compatible buckets
 - [Strimzi (Kafka) operator](components/strimzi-kafka.md)
 - [PostgreSQL operator](components/postgres-cnpg.md) CNPG
-- [Velero](components/velero.md) backup system
+- [Velero](components/velero.md) backup system (optional, not installed by default)
 - [Trivy](components/trivy.md) security scanner
 - [Vault](components/vault.md) and [External Secrets Operator](components/external-secrets.md)
-- [VPA Vertical Pod Autoscaler](components/vpa.md)
+- [VPA Vertical Pod Autoscaler](components/vpa.md) and Goldilocks
 
 
 The components are optional and you may choose to skip some of them (but there are some dependencies).
