@@ -9,7 +9,7 @@
   tasks:
     - name: Please, first uninstall DirectPV!
       pause:
-        prompt: See 429-Uninstall-directpv.yaml. Press return to continue. Press Ctrl+c and then "a" to abort
+        prompt: See 449-Uninstall-directpv.yaml. Press return to continue. Press Ctrl+c and then "a" to abort
 
     - name: List cluster components
       command: hostname
