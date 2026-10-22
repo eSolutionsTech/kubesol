@@ -6,7 +6,7 @@
   vars:
 
 # https://github.com/rancher/local-path-provisioner
-    URL: "kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.37/deploy/local-path-storage.yaml"
+    URL: "https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.37/deploy/local-path-storage.yaml"
 
   tasks:
     - name: Install local-path-provisioner
