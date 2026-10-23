@@ -3,13 +3,13 @@
 ## Ansible Playbook Techniques
 
 ### Storage and Device Management
-- How to format and mount a block device (and only if a variable is defined): `250-mount-longhorn.yaml`
+- How to format and mount a block device (and only if a variable is defined): `430-longhorn-prep.yaml`
   ```yaml
   # Example snippet:
-  - name: Format the device
+  - name: Format longhorn device
     filesystem:
       fstype: ext4
-      dev: "{{ longhorn_device }}"
+      dev: "/dev/{{ longhorn_device }}"
     when: longhorn_device is defined
   ```
 
@@ -17,27 +17,25 @@
 - How to ask "are you sure you want to continue etc": `399-uninstall.yaml`
   ```yaml
   # Example snippet:
-  - name: Confirm uninstallation
+  - name: Uninstall RKE2
     pause:
-      prompt: "Are you sure you want to uninstall RKE2 from all nodes? This will DELETE ALL YOUR DATA. Type 'yes' to continue"
-    register: confirmation
-    failed_when: confirmation.user_input != "yes"
+      prompt: Are you sure? Press return to continue. Press Ctrl+c and then "a" to abort
   ```
 
 ### Host Selection and Delegation
-- How to get the name of the first host from a group: `332-more-controllers.yaml`, `342-workers.yaml` at `delegate_to`
+- How to get the name of the first host from a group: `330-more-controllers.yaml`, `340-workers.yaml` at `delegate_to`
   ```yaml
   # Example snippet:
-  - name: Copy kubeconfig from first controller
-    delegate_to: "{{ groups['controllers'][0] }}"
-    # Task details...
+  - name: Get the token
+    shell: cat /var/lib/rancher/rke2/server/node-token
+    delegate_to: "{{ groups['controller_one'][0] }}"
   ```
 
 ### Execution Control
 - Run tasks one by one: `330-more-controllers.yaml` at `serial`
   ```yaml
   # Example snippet:
-  - hosts: controllers[1:]
+  - hosts: controller
     serial: 1
     # Task details...
   ```
