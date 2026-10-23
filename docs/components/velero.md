@@ -2,6 +2,8 @@
 
 Velero is a backup system for Kubernetes, storing the backups in a remote S3 bucket (or equivalent). See https://velero.io
 
+Velero is **optional** (commented out in `400-setup-k8s.yaml`). Install the cluster side with `ansible-playbook 480-velero.yaml` after the S3 setup below.
+
 Below we are describing step by step how to setup an AWS S3 bucket and use it in our setup.
 
 ## Install velero cli on the local machine:

@@ -4,7 +4,7 @@ CNPG (Cloud Native Postgres operator) is an operator for deploying PostgreSQL cl
 
 ## Install 
 
-This will require a storage class (Longhorn or DirectPV).
+CNPG is **optional** (commented out in `400-setup-k8s.yaml`). It requires a storage class (Longhorn or DirectPV).
 
 To check it:
 

@@ -4,7 +4,7 @@ MinIO is a S3 compatible object store. See more at https://min.io and https://mi
 
 ## Install
 
-Minio will require [DirectPV](directpv.md)!
+MinIO is **optional** (commented out in `400-setup-k8s.yaml`). It requires [DirectPV](directpv.md)!
 
 To check it: 
 

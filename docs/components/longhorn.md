@@ -7,7 +7,9 @@ We are using it as the default storage class and it is required by many other co
 
 ## Install
 
-To check it: 
+Longhorn is **enabled by default** in `400-setup-k8s.yaml` (default storage class for many components).
+
+To check it:
 
 ```
 $ kubectl -n longhorn-system get pods

@@ -6,7 +6,7 @@ and automatically injects the values into Kubernetes secrets. Read more at https
 
 ## Install
 
-If it's not installed, use `ansible-playbook 560-external-secrets.yaml`. Afterwards, you should see something like this:
+External Secrets is **optional** (commented out in `400-setup-k8s.yaml`). Install with `ansible-playbook 560-external-secrets.yaml`. Afterwards, you should see something like this:
 
 ```
 $ kubectl -n external-secrets get pods

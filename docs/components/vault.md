@@ -4,9 +4,16 @@ Vault is a system for securely storing secrets. It can be run in Kubernetes and 
 
 ExternalSecrets is an operator for accessing those secrets from Kubernetes.
 
+Both are **optional** (commented out in `400-setup-k8s.yaml`). Install with:
+
+```
+ansible-playbook 550-vault.yaml
+ansible-playbook 560-external-secrets.yaml
+```
+
 ## Vault init
 
-Vault is installed but needs to be initialized (pods are Ready 0/1):
+After install, Vault still needs to be initialized (pods are Ready 0/1):
 
 ```
 $ kubectl -n vault get  pods

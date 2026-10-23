@@ -176,12 +176,12 @@ For more Longhorn troubleshooting, see: [Longhorn Troubleshooting](https://longh
 **Possible Causes and Solutions:**
 
 1. **Drive Discovery Issues**
-   - Check drive status: `kubectl -n directpv-io get directpvdrives`
-   - Manually discover drives: `kubectl -n directpv-io directpv discover --drives /dev/sd*`
+   - Check drive status: `kubectl-directpv list drives` (pods live in namespace `directpv`)
+   - Manually discover drives: `kubectl-directpv discover --output-file .drives.yaml`
 
 2. **Drive Initialization Issues**
-   - Check for drive initialization errors: `kubectl -n directpv-io logs -l app=directpv-controller`
-   - Manually initialize drives: `kubectl -n directpv-io directpv init --drives <drive-id>`
+   - Check controller logs: `kubectl -n directpv logs -l app=directpv-controller`
+   - Initialize drives: `kubectl-directpv init .drives.yaml --dangerous`
 
 ## Component-Specific Issues
 

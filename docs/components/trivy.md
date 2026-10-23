@@ -4,7 +4,9 @@ Trivy is a security scanner and it can be run inside a Kubernetes cluster. See h
 
 ## Install
 
-To check it:
+Trivy is **optional** (commented out in `400-setup-k8s.yaml`).
+
+To check it after install:
 
 ```
 $ kubectl -n trivy-system  get pods

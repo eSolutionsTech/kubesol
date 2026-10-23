@@ -4,7 +4,7 @@ We are providing some example manifests you could use for a quick start.
 
 ## Install
 
-If you did not install it during cluster creation, you can do it later with `ansible-playbook 454-dummy.yaml`.
+Demo apps (`450` / `452` / `454`) are **enabled by default** in `400-setup-k8s.yaml`. If you skipped them, install the full demo with `ansible-playbook 454-dummy.yaml`.
 
 ## Usage
 

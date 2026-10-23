@@ -23,7 +23,7 @@ cert-manager-d7db49bf4-d5qbg               1/1     Running   0          16h
 cert-manager-webhook-f6c9958d-zr57m        1/1     Running   0          16h
 ```
 
-To install it: `ansible-playbook 410-cert-manager.yaml`
+Cert-manager is **enabled by default** in `400-setup-k8s.yaml`. To install it alone: `ansible-playbook 410-cert-manager.yaml`
 
 ## Usage
 

@@ -8,7 +8,9 @@ Read more at:
 
 ## Install
 
-To check it: 
+Argo CD is **optional** (commented out in `400-setup-k8s.yaml`).
+
+To check it after install:
 
 ```
 $ kubectl -n argocd get pods

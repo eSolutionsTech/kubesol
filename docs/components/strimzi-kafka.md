@@ -12,6 +12,8 @@ NAME                                       READY   STATUS    RESTARTS   AGE
 strimzi-cluster-operator-74fc686c7-rn2f6   1/1     Running   0          24m
 ```
 
+Strimzi is **optional** (commented out in `400-setup-k8s.yaml`).
+
 To install it: `ansible-playbook 520-strimzi.yaml`.
 
 ## Usage

@@ -10,7 +10,7 @@ Official URLs for Keycloak:
 
 ## Install
 
-In our setup it requires [CNPG Postgres operator](postgres-cnpg.md) which, in turn, uses the default storage class (Longhorn).
+Keycloak is **optional** (commented out in `400-setup-k8s.yaml`). In our setup it requires [CNPG Postgres operator](postgres-cnpg.md) which, in turn, uses the default storage class (Longhorn).
 
 To check it: 
 
