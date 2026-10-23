@@ -10,6 +10,8 @@
 - import_playbook: 430-longhorn-prep.yaml
 - import_playbook: 431-longhorn-helm.yaml
 - import_playbook: 432-longhorn-web.yaml
+
+# requires extra dedicated disk on each node
 - import_playbook: 440-directpv.yaml
 
 ## dummy exmples
@@ -18,21 +20,21 @@
 - import_playbook: 454-dummy.yaml
 
 ## more components
-- import_playbook: 460-cnpg.yaml
-- import_playbook: 470-keycloak.yaml 
+#- import_playbook: 460-cnpg.yaml
+#- import_playbook: 470-keycloak.yaml 
 #- import_playbook: 480-velero.yaml
-- import_playbook: 490-kube-prometheus-stack.yaml 
-- import_playbook: 491-loki.yaml
-- import_playbook: 492-grafana-ingress.yaml
-- import_playbook: 500-argocd.yaml
-- import_playbook: 510-trivy.yaml
-- import_playbook: 511-trivy-grafana-dash.yaml
-- import_playbook: 520-strimzi.yaml
-- import_playbook: 530-minio-operator.yaml
+#- import_playbook: 490-kube-prometheus-stack.yaml 
+#- import_playbook: 491-loki.yaml
+#- import_playbook: 492-grafana-ingress.yaml
+#- import_playbook: 500-argocd.yaml
+#- import_playbook: 510-trivy.yaml
+#- import_playbook: 511-trivy-grafana-dash.yaml
+#- import_playbook: 520-strimzi.yaml
+#- import_playbook: 530-minio-operator.yaml
 
 - import_playbook: 540-vpa.yaml 
 - import_playbook: 542-goldilocks.yaml
 
-- import_playbook: 550-vault.yaml
-- import_playbook: 560-external-secrets.yaml
+#- import_playbook: 550-vault.yaml
+#- import_playbook: 560-external-secrets.yaml
 
