@@ -88,23 +88,15 @@ Wait until you see the node STATUS Ready.
 
 10. For playbooks >400 we recommend running them one by one and checking status after each one. For example:
 
-## Kubernetes dashboard
+## Cert-manager
 
 ```
-# cert-manager
 ansible-playbook 410-cert-manager.yaml  # you will need this for ssl certificates
 kubectl -n cert-manager get pods        # wait for all pods to be Ready
-
-# kubernetes-dashboard
-ansible-playbook 420-kubernetes-dashboard.yaml
-ansible-playbook 422-kubernetes-dashboard-ingress.yaml 
-kubectl -n kubernetes-dashboard get pods         # wait for all pods to be Ready
-kubectl -n kubernetes-dashboard get ingress      # note the URL
-kubectl -n kubernetes-dashboard get certificate  # SSL certificate is ready?
-
-# get the access token and open the dashboard in browser
-kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={.data.token} | base64 -d ; echo
 ```
+
+Note: the Kubernetes Dashboard was deprecated and removed from Kubesol
+(upstream is no longer maintained). See [kubernetes dashboard](../components/kubernetes-dashboard.md).
 
 ## Longhorn storage class
 

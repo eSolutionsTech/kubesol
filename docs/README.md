@@ -36,7 +36,7 @@ See also the [FAQ](FAQ.md) and [Troubleshooting Guide](troubleshooting.md) for h
 The following components are included and we have documentation on how to use them:
 
 - [Cert-manager](components/cert-manager.md)
-- [kubernetes dashboard](components/kubernetes-dashboard.md) web interface (optional, not installed by default, upstream no longer maintained)
+- [kubernetes dashboard](components/kubernetes-dashboard.md) — **deprecated / removed** (upstream no longer maintained)
 - [metrics-server](components/kubernetes-metrics-server.md)
 - [nginx ingress controller](components/nginx-ingress-controller.md)
 - [longhorn](components/longhorn.md) storage class with web interface
