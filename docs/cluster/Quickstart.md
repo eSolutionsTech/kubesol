@@ -51,19 +51,19 @@ and a file `Inventory` like this (use your hostname, email etc):
 
 D="/root/.kubesol"
 
-rke2_version="v1.29.4+rke2r1"
+rke2_version="v1.37.1+rke2r1"
 
 ext_dns_name="dev4.YOUR_DOMAIN_COM"
 letsencrypt_email="EMAIL_FOR_letsencrypt"
 
-longhorn_version="1.6.1"
-certmanager_version="v1.14.4"
-argocd_chart_version="7.0.0"
-minio_operator_chart_version="5.0.15"
-vault_chart_version="0.28.0"
-external_secrets_chart_version="0.9.19"
-keycloak_version="24.0.5"
-trivy_chart_version="0.23.2"
+longhorn_chart_version="1.13.0"
+cert_manager_chart_version="v1.21.2"
+argocd_chart_version="10.10.5"
+minio_operator_chart_version="7.1.1"
+vault_chart_version="0.34.1"
+external_secrets_chart_version="2.13.0"
+# keycloak_chart_version unset = latest from the Bitnami archive repo
+trivy_chart_version="0.37.0"
 
 hosts_gw="kubesol-dev4-c1"
 
@@ -81,7 +81,7 @@ kubesol-dev4-c1  controller_worker=true ansible_connection=local
 $ kubectl get nodes
 
 NAME              STATUS     ROLES                       AGE   VERSION
-kubesol-dev4-c1   NotReady   control-plane,etcd,master   78s   v1.29.4+rke2r1
+kubesol-dev4-c1   NotReady   control-plane,etcd,master   78s   v1.37.1+rke2r1
 ```
 
 Wait until you see the node STATUS Ready.

@@ -146,8 +146,8 @@ velero restore create --from-backup <backup name>
 
 
 - For more information about how to schedule a backup visit:
-https://velero.io/docs/v1.13/backup-reference/
+https://velero.io/docs/v1.14/backup-reference/
 
 - For more information about how to take snapshots of a volume:
-https://velero.io/docs/v1.13/locations/
+https://velero.io/docs/v1.14/locations/
 

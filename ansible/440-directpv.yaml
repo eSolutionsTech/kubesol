@@ -5,7 +5,7 @@
   connection: local
   vars:
     D: "/root/.kubesol"
-    bin: "https://github.com/minio/directpv/releases/download/v4.0.10/kubectl-directpv_4.0.10_linux_amd64"
+    bin: "https://github.com/minio/directpv/releases/download/v4.0.19/kubectl-directpv_4.0.19_linux_amd64"
 
   tasks:
     - name: You need to have kubectl-directpv binary

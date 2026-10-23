@@ -81,7 +81,7 @@ A simple example is this:
 
 D="/root/.kubesol"
 
-#rke2_version="v1.27.12+rke2r1"
+#rke2_version="v1.37.1+rke2r1"
 
 longhorn_device="sdb"
 directpv_device="sdc"
@@ -90,10 +90,10 @@ project_name="kubesol_dev2" # used in nginx config
 ext_dns_name="dev2.kubesol.com"
 letsencrypt_email="root@kubesol.com"
 
-#longhorn_chart_version="1.6.1"
-#cert_manager_chart_version="v1.14.4"
-#argocd_chart_version="7.0.0"
-#minio_operator_chart_version="5.0.15"
+#longhorn_chart_version="1.13.0"
+#cert_manager_chart_version="v1.21.2"
+#argocd_chart_version="10.10.5"
+#minio_operator_chart_version="7.1.1"
 
 # you may choose to have an empty section [gateway]
 # in which case the ansible playbooks won't try to configure that host

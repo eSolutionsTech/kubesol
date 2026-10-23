@@ -3,7 +3,7 @@
   hosts: controller_one
   gather_facts: false
   vars:
-    HELM_ARCHIVE: "helm-v3.15.1-linux-amd64.tar.gz"
+    HELM_ARCHIVE: "helm-v3.22.1-linux-amd64.tar.gz"
 
   tasks:
     - name: Create directory {{ D }}
