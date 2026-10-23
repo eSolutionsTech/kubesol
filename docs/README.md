@@ -46,7 +46,7 @@ What runs after `ansible-playbook 000-all.yaml` (or `400-setup-k8s.yaml`) depend
 ### Bundled with RKE2 (not separate Kubesol playbooks)
 
 - [metrics-server](components/kubernetes-metrics-server.md)
-- [nginx ingress controller](components/nginx-ingress-controller.md)
+- [Ingress controller (Traefik, nginx Ingress class)](components/nginx-ingress-controller.md)
 
 ### Optional (commented out in `400-setup-k8s.yaml`)
 

@@ -132,8 +132,9 @@ This guide provides solutions for common issues you might encounter when deployi
 **Possible Causes and Solutions:**
 
 1. **Ingress Controller Issues**
-   - Check ingress controller pods: `kubectl -n kube-system get pods | grep ingress`
-   - View ingress controller logs: `kubectl -n kube-system logs <ingress-pod-name>`
+   - Check Traefik pods: `kubectl -n kube-system get pods | grep traefik`
+   - Check IngressClasses: `kubectl get ingressclass` (Kubesol Ingresses use class `nginx` via Traefik’s NGINX provider)
+   - View Traefik logs: `kubectl -n kube-system logs -l app.kubernetes.io/name=rke2-traefik` (label may vary; use `kubectl -n kube-system get pods | grep traefik` then log that pod)
 
 2. **Certificate Issues**
    - Verify certificate status: `kubectl get certificates,certificaterequests,orders,challenges --all-namespaces`

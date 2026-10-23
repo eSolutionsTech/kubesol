@@ -46,6 +46,7 @@
             - "{{ hosts_gw }}"
             - "{{ ext_dns_name }}"
           cni: "cilium"
+          ingress-controller: traefik
           {% if controller_worker is not defined %}
           node-taint:
             - "CriticalAddonsOnly=true:NoExecute"
@@ -67,6 +68,37 @@
               nodelocal:
                 enabled: true # Change this to false or remove this (Creating the CoreDNS config file) section altogether if you don’t want to install NodeLocal DNSCache
             bootstrap: true
+      notify: "rke2-server service restart"
+
+    # Traefik with nginx Ingress class compatibility so existing Ingresses
+    # (ingressClassName: nginx + nginx.ingress.kubernetes.io/*) keep working.
+    - name: Creating the Traefik config file
+      copy:
+        dest: "/var/lib/rancher/rke2/server/manifests/rke2-traefik-config.yaml"
+        content: |
+          apiVersion: helm.cattle.io/v1
+          kind: HelmChartConfig
+          metadata:
+            name: rke2-traefik
+            namespace: kube-system
+          spec:
+            valuesContent: |-
+              providers:
+                kubernetesIngress:
+                  enabled: true
+                  ingressClass: traefik
+                kubernetesIngressNGINX:
+                  enabled: true
+                  ingressClass: nginx
+                  controllerClass: k8s.io/ingress-nginx
+                  ingressClassByName: true
+              ports:
+                web:
+                  forwardedHeaders:
+                    addXForwardedSchemeHeaders: true
+                websecure:
+                  forwardedHeaders:
+                    addXForwardedSchemeHeaders: true
       notify: "rke2-server service restart"
 
     - name: Download rke2.sh
