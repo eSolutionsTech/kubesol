@@ -86,7 +86,7 @@ kubesol-dev4-c1   NotReady   control-plane,etcd,master   78s   v1.37.1+rke2r1
 
 Wait until you see the node STATUS Ready.
 
-10. For playbooks >400 we recommend running them one by one and checking status after each one. Note that a full `400-setup-k8s.yaml` run enables only a core set by default; monitoring and many other components stay commented out until you enable them (see [components](../README.md#components)). For example:
+10. For playbooks >400 we recommend running them one by one and checking status after each one. A full `400-setup-k8s.yaml` run enables cert-manager, local-path, and demo apps by default; Longhorn, monitoring, and many other components stay commented out until you enable them (see [components](../README.md#components)). For example:
 
 ## Cert-manager
 

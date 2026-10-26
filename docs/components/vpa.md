@@ -9,7 +9,7 @@ Goldilocks (by Fairwinds) is an optional helper tool to automate the creation of
 
 ## Check
 
-VPA and Goldilocks are **enabled by default** in `400-setup-k8s.yaml`. If you skipped them, install with:
+VPA and Goldilocks are **optional** (commented out in `400-setup-k8s.yaml`). Install with:
 ```
 ansible-playbook 540-vpa.yaml
 ansible-playbook 542-goldilocks.yaml

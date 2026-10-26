@@ -10,7 +10,7 @@ kube-prometheus-stack includes Grafana, Prometheus and Alertmanager.
 
 ## Install
 
-Monitoring is **optional** (commented out in `400-setup-k8s.yaml`). It requires Longhorn (or another default storage class).
+Monitoring is **optional** (commented out in `400-setup-k8s.yaml`). Its Helm values often pin Longhorn; enable Longhorn first, or adjust the values / use another default storage class.
 
 To check status:
 

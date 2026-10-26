@@ -127,8 +127,8 @@ After you are done with the `Inventory` you can start the Ansible playbooks with
 ```
 or if you want a more controlled run, call each playbook in a row.
 
-`000-all.yaml` runs prep, RKE2, then `400-setup-k8s.yaml`. Only a **core** set of components is enabled there by default (cert-manager, Longhorn, DirectPV, demo apps, VPA). Monitoring, Argo CD, Keycloak, MinIO, and others are **commented out** — uncomment the imports in `400-setup-k8s.yaml` or run those playbooks yourself. See the [component list](../README.md#components).
+`000-all.yaml` runs prep, RKE2, then `400-setup-k8s.yaml`. Only a **core** set of components is enabled there by default (cert-manager, local-path storage, demo apps). Longhorn, DirectPV, monitoring, Argo CD, Keycloak, MinIO, VPA, and others are **commented out** — uncomment the imports in `400-setup-k8s.yaml` or run those playbooks yourself. See the [component list](../README.md#components).
 
-DirectPV expects an extra disk on each worker (`directpv_device` in Inventory). If you do not have dedicated disks yet, comment out `440-directpv.yaml` in `400-setup-k8s.yaml` before running the full install.
+DirectPV expects an extra disk on each worker (`directpv_device` in Inventory) when you enable `440-directpv.yaml`.
 
 

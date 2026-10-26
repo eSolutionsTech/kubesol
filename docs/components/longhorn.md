@@ -7,7 +7,7 @@ We are using it as the default storage class and it is required by many other co
 
 ## Install
 
-Longhorn is **enabled by default** in `400-setup-k8s.yaml` (default storage class for many components).
+Longhorn is **optional** (commented out in `400-setup-k8s.yaml`). Many optional components still assume Longhorn as their storage class unless you change them or rely on the cluster default.
 
 To check it:
 

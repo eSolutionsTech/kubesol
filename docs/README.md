@@ -11,8 +11,8 @@ After creating the required Virtual Machines (VMs) and running the installer, yo
 - **Free and Open-Source, just as our MOTTO** Enjoy the benefits of a cost-effective solution with the option for premium commercial support if needed.
 - **Streamlined Installation**: Simplify your setup with a repeatable installation and configuration process, all driven by efficient Ansible playbooks.
 - **Seamless Kubernetes Management**: Easily create and upgrade Kubernetes clusters with the reliable RKE2 system. Learn more at RKE2 GitHub.
-- **Pre-Configured Storage Classes**: Benefit from Longhorn and DirectPV (enabled by default in `400-setup-k8s.yaml`; DirectPV needs extra disks on workers).
-- **Comprehensive Kubernetes Components**: Core components are enabled by default; others are optional playbooks you can uncomment or run separately. See the full list below.
+- **Pre-Configured Storage Classes**: Local-path is enabled by default; Longhorn and DirectPV are optional (uncomment in `400-setup-k8s.yaml`; DirectPV needs extra disks on workers).
+- **Comprehensive Kubernetes Components**: A small core set is enabled by default; others are optional playbooks you can uncomment or run separately. See the full list below.
 - **Extensive Documentation**: Access detailed documentation and example usage guides for a wide range of components, ensuring you have all the support you need.
 - **User-Friendly**: Operate with ease, requiring only minimal knowledge of Ansible, kubectl, and Helm, making it accessible even for DevOps professionals with limited experience.
 
@@ -38,10 +38,10 @@ What runs after `ansible-playbook 000-all.yaml` (or `400-setup-k8s.yaml`) depend
 ### Enabled by default in `400-setup-k8s.yaml`
 
 - [Cert-manager](components/cert-manager.md)
-- [longhorn](components/longhorn.md) storage class with web interface
-- [DirectPV](components/directpv.md) storage class (needs a dedicated disk per worker; see Inventory `directpv_device`)
+- [local-path](components/Storage-classes.md) storage class (`425-local-path.yaml`)
 - [Examples](components/examples.md) demo apps (simple pod / PVC / dummy web app)
-- [VPA Vertical Pod Autoscaler](components/vpa.md) and Goldilocks
+
+See also [Storage classes](components/Storage-classes.md) for Longhorn / DirectPV / local-path and setting the default.
 
 ### Bundled with RKE2 (not separate Kubesol playbooks)
 
@@ -50,7 +50,8 @@ What runs after `ansible-playbook 000-all.yaml` (or `400-setup-k8s.yaml`) depend
 
 ### Optional (commented out in `400-setup-k8s.yaml`)
 
-- [local-path provisioner](https://github.com/rancher/local-path-provisioner) — playbook `425-local-path.yaml` (handy for simple / single-node setups instead of Longhorn)
+- [longhorn](components/longhorn.md) (`430` / `431` / `432`)
+- [DirectPV](components/directpv.md) (`440`; needs a dedicated disk per worker)
 - [monitoring](components/monitoring.md) — Prometheus, AlertManager, Grafana, Loki (`490` / `491` / `492`)
 - [keycloak](components/keycloak.md) (`470`; needs CNPG)
 - [ArgoCD](components/argocd.md) (`500`)
@@ -59,6 +60,7 @@ What runs after `ansible-playbook 000-all.yaml` (or `400-setup-k8s.yaml`) depend
 - [PostgreSQL operator](components/postgres-cnpg.md) CNPG (`460`)
 - [Velero](components/velero.md) (`480`)
 - [Trivy](components/trivy.md) (`510` / `511`)
+- [VPA Vertical Pod Autoscaler](components/vpa.md) and Goldilocks (`540` / `542`)
 - [Vault](components/vault.md) and [External Secrets Operator](components/external-secrets.md) (`550` / `560`)
 
 ### Deprecated / removed

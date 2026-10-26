@@ -15,7 +15,7 @@
             name: simple-pod-pvc
             namespace: default
           spec:
-            storageClassName: directpv-min-io
+            # storageClassName: directpv-min-io  # omit to use the cluster default StorageClass
             accessModes:
               - ReadWriteOnce
             resources:

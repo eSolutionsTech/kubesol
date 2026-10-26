@@ -8,7 +8,7 @@ Good use cases are: Minio, Kafka, Zookeeper, PostgreSQL with replicas.
 
 ## Installation
 
-DirectPV is **enabled by default** in `400-setup-k8s.yaml` (comment it out if workers have no extra disk). In our setup it is required by MinIO.
+DirectPV is **optional** (commented out in `400-setup-k8s.yaml`). Uncomment `440-directpv.yaml` when workers have a dedicated disk. In our setup it is required by MinIO.
 
 This is difficult to install, even using our Ansible playbook. Please make sure
 - all the worker nodes are __Ready__ before running `ansible-playbook 440-directpv.yaml`
