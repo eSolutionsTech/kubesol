@@ -75,6 +75,10 @@
             namespace: kube-system
           spec:
             valuesContent: |-
+              # RKE2 may set systemDefaultIngressClass=traefik, which forces
+              # Traefik's IngressClass to be default even when isDefaultClass is false.
+              global:
+                systemDefaultIngressClass: ""
               ingressClass:
                 enabled: true
                 isDefaultClass: false

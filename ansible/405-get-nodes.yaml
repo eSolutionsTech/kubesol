@@ -16,6 +16,18 @@
     - debug:
         msg: "{{ ks8_nodes }}"
 
+    # Traefik (and its IngressClasses) may appear after nginx IngressClass.
+    # Wait briefly so we can clear Traefik's default annotation.
+    - name: Wait for Traefik IngressClass
+      kubernetes.core.k8s_info:
+        kind: IngressClass
+        name: traefik
+      register: traefik_ic
+      until: traefik_ic.resources | length > 0
+      retries: 30
+      delay: 10
+      failed_when: false
+
     # Ensure IngressClass "nginx" exists and is the default (Traefik NGINX provider).
     - name: Ensure nginx IngressClass is present and default
       kubernetes.core.k8s:
@@ -34,4 +46,12 @@
       loop:
         - traefik
         - rke2-ingress-nginx-migration
+      failed_when: false
+
+    # Chart creates this whenever kubernetesIngressNGINX is enabled; not used by Kubesol.
+    - name: Remove unused RKE2 nginx migration IngressClass
+      kubernetes.core.k8s:
+        state: absent
+        kind: IngressClass
+        name: rke2-ingress-nginx-migration
       failed_when: false

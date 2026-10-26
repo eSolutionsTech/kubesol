@@ -17,9 +17,9 @@ The gateway VM still runs a separate nginx reverse proxy (`280-gw.yaml`); that i
 
 Traefik is installed by RKE2 when the cluster is created. Configuration is applied via HelmChartConfig at `/var/lib/rancher/rke2/server/manifests/rke2-traefik-config.yaml` (see `310-controller-one.yaml` / `330-more-controllers.yaml`).
 
-Kubesol also creates an IngressClass named **`nginx`** (controller `k8s.io/ingress-nginx`) and marks it as the **default**. Traefik’s own `traefik` class stays available but is not the default. You may still see `rke2-ingress-nginx-migration` from RKE2; ignore it for day-to-day use — our Ingresses target `nginx`.
+Kubesol also creates an IngressClass named **`nginx`** (controller `k8s.io/ingress-nginx`) and marks it as the **only default**. Traefik’s own `traefik` class stays available but is not the default (`global.systemDefaultIngressClass` is cleared so RKE2 cannot force Traefik as default). The unused `rke2-ingress-nginx-migration` class created by the Traefik chart is removed by `405-get-nodes.yaml`.
 
-On an existing cluster, re-run `ansible-playbook 405-get-nodes.yaml` (or `400-setup-k8s.yaml`) to apply the IngressClass.
+On an existing cluster, update the Traefik HelmChartConfig on the controllers (re-run `310` / `330` or copy the manifests), restart `rke2-server` if needed, then run `ansible-playbook 405-get-nodes.yaml`.
 
 Check it with:
 
