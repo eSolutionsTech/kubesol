@@ -75,6 +75,10 @@
             namespace: kube-system
           spec:
             valuesContent: |-
+              ingressClass:
+                enabled: true
+                isDefaultClass: false
+                name: traefik
               providers:
                 kubernetesIngress:
                   enabled: true
@@ -91,6 +95,12 @@
                 websecure:
                   forwardedHeaders:
                     addXForwardedSchemeHeaders: true
+      notify: "rke2-server service restart"
+
+    - name: Creating the nginx IngressClass manifest
+      copy:
+        src: files/rke2/nginx-ingressclass.yaml
+        dest: /var/lib/rancher/rke2/server/manifests/nginx-ingressclass.yaml
       notify: "rke2-server service restart"
 
     - name: Download rke2.sh

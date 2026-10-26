@@ -15,3 +15,23 @@
 
     - debug:
         msg: "{{ ks8_nodes }}"
+
+    # Ensure IngressClass "nginx" exists and is the default (Traefik NGINX provider).
+    - name: Ensure nginx IngressClass is present and default
+      kubernetes.core.k8s:
+        state: present
+        src: files/rke2/nginx-ingressclass.yaml
+
+    - name: Clear default annotation on other IngressClasses
+      kubernetes.core.k8s:
+        state: patched
+        kind: IngressClass
+        name: "{{ item }}"
+        definition:
+          metadata:
+            annotations:
+              ingressclass.kubernetes.io/is-default-class: "false"
+      loop:
+        - traefik
+        - rke2-ingress-nginx-migration
+      failed_when: false
