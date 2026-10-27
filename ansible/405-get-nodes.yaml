@@ -7,11 +7,22 @@
 #    K: "{{ playbook_dir }}/.kubeconfig"
 
   tasks:
-    - name: Get cluster info
+    - name: Wait for all nodes to be Ready
       kubernetes.core.k8s_info:
         kind: Node
 #        kubeconfig: "{{ K }}"
       register: ks8_nodes
+      retries: 60
+      delay: 10
+      until: >
+        ks8_nodes.resources | length > 0
+        and (
+          ks8_nodes.resources
+          | json_query('[*].status.conditions[?type==`Ready`].status')
+          | flatten
+          | select('equalto', 'True')
+          | list | length
+        ) == (ks8_nodes.resources | length)
 
     - debug:
         msg: "{{ ks8_nodes }}"
