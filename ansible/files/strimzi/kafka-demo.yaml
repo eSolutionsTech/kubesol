@@ -38,7 +38,7 @@ spec:
       type: jbod
       volumes:
         - id: 0
-          class: directpv-min-io
+          # class: directpv-min-io  # omit to use the cluster default StorageClass
           type: persistent-claim
           size: 1Gi
           deleteClaim: false
@@ -52,7 +52,7 @@ spec:
         cpu: 500m
         memory: 1Gi
     storage:
-      class: directpv-min-io
+      # class: directpv-min-io  # omit to use the cluster default StorageClass
       type: persistent-claim
       size: 1Gi
       deleteClaim: false

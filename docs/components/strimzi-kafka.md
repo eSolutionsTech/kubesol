@@ -40,7 +40,7 @@ kafka-demo-zookeeper-1                        1/1     Running   0          3m32s
 kafka-demo-zookeeper-2                        1/1     Running   0          3m32s
 ```
 
-Note that we are using directpv-min-io storage class for Kafka! For more advanced examples, consult the official Strimzi documentation.
+The demo omits `class`, so Kafka and ZooKeeper use the cluster default StorageClass. Uncomment `class: directpv-min-io` in `files/strimzi/kafka-demo.yaml` if you want them on DirectPV. For more advanced examples, consult the official Strimzi documentation.
 
 ### To cleanup the above demo:
 
