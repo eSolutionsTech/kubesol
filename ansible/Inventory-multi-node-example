@@ -10,7 +10,7 @@ project_name="kubesol_dev5" # used in nginx config
 ext_dns_name="dev5.kubesol.com"
 letsencrypt_email="root@kubesol.com"
 
-#rke2_version="v1.37.1+rke2r1"
+rke2_version="v1.37.1+rke2r1"
 #longhorn_chart_version="1.13.0"
 #cert_manager_chart_version="v1.21.2"
 #argocd_chart_version="10.10.5"

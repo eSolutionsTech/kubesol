@@ -5,6 +5,8 @@ letsencrypt_email="root@example.com"
 
 D="/root/.kubesol"
 
+rke2_version="v1.37.1+rke2r1"
+
 hosts_gw="kubesol-dev4-c1"
 
 [controller_one]
