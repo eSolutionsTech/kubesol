@@ -2,7 +2,7 @@
 # List StorageClasses, or set one as the cluster default.
 # Usage:
 #   ./default-sc.sh              # list storage classes
-#   ./default-sc.sh <name>       # set <name> as default (if it exists); otherwise list only
+#   ./default-sc.sh <name>       # set <name> as default; exit 1 if it does not exist
 
 set -euo pipefail
 
@@ -25,7 +25,7 @@ SC="$1"
 if ! kubectl get storageclass "$SC" >/dev/null 2>&1; then
   echo "Storage class '$SC' not found; listing storage classes:" >&2
   list_storage_classes
-  exit 0
+  exit 1
 fi
 
 # Clear default on all StorageClasses, then mark the requested one as default.

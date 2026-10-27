@@ -163,7 +163,7 @@ This guide provides solutions for common issues you might encounter when deployi
 ```
 kubectl get storageclass
 ./default-sc.sh                 # from repo root — list classes
-./default-sc.sh local-path      # set default (if that class exists)
+./default-sc.sh local-path      # set default; fails if that class does not exist
 ```
 
 - Default install enables **local-path** and marks it default (`425-local-path.yaml`, also via `400-setup-k8s.yaml`). Confirm the provisioner pods are running: `kubectl -n local-path-storage get pods` (namespace may vary with the upstream manifest).

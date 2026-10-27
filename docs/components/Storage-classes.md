@@ -34,11 +34,11 @@ A default install runs `425-local-path.yaml`, which installs local-path and mark
 # Make DirectPV the default
 ./default-sc.sh directpv-min-io
 
-# Unknown name → script only lists classes (does not change anything)
+# Unknown name → lists classes, changes nothing, and exits with an error
 ./default-sc.sh nosuch
 ```
 
-The script clears `storageclass.kubernetes.io/is-default-class` on all classes, then sets it on the name you pass (if that StorageClass exists). Run it from a host with a working `kubectl` context (usually `controller_one`).
+The script clears `storageclass.kubernetes.io/is-default-class` on all classes, then sets it on the name you pass. If that StorageClass does not exist, it lists the classes and exits with status 1. Run it from a host with a working `kubectl` context (usually `controller_one`).
 
 Check with:
 
