@@ -22,9 +22,27 @@
       delay: 20
       until: keycloak_db is succeeded
 
+    - name: Check if keycloak admin secret exists
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: "{{ NS }}"
+        name: keycloak
+      register: keycloak_admin_secret
+
     - name: Generate a new password
       shell: pwgen 16 1
-      register: admin_password
+      register: new_password
+      when: keycloak_admin_secret.resources[0] is undefined
+
+    - name: Reuse the existing admin password
+      set_fact:
+        admin_password: "{{ keycloak_admin_secret.resources[0].data['admin-password'] | b64decode }}"
+      when: keycloak_admin_secret.resources[0] is defined
+
+    - name: Use the generated admin password
+      set_fact:
+        admin_password: "{{ new_password.stdout }}"
+      when: keycloak_admin_secret.resources[0] is undefined
 
     - name: keycloak template j2 -> yaml
       template:

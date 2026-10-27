@@ -32,7 +32,7 @@ You can get the exact address with:
 kubectl -n keycloak get ingress
 ```
 
-Retrieve the first admin password with:
+Retrieve the admin password with (re-running `470-keycloak.yaml` keeps this value):
 
 ```
 kubectl get secret --namespace keycloak keycloak -o jsonpath="{.data.admin-password}" | base64 -d

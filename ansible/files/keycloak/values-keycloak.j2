@@ -4,7 +4,7 @@ proxyAddressForwarding: true
 auth:
   createAdminUser: false
   adminUser: admin
-  adminPassword: {{ admin_password.stdout }}
+  adminPassword: "{{ admin_password }}"
 ingress:
   enabled: false
 
