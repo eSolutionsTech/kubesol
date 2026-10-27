@@ -17,7 +17,6 @@
     - name: Creating file .directpv.yaml
       shell:
         cmd: kubectl-directpv install -o yaml >{{ D }}/.directpv.yaml
-        creates: "{{ D }}/.directpv.yaml"
 
     - name: Applying .directpv.yaml to k8s
       kubernetes.core.k8s:
@@ -31,7 +30,6 @@
     - name: Creating file .drives.yaml
       shell:
         cmd: kubectl-directpv discover --output-file {{ D }}/.drives.yaml
-        creates: "{{ D }}/.drives.yaml"
 
     - command:
         cmd: cat "{{ D }}/.drives.yaml"
