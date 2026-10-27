@@ -45,9 +45,9 @@ cp Inventory-single-node-example Inventory
 ```
 [all:vars]
 
-D="/root/.kubesol"
-
 rke2_version="v1.37.1+rke2r1"
+
+D="/root/.kubesol"
 
 ext_dns_name="dev4.YOUR_DOMAIN_COM"
 letsencrypt_email="EMAIL_FOR_letsencrypt"

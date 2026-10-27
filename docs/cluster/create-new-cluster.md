@@ -87,9 +87,9 @@ A simple example is this:
 ```
 [all:vars]
 
-D="/root/.kubesol"
-
 rke2_version="v1.37.1+rke2r1"
+
+D="/root/.kubesol"
 
 # Extra disks only if you enable Longhorn / DirectPV (never the OS disk):
 #longhorn_device="sdb"
