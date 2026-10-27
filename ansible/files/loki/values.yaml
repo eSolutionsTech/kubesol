@@ -19,7 +19,7 @@ singleBinary:
   persistence:
     enabled: true
     size: 1Gi
-    storageClass: longhorn
+    # storageClass: longhorn  # omit to use the cluster default StorageClass
 read:
   replicas: 0
 backend:

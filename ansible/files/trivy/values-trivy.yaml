@@ -21,7 +21,7 @@ serviceMonitor:
   enabled: true
 
 trivy:
-  storageClassName: longhorn
+  # storageClassName: longhorn  # omit to use the cluster default StorageClass
   storageSize: "1Gi"
   ignoreUnfixed: true
   #severity: HIGH,CRITICAL

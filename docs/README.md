@@ -74,8 +74,8 @@ See also [Storage classes](components/Storage-classes.md) (Longhorn / DirectPV /
 ```
 Keycloak ──needs──> CNPG ──needs──> a StorageClass (default or Longhorn/DirectPV)
 MinIO    ──needs──> DirectPV (extra disks on workers)
-Monitoring / Loki / Trivy / Vault Helm values often pin storageClass: longhorn
-  └── enable Longhorn, change the values, or use ./default-sc.sh + omit storageClass where possible
+Monitoring / Loki / Trivy / Vault omit storageClass (use cluster default; longhorn lines are commented)
+  └── uncomment those lines or run ./default-sc.sh if you want a non-default class
 Dummy / simple PVCs that omit storageClassName use the cluster default (local-path by default)
 ```
 

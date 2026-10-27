@@ -17,7 +17,7 @@ trivy-trivy-operator-687dbbfd97-m8phd       1/1     Running     0          2m25s
 
 To install it: `ansible-playbook 510-trivy.yaml`
 
-Trivy’s Helm values pin `storageClassName: longhorn`. Enable Longhorn first, change that value, or ensure a suitable default StorageClass exists.
+Trivy’s Helm values omit `storageClassName` so PVCs use the cluster default. Uncomment `storageClassName: longhorn` in `files/trivy/values-trivy.yaml` if you want Trivy on Longhorn.
 
 Optional Grafana dashboard ConfigMap (after monitoring/Grafana is up):
 

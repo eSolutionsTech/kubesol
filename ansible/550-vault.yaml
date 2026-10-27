@@ -53,7 +53,7 @@
             dataStorage:
               enabled: true
               size: 1Gi
-              storageClass: longhorn
+              # storageClass: longhorn  # omit to use the cluster default StorageClass
             ha:
               enabled: true
               replicas: 3
