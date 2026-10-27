@@ -18,6 +18,8 @@
                - http01:
                    ingress:
                      ingressClassName: nginx
+     register: issuer_apply
      retries: 10
      delay: 30
+     until: issuer_apply is succeeded
 
