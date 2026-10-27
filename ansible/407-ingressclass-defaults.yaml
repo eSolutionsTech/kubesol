@@ -1,0 +1,80 @@
+---
+# Ensure IngressClass "nginx" is the only cluster default.
+# Traefik serves that class via providers.kubernetesIngressNGINX.
+- name: IngressClass defaults (nginx only)
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+    # Traefik (and its IngressClass) may appear after the nginx class from
+    # RKE2 manifests. Wait until Traefik exists so we can clear its default.
+    - name: Wait for Traefik IngressClass
+      kubernetes.core.k8s_info:
+        kind: IngressClass
+        name: traefik
+      register: traefik_ic
+      until: traefik_ic.resources | length > 0
+      retries: 30
+      delay: 10
+
+    - name: List IngressClasses
+      kubernetes.core.k8s_info:
+        kind: IngressClass
+      register: ingress_classes
+
+    - name: Clear default annotation on all IngressClasses
+      kubernetes.core.k8s:
+        state: patched
+        kind: IngressClass
+        name: "{{ item.metadata.name }}"
+        definition:
+          metadata:
+            annotations:
+              ingressclass.kubernetes.io/is-default-class: "false"
+      loop: "{{ ingress_classes.resources }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+
+    - name: Ensure nginx IngressClass is present and default
+      kubernetes.core.k8s:
+        state: present
+        src: files/rke2/nginx-ingressclass.yaml
+
+    # Chart creates this whenever kubernetesIngressNGINX is enabled; not used by Kubesol.
+    - name: Remove unused RKE2 nginx migration IngressClass
+      kubernetes.core.k8s:
+        state: absent
+        kind: IngressClass
+        name: rke2-ingress-nginx-migration
+      failed_when: false
+
+    - name: Re-list IngressClasses
+      kubernetes.core.k8s_info:
+        kind: IngressClass
+      register: ingress_classes_after
+
+    - name: Reset default IngressClass list
+      set_fact:
+        default_ingress_classes: []
+
+    - name: Collect default IngressClass names
+      set_fact:
+        default_ingress_classes: "{{ default_ingress_classes + [item.metadata.name] }}"
+      when: >
+        item.metadata.annotations is defined
+        and (item.metadata.annotations['ingressclass.kubernetes.io/is-default-class']
+             | default('false') | string | lower) == 'true'
+      loop: "{{ ingress_classes_after.resources }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+
+    - name: Assert nginx is the only default IngressClass
+      assert:
+        that:
+          - default_ingress_classes | length == 1
+          - default_ingress_classes[0] == 'nginx'
+        fail_msg: >-
+          Expected only IngressClass 'nginx' as default, got:
+          {{ default_ingress_classes }}
+        success_msg: "IngressClass nginx is the only default"

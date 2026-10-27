@@ -1,5 +1,6 @@
 ---
 - import_playbook: 405-get-nodes.yaml
+- import_playbook: 407-ingressclass-defaults.yaml
 - import_playbook: 410-cert-manager.yaml
 
 ### storage classes
