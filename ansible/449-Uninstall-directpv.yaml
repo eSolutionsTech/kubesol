@@ -4,7 +4,7 @@
   gather_facts: false
   connection: local
   vars:
-#    K: "{{ playbook_dir }}/.kubeconfig"
+    D: "/root/.kubesol"
 
   tasks:
     - name: List cluster components
@@ -17,7 +17,7 @@
 
     - name: Check PVC with directpv-min-io storage class
       shell:
-        cmd: kubectl --kubeconfig=.kubeconfig get pvc -A 2>/dev/null | grep directpv-min-io | wc -l | sed -e 's/ //g'
+        cmd: kubectl get pvc -A 2>/dev/null | grep directpv-min-io | wc -l | sed -e 's/ //g'
       register: how_many_pvc
 
     - name: Check PVC
@@ -29,28 +29,70 @@
 
     - name: Uninstall directpv
       shell:
-        cmd: kubectl-directpv uninstall --kubeconfig=.kubeconfig && rm .directpv.yaml .drives.yaml .drives.init
-        removes: .directpv.yaml
+        cmd: kubectl-directpv uninstall && rm -f {{ D }}/.directpv.yaml {{ D }}/.drives.yaml {{ D }}/.drives.init
+        removes: "{{ D }}/.directpv.yaml"
 
     - name: Remove directpv local files
       file:
         path: "{{ item }}"
         state: absent
-      with_items:
-        - ./.drives.init
-        - ./.drives.yaml
-        - ./.directpv.yaml
+      loop:
+        - "{{ D }}/.drives.init"
+        - "{{ D }}/.drives.yaml"
+        - "{{ D }}/.directpv.yaml"
 
+# Workers, and single-node hosts marked controller_worker=true.
+# Wipe only when directpv_device is set, and never the OS disk.
 - name: Cleanup directpv on workers
-  hosts: worker
+  hosts: all
   gather_facts: false
 
   tasks:
+    - name: Decide whether this host runs DirectPV cleanup
+      set_fact:
+        directpv_cleanup_host: >-
+          {{ ('worker' in groups and inventory_hostname in groups['worker'])
+             or (controller_worker | default(false) | bool) }}
 
-# ansible mount module requires path which sucks
+    - name: Identify root disk
+      shell: |
+        set -euo pipefail
+        src=$(findmnt -n -o SOURCE /)
+        parent=$(lsblk -no PKNAME "$src" | head -n1 || true)
+        if [ -n "$parent" ]; then
+          printf '%s\n' "$parent"
+        else
+          basename "$src" | sed -E 's/p?[0-9]+$//'
+        fi
+      args:
+        executable: /bin/bash
+      register: root_disk
+      changed_when: false
+      when:
+        - directpv_cleanup_host | bool
+        - directpv_device is defined
+
+    - name: Refuse to wipe the OS disk
+      assert:
+        that:
+          - (root_disk.stdout | trim) | length > 0
+          - (directpv_device | regex_replace('^/dev/', '')) != (root_disk.stdout | trim)
+        fail_msg: >-
+          directpv_device {{ directpv_device }} is the OS disk
+          ({{ root_disk.stdout | trim }}); refusing to wipe
+      when:
+        - directpv_cleanup_host | bool
+        - directpv_device is defined
+
     - name: Umount device
-      shell: umount "/dev/{{ directpv_device }}"
-      failed_when: none
+      shell: umount "/dev/{{ directpv_device | regex_replace('^/dev/', '') }}"
+      failed_when: false
+      when:
+        - directpv_cleanup_host | bool
+        - directpv_device is defined
 
     - name: Wipefs
-      shell: wipefs -a "/dev/{{ directpv_device }}"
+      shell: wipefs -a "/dev/{{ directpv_device | regex_replace('^/dev/', '') }}"
+      when:
+        - directpv_cleanup_host | bool
+        - directpv_device is defined

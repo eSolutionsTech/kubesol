@@ -8,15 +8,13 @@ Good use cases are: Minio, Kafka, Zookeeper, PostgreSQL with replicas.
 
 ## Installation
 
-DirectPV is **optional** (commented out in `400-setup-k8s.yaml`). Uncomment `440-directpv.yaml` when workers have a dedicated disk. In our setup it is required by MinIO.
+DirectPV is **optional** (commented out in `400-setup-k8s.yaml`). Uncomment `440-directpv.yaml` when workers have a dedicated disk. In our setup it is required by MinIO. Set `directpv_device` in Inventory to that extra disk (never the OS disk).
 
-This is difficult to install, even using our Ansible playbook. Please make sure
-- all the worker nodes are __Ready__ before running `ansible-playbook 440-directpv.yaml`
-- when Ansible shows the message __Check .drives.yaml now!__ you really check that file (in another terminal), making sure at least one block device per worker nodes is in that file!
+`440-directpv.yaml` discovers drives and prints `/root/.kubesol/.drives.yaml`. On the first run it then pauses so you can confirm at least one dedicated disk per node is listed. Press return to initialize those drives, or Ctrl+C and then `a` to abort. Later runs skip the pause and `init` because `.drives.init` already exists. Make sure the worker nodes are **Ready** before you run it.
 
 ## Uninstall / cleanup
 
-If you wish to uninstall DirectPV, we recommend using `ansible-playbook 449-Uninstall-directpv.yaml` for a clean job.
+`ansible-playbook 449-Uninstall-directpv.yaml` removes DirectPV and the files under `/root/.kubesol`. On workers, and on a single-node host marked `controller_worker=true`, it unmounts and wipes `directpv_device` when that variable is set. It refuses to wipe the disk that holds `/`.
 
 ## Check status
 
