@@ -14,10 +14,10 @@ SSH as root with key on those VMs (or as user with sudo without password).
 
 Our minimal configuration is like this:
 
-- _clusterName_-gw : This will run nginx as a reverse proxy. 2 GB RAM, 2 CPU cores, 20GB disk
+- _clusterName_-gw : This will run nginx as a reverse proxy (gateway host). 2 GB RAM, 2 CPU cores, 20GB disk
 - _clusterName_-c1 : This will be the first Kubernetes controller. 4 GB RAM, 2 CPU cores, 20GB disk
 - _clusterName_-c2/3 : Secondary Kubernetes controllers. Optional but highly recommended. Same specs as `c1`.
-- _clusterName_-w1 : First worker node. 8 GB RAM, 4 CPU cores, 50 GB root filesystem plus 2 additional disks at least 10 GB each for storage classes.
+- _clusterName_-w1 : First worker node. 8 GB RAM, 4 CPU cores, 50 GB root filesystem. Extra disks are only needed if you enable optional storage: one disk for Longhorn (`longhorn_device`) and/or one for DirectPV (`directpv_device`), typically at least 10 GB each — **do not** point those variables at the OS disk (for example avoid `sda` when that is the system disk).
 - _clusterName_-w2/3 : Additional worker nodes. Optional but highly recommended. Same specs as `w1`.
 
 ### Hostname resolving
@@ -83,8 +83,9 @@ D="/root/.kubesol"
 
 #rke2_version="v1.37.1+rke2r1"
 
-longhorn_device="sdb"
-directpv_device="sdc"
+# Extra disks only if you enable Longhorn / DirectPV (never the OS disk):
+#longhorn_device="sdb"
+#directpv_device="sdc"
 
 project_name="kubesol_dev2" # used in nginx config
 ext_dns_name="dev2.kubesol.com"

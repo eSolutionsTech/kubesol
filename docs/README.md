@@ -10,7 +10,7 @@ After creating the required Virtual Machines (VMs) and running the installer, yo
 ## Here are the main advantages that make our product a standout choice:
 - **Free and Open-Source, just as our MOTTO** Enjoy the benefits of a cost-effective solution with the option for premium commercial support if needed.
 - **Streamlined Installation**: Simplify your setup with a repeatable installation and configuration process, all driven by efficient Ansible playbooks.
-- **Seamless Kubernetes Management**: Easily create and upgrade Kubernetes clusters with the reliable RKE2 system. Learn more at RKE2 GitHub.
+- **Seamless Kubernetes Management**: Easily create and upgrade Kubernetes clusters with the reliable [RKE2](https://github.com/rancher/rke2) system.
 - **Pre-Configured Storage Classes**: Local-path is enabled by default; Longhorn and DirectPV are optional (uncomment in `400-setup-k8s.yaml`; DirectPV needs extra disks on workers).
 - **Comprehensive Kubernetes Components**: A small core set is enabled by default; others are optional playbooks you can uncomment or run separately. See the full list below.
 - **Extensive Documentation**: Access detailed documentation and example usage guides for a wide range of components, ensuring you have all the support you need.
@@ -25,6 +25,8 @@ See also the [FAQ](FAQ.md) and [Troubleshooting Guide](troubleshooting.md) for h
 - [use an existing cluster](cluster/use-existing-cluster.md)
 - [adding more worker nodes](cluster/adding-nodes.md)
 - [upgrade an existing cluster](cluster/upgrade-cluster.md)
+- [version variables](cluster/version-variables.md) (RKE2, Helm charts, `*_chart_version`)
+- [accessing web interfaces](cluster/accessing-web-interfaces.md)
 
 ## Advanced troubleshooting
 - [etcd rejoin](cluster/etcd-rejoin.md)
@@ -41,25 +43,25 @@ What runs after `ansible-playbook 000-all.yaml` (or `400-setup-k8s.yaml`) depend
 - [local-path](components/Storage-classes.md) storage class (`425-local-path.yaml`)
 - [Examples](components/examples.md) demo apps (simple pod / PVC / dummy web app)
 
-See also [Storage classes](components/Storage-classes.md) for Longhorn / DirectPV / local-path and setting the default.
+See also [Storage classes](components/Storage-classes.md) (Longhorn / DirectPV / local-path) and `./default-sc.sh` at the repo root to list or set the default StorageClass.
 
 ### Bundled with RKE2 (not separate Kubesol playbooks)
 
 - [metrics-server](components/kubernetes-metrics-server.md)
-- [Ingress controller (Traefik, nginx Ingress class)](components/nginx-ingress-controller.md)
+- [Ingress controller (Traefik, nginx Ingress class)](components/traefik-ingress.md)
 
 ### Optional (commented out in `400-setup-k8s.yaml`)
 
-- [longhorn](components/longhorn.md) (`430` / `431` / `432`)
+- [longhorn](components/longhorn.md) (`430` / `431` / `432`; optional `433-longhorn-rf1.yaml` for a single-replica class)
 - [DirectPV](components/directpv.md) (`440`; needs a dedicated disk per worker)
-- [monitoring](components/monitoring.md) — Prometheus, AlertManager, Grafana, Loki (`490` / `491` / `492`)
+- [monitoring](components/monitoring.md) — Prometheus, AlertManager, Grafana, Loki (`490` / `491` / `492`; uninstall: `499` / `498`)
 - [keycloak](components/keycloak.md) (`470`; needs CNPG)
 - [ArgoCD](components/argocd.md) (`500`)
 - [Minio operator](components/minio.md) (`530`; needs DirectPV)
 - [Strimzi (Kafka) operator](components/strimzi-kafka.md) (`520`)
 - [PostgreSQL operator](components/postgres-cnpg.md) CNPG (`460`)
 - [Velero](components/velero.md) (`480`)
-- [Trivy](components/trivy.md) (`510` / `511`)
+- [Trivy](components/trivy.md) (`510` / `511` Grafana dashboard ConfigMap)
 - [VPA Vertical Pod Autoscaler](components/vpa.md) and Goldilocks (`540` / `542`)
 - [Vault](components/vault.md) and [External Secrets Operator](components/external-secrets.md) (`550` / `560`)
 
@@ -67,10 +69,23 @@ See also [Storage classes](components/Storage-classes.md) for Longhorn / DirectP
 
 - [kubernetes dashboard](components/kubernetes-dashboard.md) — upstream no longer maintained; playbooks removed
 
-Some optional components have dependencies (for example Keycloak → CNPG → storage class; MinIO → DirectPV).
+### Component dependencies
+
+```
+Keycloak ──needs──> CNPG ──needs──> a StorageClass (default or Longhorn/DirectPV)
+MinIO    ──needs──> DirectPV (extra disks on workers)
+Monitoring / Loki / Trivy / Vault Helm values often pin storageClass: longhorn
+  └── enable Longhorn, change the values, or use ./default-sc.sh + omit storageClass where possible
+Dummy / simple PVCs that omit storageClassName use the cluster default (local-path by default)
+```
+
+## Versions and tools
+
+- Example RKE2 pin in docs/Inventory: `v1.37.1+rke2r1` (see [version variables](cluster/version-variables.md) and [upgrade](cluster/upgrade-cluster.md))
+- Helm CLI installed by `290-c1.yaml` as **v3.22.1** (`HELM_ARCHIVE`)
+- Tested OS: Ubuntu 22.04 and 24.04
+- Chart versions: leave `*_chart_version` unset for latest, or pin in Inventory
 
 ## For Developers
 
 If you're contributing to Kubesol or extending its functionality, check out our [Developer Notes](developer-notes.md) for technical insights and best practices.
-
-

@@ -1,8 +1,47 @@
+# From the docs/ directory (or repo root with -f):
+#   mkdocs serve
 
-# on your computer, run in this directory
-# mkdocs serve
-
-site_name: 'KubeSol docs'
+site_name: KubeSol docs
+site_description: Kubesol Kubernetes distribution documentation
 theme:
   name: readthedocs
-  
+
+nav:
+  - Home: README.md
+  - FAQ: FAQ.md
+  - Usage:
+      - Quickstart (single VM): cluster/Quickstart.md
+      - Create a new cluster: cluster/create-new-cluster.md
+      - Use an existing cluster: cluster/use-existing-cluster.md
+      - Adding nodes: cluster/adding-nodes.md
+      - Upgrade cluster: cluster/upgrade-cluster.md
+      - Version variables: cluster/version-variables.md
+      - Accessing web interfaces: cluster/accessing-web-interfaces.md
+  - Components:
+      - Storage classes: components/Storage-classes.md
+      - Cert-manager: components/cert-manager.md
+      - Ingress (Traefik): components/traefik-ingress.md
+      - Metrics server: components/kubernetes-metrics-server.md
+      - Longhorn: components/longhorn.md
+      - DirectPV: components/directpv.md
+      - Examples: components/examples.md
+      - Monitoring: components/monitoring.md
+      - Keycloak: components/keycloak.md
+      - Argo CD: components/argocd.md
+      - MinIO: components/minio.md
+      - Strimzi (Kafka): components/strimzi-kafka.md
+      - PostgreSQL (CNPG): components/postgres-cnpg.md
+      - Velero: components/velero.md
+      - Trivy: components/trivy.md
+      - Vault: components/vault.md
+      - External Secrets: components/external-secrets.md
+      - VPA / Goldilocks: components/vpa.md
+      - Kubernetes Dashboard (deprecated): components/kubernetes-dashboard.md
+  - Operations:
+      - Troubleshooting: troubleshooting.md
+      - Reset cluster: cluster/reset-cluster.md
+      - etcd backup/restore: cluster/etcd-backup-restore.md
+      - etcd commands: cluster/etcd-commands.md
+      - etcd rejoin: cluster/etcd-rejoin.md
+  - Developers:
+      - Developer notes: developer-notes.md

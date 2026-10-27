@@ -1,13 +1,13 @@
 # Longhorn storage
 
-Lonhorn is a Kubernetes storage system. Read more at https://github.com/longhorn/longhorn
+Longhorn is a Kubernetes storage system. Read more at https://github.com/longhorn/longhorn
 and https://longhorn.io/docs/ .
-
-We are using it as the default storage class and it is required by many other components for PVCs.
 
 ## Install
 
-Longhorn is **optional** (commented out in `400-setup-k8s.yaml`). Many optional components still assume Longhorn as their storage class unless you change them or rely on the cluster default.
+Longhorn is **optional** (commented out in `400-setup-k8s.yaml`). The cluster default storage class out of the box is usually **local-path**; enable Longhorn when you need replicated volumes. Some optional Helm values (monitoring, Loki, Trivy, Vault) still pin `longhorn` — enable Longhorn first, change those values, or point workloads at the cluster default via [Storage classes](Storage-classes.md) / `./default-sc.sh`.
+
+There is also playbook `433-longhorn-rf1.yaml`, which creates StorageClass `longhorn-rf1` (single replica, strict-local) for labs or single-node use after Longhorn is installed.
 
 To check it:
 

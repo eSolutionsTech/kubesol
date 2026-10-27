@@ -144,7 +144,29 @@ This guide provides solutions for common issues you might encounter when deployi
    - Ensure DNS records point to the correct ingress IP
    - Test with: `nslookup <hostname>` or `dig <hostname>`
 
+4. **Gateway nginx vs in-cluster Traefik**
+   - On multi-node installs, the **gateway** VM runs host nginx (`280-gw.yaml`) as an outer reverse proxy to the cluster.
+   - **Inside** the cluster, Ingress objects are handled by **Traefik** (IngressClass `nginx` by default). Do not confuse the two.
+   - Single-VM quickstart has no separate gateway — DNS/TLS hit the node / Traefik directly (or your cloud LB).
+
 ## Storage Issues
+
+### Default StorageClass / local-path
+
+**Symptoms:**
+- PVCs Pending with “no persistent volumes available” / no storage class
+- Wrong StorageClass on new PVCs
+
+**Checks:**
+
+```
+kubectl get storageclass
+./default-sc.sh                 # from repo root — list classes
+./default-sc.sh local-path      # set default (if that class exists)
+```
+
+- Default install enables **local-path** (`425-local-path.yaml`). Confirm the provisioner pods are running: `kubectl -n local-path-storage get pods` (namespace may vary with the upstream manifest).
+- Demo PVCs that omit `storageClassName` use the cluster default — see [Storage classes](components/Storage-classes.md).
 
 ### Longhorn Issues
 

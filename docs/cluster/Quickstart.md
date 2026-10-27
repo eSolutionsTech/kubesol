@@ -1,50 +1,46 @@
 # Kubesol quickstart
 
-A full production Kubesol setup will require at least 7 VMs (one gateway, 3 controller nodes, 3 worker nodes). 
-But may even experiment on a single VM with some limitations.
+A full production Kubesol setup needs several VMs (gateway, controllers, workers).
+You can also experiment on a **single VM** with limitations (no HA, no separate gateway).
 
-This procedure will use the same VM as Ansible run host and destination host, that's why we have in 
-the Inventory file `ansible_connection=local`. So you just ssh to the VM and run everything there.
+This procedure uses the same VM as Ansible control host and target (`ansible_connection=local` in Inventory). SSH to the VM and run everything there. There is no separate gateway host in this single-VM path.
 
 ## Step by step on DigitalOcean
 
-1. Create a Virtual Machine with Ubuntu Linux 24.04 and 8GB RAM, 4 CPU cores (it will have 150 GB disk but 50GB is enough). 
-I have used the name `kubesol-dev4-c1` for the VM.
+1. Create a Virtual Machine with Ubuntu Linux 24.04 and 8GB RAM, 4 CPU cores (150 GB disk is fine; ~50 GB is enough).
+   Example hostname: `kubesol-dev4-c1`.
 
-2. Check that you can ssh on it as root with the ssh key. 
-DigitalOcean VMs will have both a public and a private IP. 
-Note them down (run `ip a`).
+2. Check that you can SSH in as root with your key.
+   DigitalOcean VMs have a public and a private IP — note them (`ip a`).
 
-3. We need DNS for SSL certificates so, use the public IP from above and add 2 records to a domain. Something like this:
+3. DNS for TLS: point these at the public IP:
 
 ```
   dev4.YOUR_DOMAIN_COM    PUBLIC_IP
   *.dev4.YOUR_DOMAIN_COM  PUBLIC_IP
 ```
 
-4. `git clone https://github.com/eSolutionsTech/kubesol.git`
+4. Clone the repo:
 
-5. install pre-requisites using the `start.sh` script:
+```
+git clone https://github.com/eSolutionsTech/kubesol.git
+```
+
+5. Install prerequisites:
+
 ```
 cd kubesol
 ./start.sh
 ```
 
-6. cd into this directory kubesol/ansible and create a file `ansible.cfg`:
+`start.sh` installs Ansible packages and, if missing, copies `ansible.cfg-example` → `ansible.cfg` and a starter Inventory. For this single-VM path, use the single-node example:
 
 ```
-[defaults]
-inventory = Inventory
-host_key_checking = False
-remote_user = root
-remote_port = 22
-deprecation_warnings=False 
-log_path = .ansible.log
-executable = /bin/bash
+cd ansible
+cp Inventory-single-node-example Inventory
 ```
 
-and a file `Inventory` like this (use your hostname, email etc):
-
+6. Edit `Inventory` (hostname, DNS, email). Example:
 
 ```
 [all:vars]
@@ -56,111 +52,98 @@ rke2_version="v1.37.1+rke2r1"
 ext_dns_name="dev4.YOUR_DOMAIN_COM"
 letsencrypt_email="EMAIL_FOR_letsencrypt"
 
-longhorn_chart_version="1.13.0"
-cert_manager_chart_version="v1.21.2"
-argocd_chart_version="10.10.5"
-minio_operator_chart_version="7.1.1"
-vault_chart_version="0.34.1"
-external_secrets_chart_version="2.13.0"
-# keycloak_chart_version unset = latest from the Bitnami archive repo
-trivy_chart_version="0.37.0"
-
 hosts_gw="kubesol-dev4-c1"
 
 [controller_one]
-kubesol-dev4-c1  controller_worker=true ansible_connection=local 
+kubesol-dev4-c1  controller_worker=true ansible_connection=local
 ```
 
-7. run `ansible-playbook 200-prep-vms.yaml`. If all ok, continue, else debug and re-run the playbook
+Optional chart pins (`*_chart_version`) are documented under [version variables](version-variables.md). Leave them unset to install the latest chart versions.
 
-8. run `ansible-playbook 300-rke2-cluster.yaml`. This will take 2-3 minutes. If all ok, continue, else debug and re-run the playbook
+7. Prepare the VM:
 
-9. you now have a Kubernetes cluster with one node. you could use it with:
+```
+ansible-playbook 200-prep-vms.yaml
+```
+
+8. Install the RKE2 cluster (2–3 minutes):
+
+```
+ansible-playbook 300-rke2-cluster.yaml
+```
+
+9. Check the node:
 
 ```
 $ kubectl get nodes
 
-NAME              STATUS     ROLES                       AGE   VERSION
-kubesol-dev4-c1   NotReady   control-plane,etcd,master   78s   v1.37.1+rke2r1
+NAME              STATUS   ROLES                       AGE   VERSION
+kubesol-dev4-c1   Ready    control-plane,etcd,master   78s   v1.37.1+rke2r1
 ```
 
-Wait until you see the node STATUS Ready.
+Wait until STATUS is Ready.
 
-10. For playbooks >400 we recommend running them one by one and checking status after each one. A full `400-setup-k8s.yaml` run enables cert-manager, local-path, and demo apps by default; Longhorn, monitoring, and many other components stay commented out until you enable them (see [components](../README.md#components)). For example:
+10. For playbooks after `300`, prefer running them one by one.
+    A full `400-setup-k8s.yaml` enables **cert-manager**, **local-path**, and **demo apps** by default.
+    Longhorn, monitoring, and most other stacks stay commented out until you enable them
+    (see [components](../README.md#components)).
 
-## Cert-manager
-
-```
-ansible-playbook 410-cert-manager.yaml  # you will need this for ssl certificates
-kubectl -n cert-manager get pods        # wait for all pods to be Ready
-```
-
-Note: the Kubernetes Dashboard was deprecated and removed from Kubesol
-(upstream is no longer maintained). See [kubernetes dashboard](../components/kubernetes-dashboard.md).
-
-## Longhorn storage class
-
-Before installing Longhorn storage class, edit `430-longhorn-prep.yaml` and change `hosts: worker` to `hosts: all`. Then:
+## Default path: cert-manager, local-path, demos
 
 ```
-# edit 430-longhorn-prep.yaml and change hosts: worker to hosts: all
+ansible-playbook 410-cert-manager.yaml
+kubectl -n cert-manager get pods   # wait until Ready
+
+ansible-playbook 425-local-path.yaml
+kubectl get storageclass           # expect local-path (often already default)
+
+# Optional: set / verify the default StorageClass from the repo root
+# ../default-sc.sh
+# ../default-sc.sh local-path
+
+ansible-playbook 454-dummy.yaml
+kubectl -n dummy get pods,ingress,pvc
+# open https://dummy.<ext_dns_name> when DNS and certificates are ready
+```
+
+The dummy app PVC omits `storageClassName`, so it uses the cluster default (local-path unless you changed it). See [Storage classes](../components/Storage-classes.md) and [Examples](../components/examples.md).
+
+In-cluster Ingress is **Traefik**, with IngressClass **`nginx`** as default — see [Ingress controller](../components/traefik-ingress.md).
+
+## Optional: Longhorn
+
+Only if you want replicated storage (not required for the default demos). On a single node, edit `430-longhorn-prep.yaml` and set `hosts: all` instead of `hosts: worker`, then:
+
+```
 ansible-playbook 430-longhorn-prep.yaml
 ansible-playbook 431-longhorn-helm.yaml
-ansible-playbook 432-longhorn-web.yaml 
+ansible-playbook 432-longhorn-web.yaml
 
-kubectl -n longhorn-system get pods    # check all pods to be Ready
-kubectl -n longhorn-system get ingress # get hostname
-ansible-playbook 432-longhorn-web.yaml # run the playbook again to see the password
-# open in browser
+kubectl -n longhorn-system get pods
+kubectl -n longhorn-system get ingress
+# run 432 again to print the UI password
 ```
 
-## Dummy custom web application
- 
-In _dummy_ we have an example of a custom web application together with Ingress, SSL certificaties, pods with volumes:
+With one node, Longhorn volumes may show as *Degraded* (not enough replicas). That is expected.
+
+Then you can make Longhorn the default: `../default-sc.sh longhorn`.
+
+## Optional: monitoring
+
+Monitoring Helm values often expect Longhorn. Enable Longhorn first, or adjust values. Also raise inotify limits (otherwise Promtail may crash):
 
 ```
-ansible-playbook 454-dummy.yaml
+echo 256 > /proc/sys/fs/inotify/max_user_instances
+echo 120000 > /proc/sys/fs/inotify/max_user_watches
 
-kubectl -n dummy get pods
-kubectl -n dummy get ingress
-kubectl -n dummy get issuer
-kubectl -n dummy get certificate
-kubectl -n dummy get pvc
-# access it in browser
-```
-
-If you look again at the longhorn web interface, you will see the volume in the state _Degraded_. This is normal because there are not enough nodes for 3 replicas. But the volume works even without redundancy.
-
-## The monitoring system
-
-Before installing it you will need to run (otherwise `promtail` pod will crash):
-
-```
-echo 256 > /proc/sys/fs/inotify/max_user_instances  # default is 128
-echo 120000 > /proc/sys/fs/inotify/max_user_watches  # default is 65000
-```
-
-The monitoring system will install kube-prometheus-stack and Loki:
-
-```
 ansible-playbook 490-kube-prometheus-stack.yaml
-ansible-playbook 491-loki.yaml 
-ansible-playbook 492-grafana-ingress.yaml 
+ansible-playbook 491-loki.yaml
+ansible-playbook 492-grafana-ingress.yaml
 
-kubectl -n monitoring get pods
-kubectl -n monitoring get ingress
-
-# get the admin password
-kubectl -n monitoring get secret grafana-credentials  -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-
+kubectl -n monitoring get pods,ingress
+kubectl -n monitoring get secret grafana-credentials -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
-
-Access the web interface and browse, for example, to Dashboards -> Kubernetes / Compute Resources / Cluster.
 
 ## That's all for now
 
-Check out our full documentation for more components. Please note some components 
-won't work without additional effort in this single-VM case (for example vault).
-
-
-
+See the [full documentation](../README.md) for more components. Some stacks need extra work on a single VM (for example Vault).

@@ -45,6 +45,13 @@ ansible-playbook 491-loki.yaml
 ansible-playbook 492-grafana-ingress.yaml 
 ```
 
+To uninstall later (without resetting the whole cluster):
+
+```
+ansible-playbook 498-uninstall-loki.yaml
+ansible-playbook 499-uninstall-kube-prometheus-stack.yaml
+```
+
 ## Grafana 
 
 Grafana is a multi-platform open source analytics and interactive visualization web application. It can produce charts, graphs, and alerts for the web when connected to supported data sources such as Prometheus or Loki.

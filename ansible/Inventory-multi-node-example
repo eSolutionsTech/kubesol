@@ -2,8 +2,9 @@
 
 D="/root/.kubesol"
 
-longhorn_device="sda"
-directpv_device="sdb"
+# Extra disks only — never the OS disk (often sda). Comment out if unused.
+#longhorn_device="sdb"
+#directpv_device="sdc"
 
 project_name="kubesol_dev5" # used in nginx config
 ext_dns_name="dev5.kubesol.com"

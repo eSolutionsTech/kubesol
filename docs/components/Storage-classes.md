@@ -77,3 +77,12 @@ If you **set** a specific class, that class is used instead of the default:
 ```
 
 Many shipped examples hard-code `longhorn` or `directpv-min-io`. Prefer omitting the field when you want “whatever is currently default.”
+
+## Related playbooks
+
+| Playbook | StorageClass |
+|---|---|
+| `425-local-path.yaml` | `local-path` (default enable in `400-setup-k8s.yaml`) |
+| `430` / `431` / `432` | `longhorn` (+ UI) |
+| `433-longhorn-rf1.yaml` | `longhorn-rf1` (1 replica; after Longhorn is installed) |
+| `440-directpv.yaml` | `directpv-min-io` |

@@ -16,7 +16,7 @@ Extract the tarball:
 tar -xvf <RELEASE-TARBALL-NAME>.tar.gz
 ```
 
-Move velero binary in yout PATH (/usr/local/bin)
+Move the velero binary into your PATH (for example `/usr/local/bin`)
 
 ## Create an aws S3 bucket:
 
@@ -114,7 +114,7 @@ The result should look like:
 }
 ```
 
-## Modifify in kubesol-v1/ansible/files/velero/values-velero.yaml file the following parameters with the values from the previous step:
+## Modify `ansible/files/velero/values-velero.yaml` with the values from the previous step:
 
 - bucket: <bucket_name>
 - region: <aws_region>

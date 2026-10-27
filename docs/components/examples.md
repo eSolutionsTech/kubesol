@@ -40,12 +40,14 @@ kubectl -n dummy get sts
 NAME    READY   AGE
 dummy   1/1     3d16h
 
-# together with PVCs in longhorn storage class:
+# PVCs use the cluster default StorageClass (no storageClassName in the StatefulSet):
 $ kubectl -n dummy get pvc
 NAME           STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-data-dummy-0   Bound    pvc-ceb3e429-2084-4698-b1b0-283c82f63535   10Mi       RWO            longhorn       3d16h
+data-dummy-0   Bound    pvc-ceb3e429-2084-4698-b1b0-283c82f63535   10Mi       RWO            local-path     3d16h
 
 ```
 
-You can inspect the files to create all those under `ansible/files/dummy/`.
+(If you previously enabled Longhorn as default, `STORAGECLASS` may show `longhorn` instead.)
+
+You can inspect the files under `ansible/files/dummy/`. See [Storage classes](Storage-classes.md) and `./default-sc.sh` to change the default.
 
