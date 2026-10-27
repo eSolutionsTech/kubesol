@@ -28,7 +28,7 @@ Alternatively you can do this:
 ```
 # get the names for etcd pods
 kubectl -n kube-system get pod -l component=etcd
-# you should see one NOtReady and thw other two ok
+# you should see one NotReady and the other two ok
 ```
 
 In the commands below, instead of `etcdctl` use `kubectl -n kube-system exec <POD> -- etcdctl ...`

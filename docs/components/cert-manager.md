@@ -4,7 +4,7 @@ Cert-manager creates and renews TLS certificates for workloads in your Kubernete
 
 ## Install
 
-It is required (in our setup) by all Ingresses (that't it all web interfaces). 
+It is required (in our setup) by all Ingresses (that is, all web interfaces). 
 
 Please note if you do not have 
 the DNS setup for the names defined in `ext_dns_name` variable as described in 

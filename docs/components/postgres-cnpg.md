@@ -4,7 +4,7 @@ CNPG (Cloud Native Postgres operator) is an operator for deploying PostgreSQL cl
 
 ## Install 
 
-CNPG is **optional** (commented out in `400-setup-k8s.yaml`). It requires a storage class (Longhorn or DirectPV).
+CNPG is **optional** (commented out in `400-setup-k8s.yaml`). It needs a StorageClass for Postgres PVCs: the cluster default (`local-path`) is fine for labs; use Longhorn or DirectPV when you want replicated or disk-backed volumes for real workloads.
 
 To check it:
 

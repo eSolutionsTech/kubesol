@@ -13,6 +13,6 @@ You may need to download a new version for the `rke2.sh` script, first delete it
   ansible all -m shell -a 'rm rke2.sh'
 ```
 
-Also note compatibility for objects inside Kubernetes is in your responsability. 
+Also note compatibility for objects inside Kubernetes is your responsibility. 
 You may use tools like https://github.com/doitintl/kube-no-trouble to help you.
 

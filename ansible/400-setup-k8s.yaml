@@ -15,7 +15,7 @@
 # requires extra dedicated disk on each node
 #- import_playbook: 440-directpv.yaml
 
-## dummy exmples
+## dummy examples
 - import_playbook: 450-simple-pod.yaml
 - import_playbook: 452-simple-pod-pvc.yaml
 - import_playbook: 454-dummy.yaml

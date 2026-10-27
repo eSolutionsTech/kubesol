@@ -22,7 +22,7 @@ See [DirectPV](directpv.md).
 
 ## Setting the default StorageClass
 
-Use the helper script at the repo root:
+A default install runs `425-local-path.yaml`, which installs local-path and marks it as the cluster default. To list or change the default later, use the helper script at the repo root:
 
 ```
 # List StorageClasses (shows which one is default)

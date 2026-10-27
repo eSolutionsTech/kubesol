@@ -133,7 +133,8 @@ This guide provides solutions for common issues you might encounter when deployi
 
 1. **Ingress Controller Issues**
    - Check Traefik pods: `kubectl -n kube-system get pods | grep traefik`
-   - Check IngressClasses: `kubectl get ingressclass` (Kubesol Ingresses use class `nginx` via Traefik’s NGINX provider)
+   - Check IngressClasses: `kubectl get ingressclass` (Kubesol Ingresses use class `nginx` via Traefik’s NGINX provider). Exactly one class should show `(default)`, and it should be `nginx`.
+   - If defaults look wrong, re-run `ansible-playbook 407-ingressclass-defaults.yaml` (imported by `400-setup-k8s.yaml`).
    - View Traefik logs: `kubectl -n kube-system logs -l app.kubernetes.io/name=rke2-traefik` (label may vary; use `kubectl -n kube-system get pods | grep traefik` then log that pod)
 
 2. **Certificate Issues**
@@ -165,8 +166,8 @@ kubectl get storageclass
 ./default-sc.sh local-path      # set default (if that class exists)
 ```
 
-- Default install enables **local-path** (`425-local-path.yaml`). Confirm the provisioner pods are running: `kubectl -n local-path-storage get pods` (namespace may vary with the upstream manifest).
-- Demo PVCs that omit `storageClassName` use the cluster default — see [Storage classes](components/Storage-classes.md).
+- Default install enables **local-path** and marks it default (`425-local-path.yaml`, also via `400-setup-k8s.yaml`). Confirm the provisioner pods are running: `kubectl -n local-path-storage get pods` (namespace may vary with the upstream manifest).
+- Demo PVCs that omit `storageClassName` use the cluster default — see [Storage classes](components/Storage-classes.md). To change the default later, use `./default-sc.sh <name>`.
 
 ### Longhorn Issues
 

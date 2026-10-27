@@ -25,8 +25,9 @@ You must see something like this:
 ```
 $ kubectl get storageclasses
 NAME                 PROVISIONER          RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-directpv-min-io      directpv-min-io      Delete          WaitForFirstConsumer   true                   6d23h
-longhorn (default)   driver.longhorn.io   Delete          Immediate              true                   6d23h
+local-path (default) rancher.io/local-path   Delete          WaitForFirstConsumer   false                  1d
+directpv-min-io      directpv-min-io         Delete          WaitForFirstConsumer   true                   6d23h
+# Cluster default stays local-path unless you run ./default-sc.sh (or enable Longhorn and set it default).
 
 # note one controller and one node-server for each worker node
 $ kubectl -n directpv get pods

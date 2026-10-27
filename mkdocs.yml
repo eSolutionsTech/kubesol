@@ -13,6 +13,7 @@ nav:
       - Quickstart (single VM): cluster/Quickstart.md
       - Create a new cluster: cluster/create-new-cluster.md
       - Use an existing cluster: cluster/use-existing-cluster.md
+      - Admin machine setup: admin-machine-setup.md
       - Adding nodes: cluster/adding-nodes.md
       - Upgrade cluster: cluster/upgrade-cluster.md
       - Version variables: cluster/version-variables.md

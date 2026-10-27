@@ -108,7 +108,7 @@ kubectl -n dummy get pods,ingress,pvc
 
 The dummy app PVC omits `storageClassName`, so it uses the cluster default (local-path unless you changed it). See [Storage classes](../components/Storage-classes.md) and [Examples](../components/examples.md).
 
-In-cluster Ingress is **Traefik**, with IngressClass **`nginx`** as default — see [Ingress controller](../components/traefik-ingress.md).
+In-cluster Ingress is **Traefik**, with IngressClass **`nginx`** as default. A full `400` runs `407-ingressclass-defaults.yaml` to enforce that; re-run `407` alone if defaults look wrong. See [Ingress controller](../components/traefik-ingress.md).
 
 ## Optional: Longhorn
 

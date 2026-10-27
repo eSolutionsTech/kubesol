@@ -23,6 +23,7 @@ See also the [FAQ](FAQ.md) and [Troubleshooting Guide](troubleshooting.md) for h
 - [quickstart with a single VM](cluster/Quickstart.md)
 - [create a new cluster](cluster/create-new-cluster.md)
 - [use an existing cluster](cluster/use-existing-cluster.md)
+- [admin machine setup](admin-machine-setup.md) (run Ansible from `c1`)
 - [adding more worker nodes](cluster/adding-nodes.md)
 - [upgrade an existing cluster](cluster/upgrade-cluster.md)
 - [version variables](cluster/version-variables.md) (RKE2, Helm charts, `*_chart_version`)
@@ -40,10 +41,11 @@ What runs after `ansible-playbook 000-all.yaml` (or `400-setup-k8s.yaml`) depend
 ### Enabled by default in `400-setup-k8s.yaml`
 
 - [Cert-manager](components/cert-manager.md)
-- [local-path](components/Storage-classes.md) storage class (`425-local-path.yaml`)
+- [local-path](components/Storage-classes.md) storage class (`425-local-path.yaml`; also set as default)
+- IngressClass defaults (`407-ingressclass-defaults.yaml`; Traefik + default class `nginx`)
 - [Examples](components/examples.md) demo apps (simple pod / PVC / dummy web app)
 
-See also [Storage classes](components/Storage-classes.md) (Longhorn / DirectPV / local-path) and `./default-sc.sh` at the repo root to list or set the default StorageClass.
+See also [Storage classes](components/Storage-classes.md) (Longhorn / DirectPV / local-path) and `./default-sc.sh` at the repo root to list or set the default StorageClass. See [Ingress (Traefik)](components/traefik-ingress.md) and the [FAQ](FAQ.md) for Traefik vs gateway nginx.
 
 ### Bundled with RKE2 (not separate Kubesol playbooks)
 

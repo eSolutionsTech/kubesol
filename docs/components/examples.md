@@ -15,6 +15,8 @@ $ kubectl -n dummy get ingress
 NAME    CLASS    HOSTS                    ADDRESS                                     PORTS     AGE
 dummy   <none>   dummy.dev2.kubesol.com   192.168.40.88,192.168.40.89,192.168.40.90   80, 443   3d16h
 #                ^ access this name with https
+# CLASS may show <none> when ingressClassName is omitted; Traefik still uses the
+# cluster default IngressClass (nginx). See Ingress (Traefik).
 
 $ kubectl -n dummy get certificate
 NAME        READY   SECRET      AGE

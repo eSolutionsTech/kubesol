@@ -65,9 +65,17 @@ c1 # cd kubesol
 c1 # ./start.sh
 ```
 
+`start.sh` installs Ansible packages and, if missing, copies a **single-node** starter Inventory. For this multi-node guide, replace it before continuing:
+
+```
+c1 # cd ansible
+c1 # cp Inventory-multi-node-example Inventory
+# then edit Inventory for your hostnames, DNS, and optional disk vars
+```
+
 ## Details on Ansible Inventory file
 
-In the `ansible` directory you must create a file called `Inventory`, see the example below.
+In the `ansible` directory you must have a file called `Inventory` (see the multi-node example above and the sample below).
 
 This file contains hostnames and variables used by the project. Most of them are self explanatory. 
 Variables `rke2_version` and the rest named `*_chart_version` can be commented out to install the latest version available. 

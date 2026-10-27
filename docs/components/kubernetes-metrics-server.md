@@ -17,11 +17,11 @@ kubesol-dev2-w1   640m         16%    4242Mi          53%
 kubesol-dev2-w2   1248m        31%    4794Mi          60%       
 kubesol-dev2-w3   720m         18%    4391Mi          55%       
 
-# check resource usage in a namespace
-$ kubectl -n longhorn-system top pods
-NAME                                                CPU(cores)   MEMORY(bytes)   
-csi-attacher-5dcc766457-abc12                       1m           12Mi            
-longhorn-manager-xyz12                              15m          128Mi           
+# check resource usage in a namespace (any namespace works; example uses kube-system)
+$ kubectl -n kube-system top pods
+NAME                                      CPU(cores)   MEMORY(bytes)
+coredns-...                               3m           20Mi
+rke2-traefik-...                          5m           40Mi
 ```
 
 
