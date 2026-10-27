@@ -13,3 +13,5 @@ with optional commercial support and / or license by [esolutions.tech](https://w
 - **User-Friendly**: Operate with ease, requiring only minimal knowledge of Ansible, kubectl, and Helm, making it accessible even for DevOps professionals with limited experience.
 
 The detailed documentation is [here](docs/README.md).
+
+See also [AGENTS.md](AGENTS.md) (Cursor / AI-assisted improvements since October 2026).
