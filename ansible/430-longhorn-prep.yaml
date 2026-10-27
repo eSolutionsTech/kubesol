@@ -1,32 +1,75 @@
 ---
+# Workers, and single-node hosts marked controller_worker=true.
+# Dedicated disk format/mount only when longhorn_device is set, and never the OS disk.
 - name: Longhorn prep
-  hosts: worker
+  hosts: all
   gather_facts: false
 
   tasks:
+    - name: Decide whether this host runs Longhorn prep
+      set_fact:
+        longhorn_prep_host: >-
+          {{ ('worker' in groups and inventory_hostname in groups['worker'])
+             or (controller_worker | default(false) | bool) }}
+
+    - name: Identify root disk
+      shell: |
+        set -euo pipefail
+        src=$(findmnt -n -o SOURCE /)
+        parent=$(lsblk -no PKNAME "$src" | head -n1 || true)
+        if [ -n "$parent" ]; then
+          printf '%s\n' "$parent"
+        else
+          basename "$src" | sed -E 's/p?[0-9]+$//'
+        fi
+      args:
+        executable: /bin/bash
+      register: root_disk
+      changed_when: false
+      when:
+        - longhorn_prep_host | bool
+        - longhorn_device is defined
+
+    - name: Refuse to format the OS disk
+      assert:
+        that:
+          - (root_disk.stdout | trim) | length > 0
+          - (longhorn_device | regex_replace('^/dev/', '')) != (root_disk.stdout | trim)
+        fail_msg: >-
+          longhorn_device {{ longhorn_device }} is the OS disk
+          ({{ root_disk.stdout | trim }}); refusing to format
+      when:
+        - longhorn_prep_host | bool
+        - longhorn_device is defined
+
     - name: Format longhorn device
       filesystem:
         fstype: ext4
-        dev: "/dev/{{ longhorn_device }}"
-      when: longhorn_device is defined
+        dev: "/dev/{{ longhorn_device | regex_replace('^/dev/', '') }}"
+      when:
+        - longhorn_prep_host | bool
+        - longhorn_device is defined
 
     - name: Mount longhorn device
       mount:
         path: "/var/lib/longhorn"
-        src: "/dev/{{ longhorn_device }}"
+        src: "/dev/{{ longhorn_device | regex_replace('^/dev/', '') }}"
         fstype: ext4
         state: mounted
-      when: longhorn_device is defined
+      when:
+        - longhorn_prep_host | bool
+        - longhorn_device is defined
 
     - name: Install longhorn requirements nfs for RWM
       apt:
         pkg:
-        - open-iscsi
-        - nfs-kernel-server
+          - open-iscsi
+          - nfs-kernel-server
+      when: longhorn_prep_host | bool
 
-  # https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+    # https://longhorn.io/kb/troubleshooting-volume-with-multipath/
     - name: Longhorn multipath.conf fix
-      copy: 
+      copy:
         dest: /etc/multipath.conf
         content: |
           defaults {
@@ -34,8 +77,9 @@
           }
           blacklist {
             devnode "^sd[a-z0-9]+"
-          } 
-      notify: Restart multipathd 
+          }
+      notify: Restart multipathd
+      when: longhorn_prep_host | bool
 
   handlers:
     - name: Restart multipathd

@@ -7,6 +7,8 @@ and https://longhorn.io/docs/ .
 
 Longhorn is **optional** (commented out in `400-setup-k8s.yaml`). The cluster default storage class out of the box is usually **local-path**; enable Longhorn when you need replicated volumes. Optional Helm values (monitoring, Loki, Trivy, Vault) omit `storageClass` / `storageClassName` so they follow the cluster default; uncomment the `longhorn` lines in those values if you want them on Longhorn instead. See [Storage classes](Storage-classes.md) / `./default-sc.sh`.
 
+`430-longhorn-prep.yaml` installs open-iscsi and nfs on **worker** nodes, and on a single-node host marked `controller_worker=true`. A dedicated disk is optional: set `longhorn_device` in Inventory (for example `sdb`) to format and mount it at `/var/lib/longhorn`. The playbook refuses to format the disk that holds `/`. Do not point `longhorn_device` at the OS disk.
+
 There is also playbook `433-longhorn-rf1.yaml`, which creates StorageClass `longhorn-rf1` (single replica, strict-local) for labs or single-node use after Longhorn is installed.
 
 To check it:

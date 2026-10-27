@@ -3,7 +3,7 @@
 ## Ansible Playbook Techniques
 
 ### Storage and Device Management
-- How to format and mount a block device (and only if a variable is defined): `430-longhorn-prep.yaml`
+- How to format and mount a block device (only if `longhorn_device` is defined, and not the OS disk): `430-longhorn-prep.yaml`
   ```yaml
   # Example snippet:
   - name: Format longhorn device

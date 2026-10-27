@@ -112,7 +112,7 @@ In-cluster Ingress is **Traefik**, with IngressClass **`nginx`** as default. A f
 
 ## Optional: Longhorn
 
-Only if you want replicated storage (not required for the default demos). On a single node, edit `430-longhorn-prep.yaml` and set `hosts: all` instead of `hosts: worker`, then:
+Only if you want replicated storage (not required for the default demos). `430-longhorn-prep.yaml` already includes a single-node host with `controller_worker=true`. Optionally set `longhorn_device` in Inventory to a dedicated disk (never the OS disk). Then:
 
 ```
 ansible-playbook 430-longhorn-prep.yaml

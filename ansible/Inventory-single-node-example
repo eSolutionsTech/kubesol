@@ -7,6 +7,9 @@ letsencrypt_email="root@example.com"
 
 D="/root/.kubesol"
 
+# Extra disk only if you enable Longhorn (never the OS disk). Comment out if unused.
+#longhorn_device="sdb"
+
 hosts_gw="kubesol-dev4-c1"
 
 [controller_one]
