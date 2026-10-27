@@ -6,7 +6,7 @@ Kubesol can provide three StorageClasses. You typically pick one as the cluster 
 
 ### 1. Local path (`local-path`)
 
-Rancher local-path provisioner: dynamic PVCs as directories on the node filesystem. **Enabled by default** in `400-setup-k8s.yaml` (`425-local-path.yaml`). Simple option for single-node or lab setups.
+Rancher local-path provisioner: dynamic PVCs as directories on the node filesystem. **Enabled by default** in `400-setup-k8s.yaml` (`425-local-path.yaml`), which also marks `local-path` as the cluster default StorageClass. Simple option for single-node or lab setups.
 
 ### 2. Longhorn (`longhorn`)
 
@@ -82,7 +82,7 @@ Many shipped examples hard-code `longhorn` or `directpv-min-io`. Prefer omitting
 
 | Playbook | StorageClass |
 |---|---|
-| `425-local-path.yaml` | `local-path` (default enable in `400-setup-k8s.yaml`) |
+| `425-local-path.yaml` | `local-path` (enabled + set as default in `400-setup-k8s.yaml`) |
 | `430` / `431` / `432` | `longhorn` (+ UI) |
 | `433-longhorn-rf1.yaml` | `longhorn-rf1` (1 replica; after Longhorn is installed) |
 | `440-directpv.yaml` | `directpv-min-io` |

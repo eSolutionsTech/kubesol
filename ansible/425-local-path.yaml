@@ -14,3 +14,31 @@
         state: present
         src: "{{ URL }}"
 
+    # Upstream local-path is not marked default; demos that omit storageClassName need one.
+    - name: List StorageClasses
+      kubernetes.core.k8s_info:
+        kind: StorageClass
+      register: storage_classes
+
+    - name: Clear default annotation on all StorageClasses
+      kubernetes.core.k8s:
+        state: patched
+        kind: StorageClass
+        name: "{{ item.metadata.name }}"
+        definition:
+          metadata:
+            annotations:
+              storageclass.kubernetes.io/is-default-class: "false"
+      loop: "{{ storage_classes.resources }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+
+    - name: Set local-path as the default StorageClass
+      kubernetes.core.k8s:
+        state: patched
+        kind: StorageClass
+        name: local-path
+        definition:
+          metadata:
+            annotations:
+              storageclass.kubernetes.io/is-default-class: "true"

@@ -95,11 +95,11 @@ ansible-playbook 410-cert-manager.yaml
 kubectl -n cert-manager get pods   # wait until Ready
 
 ansible-playbook 425-local-path.yaml
-kubectl get storageclass           # expect local-path (often already default)
+kubectl get storageclass           # expect local-path (default)
 
-# Optional: set / verify the default StorageClass from the repo root
+# Optional: list or change the default later from the repo root
 # ../default-sc.sh
-# ../default-sc.sh local-path
+# ../default-sc.sh longhorn
 
 ansible-playbook 454-dummy.yaml
 kubectl -n dummy get pods,ingress,pvc
