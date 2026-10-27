@@ -10,7 +10,7 @@ kube-prometheus-stack includes Grafana, Prometheus and Alertmanager.
 
 ## Install
 
-Monitoring is **optional** (commented out in `400-setup-k8s.yaml`). Its Helm values often pin Longhorn; enable Longhorn first, or adjust the values / use another default storage class.
+Monitoring is **optional** (commented out in `400-setup-k8s.yaml`). Its Helm values omit `storageClassName`, so Prometheus and Grafana use the cluster default (usually `local-path`). The `longhorn` lines stay commented in `files/kube-prometheus-stack/values.yaml` if you want to pin Longhorn later. Loki (`491-loki.yaml`) works the same way.
 
 To check status:
 

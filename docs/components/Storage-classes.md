@@ -76,7 +76,7 @@ If you **set** a specific class, that class is used instead of the default:
   # storageClass: directpv-min-io
 ```
 
-Many shipped examples hard-code `longhorn` or `directpv-min-io`. Prefer omitting the field when you want “whatever is currently default.”
+Shipped Helm values omit the class so they follow the cluster default. Commented `longhorn` lines in those values are optional. Prefer omitting the field when you want “whatever is currently default.”
 
 ## Related playbooks
 

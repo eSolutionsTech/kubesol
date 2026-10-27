@@ -130,7 +130,7 @@ Then you can make Longhorn the default: `../default-sc.sh longhorn`.
 
 ## Optional: monitoring
 
-Monitoring Helm values often expect Longhorn. Enable Longhorn first, or adjust values. Also raise inotify limits (otherwise Promtail may crash):
+Monitoring uses the cluster default StorageClass and does not need Longhorn. Also raise inotify limits (otherwise Promtail may crash):
 
 ```
 echo 256 > /proc/sys/fs/inotify/max_user_instances
