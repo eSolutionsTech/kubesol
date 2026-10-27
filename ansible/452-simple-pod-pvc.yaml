@@ -5,7 +5,7 @@
   connection: local
 
   tasks:
-    - name: Create PVC directPV
+    - name: Create PVC simple-pod-pvc
       kubernetes.core.k8s:
         state: present
         definition:
@@ -22,7 +22,7 @@
               requests:
                 storage: 10Mi
 
-    - name: Create simple-pod-pvc directPV
+    - name: Create Pod simple-pod-pvc
       kubernetes.core.k8s:
         state: present
         definition:
